@@ -1,0 +1,155 @@
+--Table Role
+CREATE TABLE tblRole (
+    fldRole_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    fldRoleName VARCHAR(64) NOT NULL,
+);
+
+
+INSERT INTO tblRole 
+Values	(0,'Admin'),
+	(1,'User')
+-------------------------------------------------------
+-- Table tblUser
+CREATE TABLE tblUser (
+    fldUser_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    fldFirstName VARCHAR(32) NOT NULL,
+    fldLastName VARCHAR(32),
+    fldEmail VARCHAR(100) NOT NULL UNIQUE,
+    fldPhone VARCHAR(15) NOT NULL,
+    fldRoleId INT NOT NULL,
+    fldHashedPassword VARCHAR(256) ,
+    fldUserSaltString VARCHAR(32) ,
+    fldActive TINYINT(1)UNSIGNED NOT NULL DEFAULT 1,
+    fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fldUpdatedBy INT ,
+    fldUpdatedDate DATETIME  DEFAULT NULL CURRENT_TIMESTAMP,
+    FOREIGN KEY (fldRoleId) REFERENCES tblRole (fldRole_ID)
+);
+
+INSERT INTO tblUser
+(fldFirstName,fldLastName,fldEmail,fldPhone,fldRoleId,fldHashedPassword,fldUserSaltString,fldActive)
+VALUES ('Jibin','Varghese','admin@123.com','9998887771',0,'F3203B2B84FA9193F58B4E2702F08A413C207E657204C61D8CE4CD7BE2958C1F','bmU955A9IM6e7J4y4PqLeA==',1)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Table tblAddress
+CREATE TABLE tblAddress (
+    fldAddress_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    fldUserId INT NOT NULL,
+    fldFirstName VARCHAR(32) NULL,
+    fldLastName VARCHAR(32) NULL,
+    fldAddressLine1 VARCHAR(64) NULL,
+    fldAddressLine2 VARCHAR(64) NULL,
+    fldCity VARCHAR(64) NULL,
+    fldState VARCHAR(64) NULL,
+    fldPincode VARCHAR(10) NULL,
+    fldPhoneNumber VARCHAR(15) NULL,
+    fldActive TINYINT(1)UNSIGNED NOT NULL DEFAULT 1,
+    fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fldUserId) REFERENCES tblUser (fldUser_ID)
+);
+
+--table Order
+CREATE TABLE tblOrder (
+    fldOrder_ID UNIQUE IDENTIFIER DEFAULT NEWID() NOT NULL PRIMARY KEY,
+    fldUserId INT NOT NULL,
+    fldAddressId INT NOT NULL,
+    fldTotalPrice DECIMAL(10,2) NULL,
+    fldTotalTax DECIMAL(10,2) NULL,
+    fldCardPart VARCHAR(4) NULL,
+    fldOrderDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fldOrder_ID),
+    FOREIGN KEY (fldUserId) REFERENCES tblUser (fldUser_ID),
+    FOREIGN KEY (fldAddressId) REFERENCES tblAddress (fldAddress_ID)
+);
+
+-- Table tblCategory
+CREATE TABLE tblCategory (
+    fldCategory_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    fldCategoryName VARCHAR(64) NULL,
+    fldActive BIT NULL DEFAULT 1,
+    fldCreatedBy INT NOT NULL,
+    fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fldUpdatedby INT NULL,
+    fldUpdatedDate DATETIME  DEFAULT NULL,
+    FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID)
+);	
+
+INSERT INTO tblCategory(fldcategoryName,fldCreatedBy) VALUES('Fashion',1)
+-------------------------------------------------------------------------------
+--Table SubCategory
+CREATE TABLE tblSubCategory (
+  fldSubCategory_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  fldCategoryId INT NOT NULL,
+  fldSubCategoryName NVARCHAR(64) NULL,
+  fldActive TINYINT NOT NULL DEFAULT 1,
+  fldCreatedBy INT NOT NULL,
+  fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  fldUpdatedBy INT NULL,
+  fldUpdatedDate DATETIME NULL,
+  FOREIGN KEY (fldCategoryId) REFERENCES tblCategory (fldCategory_ID),
+  FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID)
+);
+
+---------------------------------------------------------------------------------
+--Table Brands
+CREATE TABLE tblBrands (
+  fldBrand_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  fldBrandName VARCHAR(64) NOT NULL,
+  fldActive BIT NULL DEFAULT 1
+);
+
+--Table Product
+CREATE TABLE tblProduct (
+  fldProduct_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY ,
+  fldSubCategoryId INT NOT NULL,
+  fldProductName VARCHAR(100) NOT NULL,
+  fldBrandId INT NOT NULL,
+  fldDescription VARCHAR(MAX) NULL,
+  fldPrice DECIMAL(10, 2) NULL,
+  fldTax DECIMAL(10, 2) NULL,
+  fldActive BIT NULL DEFAULT 1,
+  fldCreatedBy INT NULL,
+  fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  fldUpdatedBy INT NULL,
+  fldUpdatedDate DATETIME NULL,
+  FOREIGN KEY (fldSubCategoryId) REFERENCES tblSubCategory (fldSubCategory_ID),
+  FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID),
+  FOREIGN KEY (fldBrandId) REFERENCES tblBrands (fldBrand_ID)
+);
+
+--Table OrderedItems
+  CREATE TABLE tblOrderedItems (
+  fldOrderItem_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  fldOrderId NVARCHAR(64) NOT NULL,
+  fldProductId INT NOT NULL,
+  fldQuantity INT NULL,
+  fldUnitPrice DECIMAL(10, 2) NULL,
+  fldUnitTax DECIMAL(10, 2) NULL,
+  FOREIGN KEY (fldOrderId) REFERENCES tblOrder (fldOrder_ID),
+  FOREIGN KEY (fldProductId) REFERENCES tblProduct (fldProduct_ID)
+);
+
+--Table Cart
+CREATE TABLE tblCart (
+  fldCart_ID INT NOT NULL IDENTITY(1,1),
+  fldUserId INT NOT NULL,
+  fldProductId INT NOT NULL,
+  fldQuantity INT NULL,
+  fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (fldUserId) REFERENCES tblUser (fldUser_ID),
+   FOREIGN KEY (fldProductId) REFERENCES tblProduct (fldProduct_ID)
+);
+
+--Table productImage
+CREATE TABLE tblProductImages (
+  fldProductImage_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  fldProductId INT NOT NULL,
+  fldImageFileName NVARCHAR(128) NULL,
+  fldDefaultImage BIT NULL DEFAULT 0,
+  fldCreatedBy INT NOT NULL,
+  ffldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  fldDeactivatedBy INT NULL,
+  fldDeactivatedDate DATETIME NULL,
+  FOREIGN KEY (fldProductId) REFERENCES tblProduct (fldProduct_ID),
+  FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID),
+  FOREIGN KEY (fldDeactivatedBy) REFERENCES tblUser (fldUser_ID)
+);

@@ -1,0 +1,161 @@
+body{
+    margin: 0;
+    padding:0;
+}
+
+header{
+    border: 1px solid #97bac5;
+    height: 10vh;
+    background-color: #97bac5;
+}
+
+.headerDiv span{
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.headerDiv span:hover{
+    cursor: pointer;
+}
+
+.headerImageDiv{
+    height: 6vh;
+    width:4vw;
+}
+
+.headerImageDiv img{
+    height: 100%;
+    width:100%;
+}
+
+.headerCartName a{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.mainContentDiv{
+    height:90vh;
+}
+
+.loginDiv{
+    height: 60vh;
+    width:60vh;
+    border: 2px solid #aeced8;
+    background: #97bac5;
+    margin: auto;
+}
+
+.loginDiv button{
+    width:10vw;
+    border: none;
+    color: #67c5e2;
+    font-weight: 700;
+    background-color: #ffffff;
+}
+
+.loginDiv input{
+    border: none;
+}
+
+.loginDiv input:focus{
+    outline: none;
+}
+
+.loginDivHeading{
+    width:100%;
+    border:2px solid;
+    color: #ffffff;
+    font-size: large;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+.logoutBtnClass button{
+    background: none;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.categoryDiv{
+    height: 70vh;
+    width:60vh;
+    border: 2px solid #aeced8;
+    background: #97bac5;
+    margin: auto;
+}
+
+.categoryHeading{
+    border-bottom: 3px solid #ffffff;
+}
+
+.categoryHeading span{
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.categoryHeading button{
+    background: none;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.modal-content{
+    height: 40vh;
+    width:50vh;
+    border: 2px solid #aeced8;
+    background: #ffffff;
+    margin: auto;
+}
+
+.modalCategoryName{
+    height:50px;
+}
+
+.modalInputCategory span{
+    color:#aeced8;
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.btnAddCategory{
+    background: #aeced8;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.btnModalClose{
+    background: #e69696;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.singleItemCategory span{
+    color:#97bac5;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.categoryButtons button{
+    background: none;
+    border:none;
+}
+
+.singleItemCategory{
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.categoryListingDiv{
+    height:58vh;
+    overflow: auto;
+}
+.categoryListingDiv::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
