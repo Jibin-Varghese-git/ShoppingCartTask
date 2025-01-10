@@ -26,22 +26,22 @@
                 </div>  
             </div>
         </header>
-        <cfset result=application.objShoppingCart.fnSelectCategory()>
+    <cfset result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
-                    <span>Category</span>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                    <span>Subcategory</span>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddSubCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
                 </div>
                 <div class="categoryListingDiv">
                     <cfoutput>
                         <cfloop query="result">
-                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#result.fldCategory_ID#">
-                                <span>#result.fldCategoryName#</span>
+                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#result.fldSubCategory_ID#">
+                                <span>#result.fldSubCategoryName#</span>
                                 <div class="categoryButtons">
-                                    <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <button type="button" class="editCategory" value="#result.fldSubCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldSubCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                    <a href="adminSubCategory.cfm?catId=#result.fldSubCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
                                 </div>
                             </div>
                         </cfloop>
@@ -49,18 +49,20 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modalAddCategory" tabindex="-1" aria-labelledby="static" aria-hidden="true">
+        <div class="modal fade" id="modalAddSubCategory" tabindex="-1" aria-labelledby="static" aria-hidden="true">
             <div class="modal-dialog">
                 <form method="post">
                     <div class="modal-content d-flex  flex-column justify-content-between px-3 pt-4">
                         <div class="modalInputCategory">
-                            <input type="text" class="newCategoryName mt-4 w-100" id="newCategoryName"><br>
-                            <span id="errorNewCategory" class="text-danger fw-bold fs-6"></span>
-                            <span class="ms-5" id="categoryModalHeading">Add Category</span>
+                            <input type="text" class="newSubcategoryName mt-4 w-100" id="newSubcategoryName"><br>
+                            <span id="errorNewSubcategory" class="text-danger fw-bold fs-6"></span><br>
+                            <span class="ms-5" id="subcategoryModalHeading">Add Subcategory</span>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btnModalClose p-2" onClick="fnCloseModal()"  data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
+                            <cfoutput>
+                                <button type="button" class="btnModalClose p-2" onClick="fnCloseModal()"  data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btnAddCategory  p-2" value="#url.catid#" id="btnAddCategory" onClick="fnAddSubcategory(this)">Add Subcategory</button>
+                            </cfoutput>
                         </div>
                     </div>
                 </form>

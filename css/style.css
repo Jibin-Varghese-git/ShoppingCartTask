@@ -122,3 +122,40 @@ header{
     font-size: 22px;
 }
 
+.btnAddCategory{
+    background: #aeced8;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.btnModalClose{
+    background: #e69696;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.singleItemCategory span{
+    color:#97bac5;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.categoryButtons button{
+    background: none;
+    border:none;
+}
+
+.singleItemCategory{
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.categoryListingDiv{
+    height:58vh;
+    overflow: auto;
+}
+.categoryListingDiv::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }

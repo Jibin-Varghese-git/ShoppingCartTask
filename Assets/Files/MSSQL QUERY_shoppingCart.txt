@@ -61,34 +61,35 @@ CREATE TABLE tblOrder (
     FOREIGN KEY (fldAddressId) REFERENCES tblAddress (fldAddress_ID)
 );
 
-
 -- Table tblCategory
 CREATE TABLE tblCategory (
     fldCategory_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-    fldCategoryName NVARCHAR(64) NULL,
+    fldCategoryName VARCHAR(64) NULL,
     fldActive BIT NULL DEFAULT 1,
     fldCreatedBy INT NOT NULL,
     fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fldUpdatedby INT NULL,
-    fldUpdatedDate DATETIME NULL DEFAULT NULL,
+    fldUpdatedDate DATETIME  DEFAULT NULL,
     FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID)
-);
+);	
 
+INSERT INTO tblCategory(fldcategoryName,fldCreatedBy) VALUES('Fashion',1)
+-------------------------------------------------------------------------------
 --Table SubCategory
 CREATE TABLE tblSubCategory (
-  fldSubCategory_ID INT NOT NULL IDENTITY(1,1),
+  fldSubCategory_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   fldCategoryId INT NOT NULL,
   fldSubCategoryName NVARCHAR(64) NULL,
-  fldActive TINYINT(1)UNSIGNED NOT NULL DEFAULT 1,
+  fldActive TINYINT NOT NULL DEFAULT 1,
   fldCreatedBy INT NOT NULL,
   fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fldUpdatedBy INT NULL,
   fldUpdatedDate DATETIME NULL,
-  CONSTRAINT PK_tblSubCategory PRIMARY KEY (fldSubCategory_ID),
   FOREIGN KEY (fldCategoryId) REFERENCES tblCategory (fldCategory_ID),
   FOREIGN KEY (fldCreatedBy) REFERENCES tblUser (fldUser_ID)
 );
 
+---------------------------------------------------------------------------------
 --Table Brands
 CREATE TABLE tblBrands (
   fldBrand_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,

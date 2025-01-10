@@ -39,7 +39,6 @@
                     </div>
                 </form>
                 <cfif structKeyExists(form, "loginBtn")>
-                    
                     <cfset result = application.objShoppingCart.fnAdminLogin(form)>
                     <cfif NOT result>
                         <span class="fw-bold text-danger">Invalid Username or Password</span>
