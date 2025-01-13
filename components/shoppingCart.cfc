@@ -95,7 +95,6 @@
 
     <cffunction  name="fnDeleteCategory" access="remote" >
         <cfargument  name="categoryId">
-        <cfdump  var="#arguments.categoryId#">
         <cfquery name="deleteCategory">  
             UPDATE 
                 tblCategory
@@ -104,6 +103,7 @@
             WHERE
                 fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
         </cfquery>
+        <cfreturn true>
     </cffunction>
 
     <cffunction  name="fnSelectCategoryName" access="remote" returnformat="plain">
@@ -157,7 +157,7 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnSelectSubCategory">
+    <cffunction  name="fnSelectSubCategory" access="remote" returnformat="JSON">
         <cfargument  name="categoryId">
         <cfquery name="local.qrySelectSubCategory">
             SELECT
@@ -167,8 +167,13 @@
                 tblSubCategory
             WHERE
                 fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+            AND
+                fldActive = 1
         </cfquery>
-        <cfreturn local.qrySelectSubCategory>
+        <cfloop query="local.qrySelectSubCategory">
+            <cfset local.structSubCategoryDetails[local.qrySelectSubCategory.fldSubCategory_ID] = local.qrySelectSubCategory.fldSubCategoryName>
+        </cfloop>
+        <cfreturn local.structSubCategoryDetails>
     </cffunction>
 
     <cffunction  name="fnAddSubcategory" access="remote" returnformat="plain">
@@ -209,6 +214,106 @@
             <cfset local.result = false>
         </cfif>
         <cfreturn local.result>
+    </cffunction>
+
+
+    <cffunction  name="fnSelectSubcategoryDetails" access="remote" returnformat="JSON">
+        <cfargument  name="subcategoryId">
+        <cfquery name="qrySelectSubcategoryDetails">
+            SELECT
+                fldSubCategory_ID,
+                fldSubCategoryName,
+                fldCategoryId
+            FROM
+                tblSubCategory
+            WHERE
+                fldSubCategory_Id = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfset local.structSubcategoryDetails["subcategoryId"] = qrySelectSubcategoryDetails.fldSubCategory_ID>
+        <cfset local.structSubcategoryDetails["subcategoryName"] = qrySelectSubcategoryDetails.fldSubCategoryName>
+        <cfset local.structSubcategoryDetails["categoryId"] = qrySelectSubcategoryDetails.fldCategoryId>
+        <cfreturn local.structSubcategoryDetails>
+    </cffunction>
+
+    <cffunction  name="fnUpdateSubcategory" access="remote" returnformat="plain">
+        <cfargument  name="subcategoryName">
+        <cfargument  name="categoryId">
+        <cfargument  name="subcategoryId">
+        <cfquery name="local.qrySubcategoryNameCount">
+            SELECT
+                count(fldSubCategoryName)
+            AS
+                subcategoryNameCount
+            FROM
+                tblSubCategory
+            WHERE 
+                fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">
+            AND
+                fldActive = 1
+            AND
+                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+            AND NOT 
+                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfif qrySubcategoryNameCount.subcategoryNameCount LT 1> 
+            <cfset local.todayDate = now()>
+            <cfquery name="qryUpdateCategory">
+                UPDATE 
+                    tblSubCategory
+                SET
+                    fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">,
+                    fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">,
+                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_varchar">,
+                    fldUpdatedDate = <cfqueryparam value="#local.todayDate#" cfsqltype="cf_sql_date">
+                WHERE
+                    fldSubCategory_ID=<cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfset local.result = true>
+        <cfelse>
+            <cfset local.result = false>
+        </cfif>
+        <cfreturn local.result>
+    </cffunction>
+
+    <cffunction  name="fnDeleteSubcategory" access="remote" >
+        <cfargument  name="subcategoryId">
+        <cfquery name="deleteSubcategory">  
+            UPDATE 
+                tblSubCategory
+            SET
+                fldActive = <cfqueryparam value='0' cfsqltype="cf_sql_integer">
+            WHERE
+                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="fnSelectBrand">
+        <cfquery name="local.qrySelectBrand">
+            SELECT 
+                fldBrand_ID,
+                fldBrandName
+            FROM
+                tblBrands
+            WHERE
+                fldActive = 1
+        </cfquery>
+        <cfreturn local.qrySelectBrand>
+    </cffunction>
+
+    <cffunction  name="fnAddProduct">
+        <cfargument  name="productName">
+        <cfargument  name="productDescription">
+        <cfargument  name="productPrice">
+        <cfargument  name="productTax">
+        <cfargument  name="brandId">
+        <cfargument  name="subCategoryId">
+
+        <cfquery name="qryAddProducts">
+            INSERT INTO
+                tblProduct
+            ()
+        </cfquery>
     </cffunction>
 
 </cfcomponent>
