@@ -91,6 +91,10 @@ header{
     border-bottom: 3px solid #ffffff;
 }
 
+.categoryHeading a{
+    text-decoration: none;
+}
+
 .categoryHeading span{
     color: #ffffff;
     font-size: 20px;
@@ -159,3 +163,45 @@ header{
 .categoryListingDiv::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
   }
+
+.btnAddSubcategory{
+    background: #aeced8;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.modalSubcategory{
+    height: 50vh;
+    width:50vh;
+    border: 2px solid #aeced8;
+    background: #ffffff;
+    margin: auto;
+}
+
+.modalAddProducts{
+    height:auto;
+    width:70vh;
+    border: 2px solid #aeced8;
+    background: #ffffff;
+    margin: auto;
+}
+
+.modalAddProductsHeading{
+    height: 15vh;
+    background:#aeced8;
+    text-align: center;
+    padding: 30px;
+}
+
+.modalAddProductsHeading span{
+    font-size:25px ;
+    color:#ffffff;
+    font-weight:700;
+}
+
+.modalAddProductsBody span{
+    font-size:18px ;
+    color:#aeced8;
+    font-weight:600;
+}

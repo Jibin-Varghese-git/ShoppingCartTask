@@ -27,21 +27,24 @@
             </div>
         </header>
     <cfset result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
+    <cfset CategoryName=application.objShoppingCart.fnSelectCategoryName(categoryId=url.catId)>
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
-                    <span>Subcategory</span>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddSubCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                    <cfoutput>
+                        <a href="adminCategory.cfm"><span>#CategoryName#</span></a>
+                        <button type="button" value="#url.catId#" onClick="fnModalAddSubCategory(this)" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                    </cfoutput>
                 </div>
                 <div class="categoryListingDiv">
                     <cfoutput>
-                        <cfloop query="result">
-                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#result.fldSubCategory_ID#">
-                                <span>#result.fldSubCategoryName#</span>
+                        <cfloop collection="#result#" item="item">
+                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#item#">
+                                <span>#result[item]#</span>
                                 <div class="categoryButtons">
-                                    <button type="button" class="editCategory" value="#result.fldSubCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldSubCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <a href="adminSubCategory.cfm?catId=#result.fldSubCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <button type="button" class="editSubCategory" value="#item#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditSubCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteSubCategory(this)" value="#item#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                    <a href="adminProducts.cfm?categoryId=#url.catId#&subcategoryId=#item#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
                                 </div>
                             </div>
                         </cfloop>
@@ -49,19 +52,28 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modalAddSubCategory" tabindex="-1" aria-labelledby="static" aria-hidden="true">
+           <div class="modal fade" id="modalAddSubCategory" tabindex="-1" aria-labelledby="static" aria-hidden="true">
             <div class="modal-dialog">
                 <form method="post">
-                    <div class="modal-content d-flex  flex-column justify-content-between px-3 pt-4">
+                    <div class="modal-content modalSubcategory d-flex  flex-column justify-content-between px-3 pt-4">
                         <div class="modalInputCategory">
+                            <cfset categoryListingValues=application.objShoppingCart.fnSelectCategory()>
+                            <span class="ms-5 my-2" id="categoryListingHeading">Category</span><br>
+                            <select class="w-100 my-2" name="categoryListing" id="categoryListing">
+                                <cfoutput>
+                                    <cfloop query="categoryListingValues">
+                                        <option value="#categoryListingValues.fldCategory_ID#">#categoryListingValues.fldCategoryName#</option>
+                                    </cfloop>
+                                </cfoutput>
+                            </select>
                             <input type="text" class="newSubcategoryName mt-4 w-100" id="newSubcategoryName"><br>
                             <span id="errorNewSubcategory" class="text-danger fw-bold fs-6"></span><br>
-                            <span class="ms-5" id="subcategoryModalHeading">Add Subcategory</span>
+                            <span class="ms-5" id="subcategoryModalHeading">Edit Subcategory</span>
                         </div>
                         <div class="modal-footer">
                             <cfoutput>
-                                <button type="button" class="btnModalClose p-2" onClick="fnCloseModal()"  data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btnAddCategory  p-2" value="#url.catid#" id="btnAddCategory" onClick="fnAddSubcategory(this)">Add Subcategory</button>
+                                <button type="button" class="btnModalClose p-2" onClick="fnCloseModalSubCategory()"  data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btnAddSubcategory  p-2" value="" id="btnAddSubcategory" onClick="fnAddSubcategory(this)">Edit Subcategory</button>
                             </cfoutput>
                         </div>
                     </div>

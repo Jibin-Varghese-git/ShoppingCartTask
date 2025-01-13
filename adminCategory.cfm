@@ -59,7 +59,7 @@
                             <span class="ms-5" id="categoryModalHeading">Add Category</span>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btnModalClose p-2" onClick="fnCloseModal()"  data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btnModalClose p-2" onClick="fnCloseModalSubcategory()"  data-bs-dismiss="modal">Close</button>
                           <button type="button" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
                         </div>
                     </div>
