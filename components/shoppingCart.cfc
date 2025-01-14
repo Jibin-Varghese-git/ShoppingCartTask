@@ -170,6 +170,7 @@
             AND
                 fldActive = 1
         </cfquery>
+        <cfset local.structSubCategoryDetails = structNew()>
         <cfloop query="local.qrySelectSubCategory">
             <cfset local.structSubCategoryDetails[local.qrySelectSubCategory.fldSubCategory_ID] = local.qrySelectSubCategory.fldSubCategoryName>
         </cfloop>
@@ -301,19 +302,204 @@
         <cfreturn local.qrySelectBrand>
     </cffunction>
 
-    <cffunction  name="fnAddProduct">
+    <cffunction  name="fnAddProduct" access="remote" returnFormat="plain">
+        <cfargument  name="subcategoryListing">
         <cfargument  name="productName">
+        <cfargument  name="brandListing">
+        <cfargument  name="productImages">
         <cfargument  name="productDescription">
         <cfargument  name="productPrice">
         <cfargument  name="productTax">
-        <cfargument  name="brandId">
-        <cfargument  name="subCategoryId">
+            <cfset local.imageLocation="../Assets/productImages">
+            <cfif NOT directoryExists(expandPath(local.imageLocation))>
+                <cfset directoryCreate(expandPath(local.imageLocation))>
+            </cfif>
+            <cffile action="uploadall"
+                    destination="#expandPath(local.imageLocation)#"
+                    nameConflict="MakeUnique"
+                    result="local.fileNames"        
+            >
 
-        <cfquery name="qryAddProducts">
-            INSERT INTO
-                tblProduct
-            ()
+            <cfquery result="local.qryAddProducts">
+                INSERT INTO
+                    tblProduct
+                    (
+                        fldSubCategoryId,
+                        fldProductName,
+                        fldBrandId,
+                        fldDescription,
+                        fldPrice,
+                        fldTax,
+                        fldCreatedBy 
+                    )
+                VALUES
+                    (
+                        <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.productName#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.brandListing#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.productDescription#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.productPrice#" cfsqltype="cf_sql_decimal">,
+                        <cfqueryparam value="#arguments.productTax#" cfsqltype="cf_sql_decimal">,
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">
+                    )
+            </cfquery>
+            <cfset local.defaultValue = 1>
+            <cfloop array="#local.fileNames#" index="local.arrayFileName">
+                <cfquery>
+                    INSERT INTO
+                        tblProductImages
+                        (
+                            fldProductId,
+                            fldImageFileName,
+                            fldDefaultImage,
+                            fldCreatedBy
+                        )   
+                    VALUES
+                        (
+                            <cfqueryparam value="#local.qryAddProducts.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.arrayFileName.SERVERFILE#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#local.defaultValue#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">
+                        )
+                </cfquery>
+                <cfset local.defaultValue = 0>
+            </cfloop>
+        
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="fnSelectProduct" access="remote">
+        <cfargument  name="subCategoryId">
+        
+        <cfquery name="local.qrySelectProductDetails">
+            SELECT
+                tp.fldProduct_ID,
+                tp.fldProductName,
+                tp.fldDescription,
+                tp.fldPrice,
+                tp.fldTax,
+                tpi.fldProductImage_ID,
+                tpi.fldImageFileName,
+                tb.fldBrandName
+            FROM
+                tblBrands as tb
+            INNER JOIN 
+                tblProduct AS tp
+            ON
+                tb.fldBrand_Id=tp.fldBrandId
+            INNER JOIN
+                tblProductImages AS tpi
+            ON
+                tp.fldProduct_ID=tpi.fldProductId
+            WHERE
+                fldSUbCategoryId=<cfqueryparam value="#arguments.subCategoryId#" cfsqltype="cf_sql_integer">
+            AND
+                tp.fldActive=1
+            AND
+                tpi.fldActive=1
+            AND
+                tpi.fldDefaultImage=1
         </cfquery>
+        <cfreturn local.qrySelectProductDetails>
+    </cffunction>
+
+    <cffunction  name="fnSelectSingleProduct"  access="remote" returnFormat="JSON">
+        <cfargument  name="productId">
+        <cfquery name="local.qrySingleSelectProduct">
+            SELECT
+                tp.fldProduct_ID,
+                tp.fldProductName,
+                tp.fldDescription,
+                tp.fldPrice,
+                tp.fldTax,
+                tpi.fldProductImage_ID,
+                tpi.fldImageFileName,
+                tb.fldBrandName,
+                tp.fldBrandId
+            FROM
+                tblBrands as tb
+            INNER JOIN 
+                tblProduct AS tp
+            ON
+                tb.fldBrand_Id=tp.fldBrandId
+            INNER JOIN
+                tblProductImages AS tpi
+            ON
+                tp.fldProduct_ID=tpi.fldProductId
+            WHERE
+                tp.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+            AND
+                tp.fldActive=1
+            AND
+                tpi.fldActive=1
+        </cfquery>
+        <cfset structProductDetails["productName"] = local.qrySingleSelectProduct.fldProductName>
+        <cfset structProductDetails["description"] = local.qrySingleSelectProduct.fldDescription>
+        <cfset structProductDetails["price"] = local.qrySingleSelectProduct.fldPrice>
+        <cfset structProductDetails["brandId"] = local.qrySingleSelectProduct.fldBrandId>
+        <cfset structProductDetails["tax"] = local.qrySingleSelectProduct.fldtax>
+        <cfreturn structProductDetails>
+    </cffunction>
+
+    <cffunction  name="fnUpdateProduct" access="remote">
+        <cfargument  name="subcategoryListing">
+        <cfargument  name="productName">
+        <cfargument  name="brandListing">
+        <cfargument  name="productImages">
+        <cfargument  name="productDescription">
+        <cfargument  name="productPrice">
+        <cfargument  name="productTax">
+        <cfargument  name="hiddenProductId">
+        <cfset local.today = now()>
+        <cfquery name="local.qryUpdate">
+            UPDATE
+                tblProduct
+            SET
+                fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_integer">,
+                fldProductName = <cfqueryparam value="#arguments.productName#" cfsqltype="cf_sql_varchar">,
+                fldBrandId = <cfqueryparam value="#arguments.brandListing#" cfsqltype="cf_sql_varchar">,
+                fldDescription =  <cfqueryparam value="#arguments.productDescription#" cfsqltype="cf_sql_varchar">,
+                fldPrice = <cfqueryparam value="#arguments.productPrice#" cfsqltype="cf_sql_decimal">,
+                fldTax = <cfqueryparam value="#arguments.productTax#" cfsqltype="cf_sql_decimal">,
+                fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">,
+                fldUpdatedDate = <cfqueryparam value="#local.today#" cfsqltype="cf_sql_date">
+            WHERE
+                fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="cf_sql_decimal">
+            AND
+                fldActive = 1
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="fnDeleteProduct" access="remote">
+        <cfargument  name="productId">
+        <cfquery name="local.deleteProduct">
+            UPDATE
+                tblProduct
+            SET
+                fldActive = 0
+            WHERE
+                fldProduct_ID =<cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="fnSelectImage" access="remote" returnFormat="JSON">
+        <cfargument  name="productId">
+        <cfquery name="local.qrySelectImage">
+            SELECT
+                fldProductImage_ID, 
+                fldImageFileName
+            FROM
+                tblProductImages
+            WHERE
+                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_decimal">
+        </cfquery>
+        <cfset local.imagePath="Assets/productImages/">
+        <cfloop query="local.qrySelectImage">
+            <cfset local.structImageDetails[local.qrySelectImage.fldProductImage_ID] = local.imagePath & local.qrySelectImage.fldImageFileName>
+        </cfloop>
+        <cfreturn local.structImageDetails>
     </cffunction>
 
 </cfcomponent>

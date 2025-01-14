@@ -60,7 +60,7 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btnModalClose p-2" onClick="fnCloseModalSubcategory()"  data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
+                          <button type="submit" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
                         </div>
                     </div>
                 </form>
