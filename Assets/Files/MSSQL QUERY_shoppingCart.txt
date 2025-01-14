@@ -106,7 +106,7 @@ CREATE TABLE tblProduct (
   fldDescription VARCHAR(MAX) NULL,
   fldPrice DECIMAL(10, 2) NULL,
   fldTax DECIMAL(10, 2) NULL,
-  fldActive BIT NULL DEFAULT 1,
+  fldActive BIT NOT NULL DEFAULT 1,
   fldCreatedBy INT NULL,
   fldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fldUpdatedBy INT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE tblCart (
 CREATE TABLE tblProductImages (
   fldProductImage_ID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   fldProductId INT NOT NULL,
-  fldImageFileName NVARCHAR(128) NULL,
+  fldImageFileName VARCHAR(128) NULL,
   fldDefaultImage BIT NULL DEFAULT 0,
   fldCreatedBy INT NOT NULL,
   ffldCreatedDate DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,

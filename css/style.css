@@ -205,3 +205,58 @@ header{
     color:#aeced8;
     font-weight:600;
 }
+
+.productDiv{
+    height: 80vh;
+    width:70vh;
+    border: 2px solid #aeced8;
+    background: #97bac5;
+    margin: auto;
+}
+
+
+.productListingDiv{
+    height:68vh;
+    overflow: auto;
+}
+
+.productListingDiv::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+.productThumbNail{
+    height:80px;
+    width:70px;
+    border:none;
+    background: none;
+}
+
+.productThumbNail img{
+    height:100%;
+    width:100%;
+}
+
+.deleteProduct
+{
+    height:60px;
+    width:60px;
+}
+
+.imageView{
+    height:70vh;
+    width:35vw;
+}
+
+.carouselImageView{
+    height:50vh;
+    width:27vw;
+}
+
+.carouselImageView img{
+    height:100%;
+    width:100%;
+}
+
+.btnImageModal{
+    width:27vw;
+}

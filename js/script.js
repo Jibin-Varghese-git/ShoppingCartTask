@@ -253,61 +253,219 @@ function fnGetCategory()
     });
 }
 
-function fnProductModalValidation(productId){
+function openProductModal(structProduct){
+    document.getElementById("CategoryListing").value=structProduct.categoryId;
+    document.getElementById("subcategoryListing").value=structProduct.subcategoryId;
+}
+
+function fnProductModalValidation(){
+    event.preventDefault()  
+    var error = false;
     let productName = document.getElementById("productName").value;
     let productDescription = document.getElementById("productDescription").value;
     let productPrice = document.getElementById("productPrice").value;
     let productTax = document.getElementById("productTax").value;
     let productImage = document.getElementById("productImage").value;
-    let brandId = document.getElementById("brandListing").value;
-    let subcategoryId = document.getElementById("brandListing").value
+    let productId = document.getElementById("btnAddProducts").value;
     if(productName.length < 1)
     {
         document.getElementById("errorProductName").innerHTML="Enter the product name"
-        event.preventDefault();
+        error=true;
     }
     if(productDescription.length < 1)
     {
         document.getElementById("errorProductDescription").innerHTML="Enter the product description"
-        event.preventDefault();
+        error=true;
     }
     if(productPrice.length < 1)
     {
         document.getElementById("errorProductPrice").innerHTML="Enter the product Price"
-        event.preventDefault();
+        error=true;
     }
     if(productTax.length < 1)
     {
         document.getElementById("errorProductTax").innerHTML="Enter the product Tax"
-        event.preventDefault();
+        error=true;    }
+   
+    
+    if(error){
+        event.preventDefault()
     }
-    if(productImage.length < 1)
-    {
-        document.getElementById("errorProductImage").innerHTML="Choose the image"
-        event.preventDefault();
-    }
+    else {
+      
+        if(productId.length < 1){
+            if(productImage.length < 1)
+            {
+                document.getElementById("errorProductImage").innerHTML="Choose the image"
+                event.preventDefault();    
+            }
+            else{
+                var formData=new FormData(document.getElementById("productForm"));
+                formData.forEach(function(value, key) {
+                    console.log(key, value);
+                });
+                $.ajax({
+                    type:"POST",
+                    url:"components/shoppingCart.cfc?method=fnAddProduct",
+                    data: formData,
+                    processData:false,
+                    contentType:false,
+                    success:function(result){
+                        alert(result)
+                        if(result == "true")
+                        {
+                           location.reload()
+                        }
+                        else
+                        {
+                            document.getElementById("errorProductName").innerHTML="Product name already exist";
+                            event.preventDefault();
+                        }
+                    }
+                });
+            }
+        }
+        else{
+            var formData=new FormData(document.getElementById("productForm"));
+            formData.forEach(function(value, key) {
+                console.log(key, value);
+            });
+            $.ajax({
+                type:"POST",
+                url:"components/shoppingCart.cfc?method=fnUpdateProduct",
+                data: formData,
+                processData:false,
+                contentType:false,
+                success:function(result){
+                    if(result)
+                    {
+                       location.reload()
+                    }
+                }
+            });
+        }
+    } 
+}
 
-    if(productId.value.length < 1){
-        alert("Insert")
+function fnEditProductModal(structProduct){
+    console.log(structProduct.productId)
+    $.ajax({
+        type:"POST",
+        url:"components/shoppingCart.cfc?method=fnSelectSingleProduct",
+        data:{productId:structProduct.productId},
+        success:function(result){
+            if(result)
+            {
+               structProductDetails=JSON.parse(result);
+               document.getElementById("CategoryListing").value=structProduct.categoryId;
+               document.getElementById("subcategoryListing").value=structProduct.subcategoryId;
+               document.getElementById("productName").value=structProductDetails.productName;
+               document.getElementById("brandListing").value=structProductDetails.brandId;
+               document.getElementById("productDescription").value=structProductDetails.description;
+               document.getElementById("productPrice").value=structProductDetails.price;
+               document.getElementById("productTax").value=structProductDetails.tax;
+               document.getElementById("hiddenProductId").value=structProduct.productId
+               document.getElementById("btnAddProducts").value=structProduct.productId;
+            }
+        }
+    });
+}
+
+
+function fnDeleteProduct(productId)
+{
+    if(confirm("Do you want to Delete this item?"))
+    {
         $.ajax({
             type:"GET",
-            url:"components/shoppingCart.cfc?method=fnAddProduct",
-            data:{  productName : productName,
-                productDescription : productDescription,
-                productPrice : productPrice,
-                productTax : productTax,
-                brandId : brandId,
-                subcategoryId : subcategoryId
-            },
+            url:"components/shoppingCart.cfc?method=fnDeleteProduct",
+            data:{productId : productId.value},
             success:function(result){
                 if(result)
                 {
-                    document.getElementById(subcategoryId.value).remove();
+                    document.getElementById(productId.value).remove();
                 }
             }
         });
-    }
-    else{
-        alert("Update")
-    }
+    } 
+}
+
+function fnImageModal(structImage){
+    $.ajax({
+        type:"GET",
+        url:"components/shoppingCart.cfc?method=fnSelectImage",
+        data:{productId : structImage.productId},
+        success:function(result){
+            if(result)
+            {
+                structImageDetails = JSON.parse(result);
+                const carouselContainer = document.getElementById('carouselInner');
+                const btnContainer=document.getElementById("btnImageModal")
+                var active = 1; 
+                carouselContainer.innerHTML = ''; 
+                btnContainer .innerHTML = '';  
+                for (var key in structImageDetails) {
+                    if (structImageDetails.hasOwnProperty(key)) {
+                        console.log(structImageDetails[key]);
+                        console.log(key);
+                        const carouselSubContainer = document.createElement('div');
+                        carouselSubContainer.classList.add('carousel-item');
+                        if (active == 1) {
+                            carouselSubContainer.classList.add('active');
+                            active=0; 
+                        }
+                        const image = document.createElement('img');
+                        image.src = structImageDetails[key];
+                        image.width=100;
+                        image.height=100;
+                        image.alt = `Image ${key}`;
+                        carouselSubContainer.append(image);
+                        carouselContainer.append(carouselSubContainer);
+
+                        // Create a div container for the buttons inside the carousel item
+                        const buttonContainer = document.createElement('div');
+                        buttonContainer.classList.add('button-container'); // Optional: Add a class for styling buttons
+                                    
+                        // Create "Delete" button
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.value = key;
+                                    
+                        // Correct way to assign onclick event (using a function reference)
+                        deleteBtn.onclick = function() {
+                            fnProductDelete(key);  // Pass key to the delete function
+                        };
+                    
+                        // Create "Set as Thumbnail" button
+                        const thumbnailBtn = document.createElement('button');
+                        thumbnailBtn.textContent = 'Set as Thumbnail';
+                        thumbnailBtn.value = key;
+                    
+                        // Correct way to assign onclick event (using a function reference)
+                        thumbnailBtn.onclick = function() {
+                            fnSetThumbnail(key);  // Pass key to the set thumbnail function
+                        };
+                    
+                        // Append buttons to the button container
+                        buttonContainer.append(deleteBtn, thumbnailBtn);
+                    
+                        // Append the button container to the carousel item
+                        carouselSubContainer.append(buttonContainer);
+
+
+                    }
+                }
+                
+                
+            }
+        }
+    });
+}
+
+function fnProductDelete(){
+    console.log()
+}
+
+function fnSetThumbnail(){
+
 }
