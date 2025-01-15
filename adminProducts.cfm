@@ -64,19 +64,16 @@
                     <div class="modal-content imageView d-flex  flex-column justify-content-between  px-5 pt-3">
                         <div class="">
                             <div id="carouselExample" class="carousel  carousel-dark slide">
-                                <div class="carousel-inner carouselImageView border border-primary" id="carouselInner">
+                                <div class="carousel-inner carouselImageView p-2" id="carouselInner">
                                 </div>
                                 <button class="carousel-control-prev"  type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                  <span class="carousel-control-prev-icon btn btn-dark" aria-hidden="true"></span>
                                   <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                  <span class="carousel-control-next-icon btn btn-dark" aria-hidden="true"></span>
                                   <span class="visually-hidden">Next</span>
                                 </button>
-                            </div>
-                            <div class="btnImageModal border border-success d-flex" id="btnImageModal">
-                                
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -88,11 +85,11 @@
           </div>
         <div class="modal fade" id="modalAddProducts" tabindex="-1" aria-labelledby="static" aria-hidden="true">
             <div class="modal-dialog">
-                <form method="post" id="productForm" onsubmit="return fnProductModalValidation()" enctype="multipart/form-data">
+                <form method="post" id="productForm"  enctype="multipart/form-data">
                     <div class="modal-content  modalAddProducts d-flex  flex-column justify-content-between px-3 pt-4">
-                        <div class="modalInputProducts border">
+                        <div class="modalInputProducts">
                             <div class="modalAddProductsHeading">
-                                <span>Add Products</span>
+                                <span id="modalAddProductsHeading">Add Product</span>
                             </div>
                             <div class="modalAddProductsBody">
                                     <cfset categoryListingValues=application.objShoppingCart.fnSelectCategory()> 
@@ -130,10 +127,10 @@
                                     <input type="text" class="productDescription mt-2 w-100" name="productDescription" id="productDescription"><br>
                                     <span id="errorProductDescription" class="text-danger fw-bold fs-6"></span><br>
                                     <span class="my-2">Product Price</span>
-                                    <input type="text" class="productPrice mt-2 w-100" name="productPrice" id="productPrice"><br>
+                                    <input type="number" step="0.01" class="productPrice mt-2 w-100" name="productPrice" id="productPrice"><br>
                                     <span id="errorProductPrice" class="text-danger fw-bold fs-6"></span><br>
                                     <span class="my-2">Product Tax</span>
-                                    <input type="text" class="productTax mt-2 w-100" name="productTax" id="productTax"><br>
+                                    <input type="number" step="0.01" class="productTax mt-2 w-100" name="productTax" id="productTax"><br>
                                     <span id="errorProductTax" class="text-danger fw-bold fs-6"></span><br>
                                     <span class="my-2">Product Image</span>
                                     <input type="file" class="productImage mt-2 w-100" name="productImage" id="productImage" multiple><br>
@@ -143,8 +140,8 @@
                         </div>
                         <div class="modal-footer">
                             <cfoutput>
-                                <button type="button" class="btnModalClose p-2" onClick=""  data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btnAddProducts  p-2" value="" id="btnAddProducts">Edit Subcategory</button>
+                                <button type="button" class="btnModalClose p-2" onClick="fnCloseProduct()"  data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btnAddProducts  p-2" value="" onclick="fnProductModalValidation()" id="btnAddProducts">Add Product</button>
                             </cfoutput>
                         </div>
                     </div>

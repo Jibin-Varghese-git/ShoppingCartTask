@@ -134,7 +134,7 @@ header{
 }
 
 .btnModalClose{
-    background: #e69696;;
+    background: #e69696;
     border:none;
     color: #ffffff;
     font-weight: 700;
@@ -260,3 +260,26 @@ header{
 .btnImageModal{
     width:27vw;
 }
+
+
+.button-container{
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+}
+
+.button-container button{
+    color: #ffffff;
+    font-weight: 600;
+    border:none;
+    width:50%;
+}
+
+.btnAddProducts{
+    background: #aeced8;;
+    border:none;
+    color: #ffffff;
+    font-weight: 700; 
+}
+
+

@@ -1,0 +1,75 @@
+body{
+    padding: 0;
+    margin: 0;
+    background-color: #d2c9ff;
+}
+
+header{
+    height:10vh;
+    width:100%;
+    background-color:#ffffff;
+}
+
+header a{
+    text-decoration: none;
+}
+
+.mainContainerSignup{
+    height: auto;
+    width: 80vw;
+    border-radius: 20px;
+    background-color: #ffffff;
+    margin: auto;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;;
+}
+
+.containerSignup{
+    height: 80vh;
+    width: 35vw;
+    background-color: #777777;
+    border-radius: 20px;
+    margin: auto;
+}
+
+.subContainerSignup{
+    height: 65vh;
+}
+
+.logoHeading{
+    font-size: 22px;
+    font-weight: 700;
+    color: #ccc2ff;
+}
+
+.loginBtnClass button{
+    background:none;
+    border: none;
+    color:#ccc2ff;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.signupHeading{
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+
+.signupHeading h2{
+    color:#ffffff
+}
+
+.userInputFields span{
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.btnSignup{
+    background-color: #ffffff;
+    border: none;
+    width:45%;
+    font-size: 18px;
+    font-weight: 600;
+}
+
