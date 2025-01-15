@@ -311,15 +311,15 @@ function fnProductModalValidation(){
                     processData:false,
                     contentType:false,
                     success:function(result){
-                        alert(result)
-                        if(result == "true")
-                        {
-                           location.reload()
-                        }
-                        else
+                        if(result == "false")
                         {
                             document.getElementById("errorProductName").innerHTML="Product name already exist";
                             event.preventDefault();
+                           
+                        }
+                        else
+                        {
+                            location.reload()
                         }
                     }
                 });
@@ -337,9 +337,15 @@ function fnProductModalValidation(){
                 processData:false,
                 contentType:false,
                 success:function(result){
-                    if(result)
+                    if(result == "false")
                     {
-                       location.reload()
+                        document.getElementById("errorProductName").innerHTML="Product name already exist";
+                        event.preventDefault();
+                       
+                    }
+                    else
+                    {
+                        location.reload()
                     }
                 }
             });
@@ -357,6 +363,8 @@ function fnEditProductModal(structProduct){
             if(result)
             {
                structProductDetails=JSON.parse(result);
+               document.getElementById("btnAddProducts").innerHTML="Edit Product"
+               document.getElementById("modalAddProductsHeading").innerHTML="Edit Product"
                document.getElementById("CategoryListing").value=structProduct.categoryId;
                document.getElementById("subcategoryListing").value=structProduct.subcategoryId;
                document.getElementById("productName").value=structProductDetails.productName;
@@ -400,72 +408,101 @@ function fnImageModal(structImage){
             {
                 structImageDetails = JSON.parse(result);
                 const carouselContainer = document.getElementById('carouselInner');
-                const btnContainer=document.getElementById("btnImageModal")
-                var active = 1; 
-                carouselContainer.innerHTML = ''; 
-                btnContainer .innerHTML = '';  
-                for (var key in structImageDetails) {
-                    if (structImageDetails.hasOwnProperty(key)) {
-                        console.log(structImageDetails[key]);
+                carouselContainer.innerHTML = '';
+
+                var thumbnailImageKey=Object.keys(structImageDetails.thumbnailImage);
+                const carouselSubContainer = document.createElement('div');
+                carouselSubContainer.classList.add('carousel-item');
+                carouselSubContainer.style.backgroundColor = '#f0f0f0';
+                const image = document.createElement('img');
+                image.src = structImageDetails.thumbnailImage[thumbnailImageKey];
+                image.style.maxWidth = '27vw';
+                image.style.maxHeight = '44vh';
+                image.alt = `Image ${key}`;
+                carouselSubContainer.append(image);
+                carouselSubContainer.classList.add('active');
+                carouselContainer.append(carouselSubContainer);
+                
+                for (var key in structImageDetails.otherImages) {
+                    if (structImageDetails.otherImages.hasOwnProperty(key)) {
+                        console.log(structImageDetails.otherImages[key]);
                         console.log(key);
+
                         const carouselSubContainer = document.createElement('div');
                         carouselSubContainer.classList.add('carousel-item');
-                        if (active == 1) {
-                            carouselSubContainer.classList.add('active');
-                            active=0; 
-                        }
+                        carouselSubContainer.style.backgroundColor = '#f0f0f0';
                         const image = document.createElement('img');
-                        image.src = structImageDetails[key];
-                        image.width=100;
-                        image.height=100;
+                        image.src = structImageDetails.otherImages[key];
+                        image.style.maxWidth = '27vw';
+                        image.style.maxHeight = '44vh';
                         image.alt = `Image ${key}`;
                         carouselSubContainer.append(image);
-                        carouselContainer.append(carouselSubContainer);
 
-                        // Create a div container for the buttons inside the carousel item
                         const buttonContainer = document.createElement('div');
-                        buttonContainer.classList.add('button-container'); // Optional: Add a class for styling buttons
-                                    
-                        // Create "Delete" button
+                        buttonContainer.classList.add('button-container');
+
                         const deleteBtn = document.createElement('button');
                         deleteBtn.textContent = 'Delete';
                         deleteBtn.value = key;
-                                    
-                        // Correct way to assign onclick event (using a function reference)
+                        deleteBtn.type='button';
+                        deleteBtn.style.margin = '5px';
+                        deleteBtn.style.backgroundColor = '#e69696';
                         deleteBtn.onclick = function() {
-                            fnProductDelete(key);  // Pass key to the delete function
+                            fnProductDelete(this,structImage.productId);
                         };
                     
-                        // Create "Set as Thumbnail" button
                         const thumbnailBtn = document.createElement('button');
                         thumbnailBtn.textContent = 'Set as Thumbnail';
                         thumbnailBtn.value = key;
-                    
-                        // Correct way to assign onclick event (using a function reference)
+                        thumbnailBtn.type='button';
+                        thumbnailBtn.style.margin = '5px';
+                        thumbnailBtn.style.backgroundColor = '#018749';
                         thumbnailBtn.onclick = function() {
-                            fnSetThumbnail(key);  // Pass key to the set thumbnail function
-                        };
-                    
-                        // Append buttons to the button container
+                            fnSetThumbnail(this,structImage.productId);
+                        }   
                         buttonContainer.append(deleteBtn, thumbnailBtn);
-                    
-                        // Append the button container to the carousel item
                         carouselSubContainer.append(buttonContainer);
-
-
+                        carouselContainer.append(carouselSubContainer);
                     }
-                }
-                
-                
+                }  
             }
         }
     });
 }
 
-function fnProductDelete(){
-    console.log()
+function fnProductDelete(productImageId,productId){
+    console.log(productImageId.value)
+    $.ajax({
+        type:"POST",
+        url:"components/shoppingCart.cfc?method=fnDeleteProductImage",
+        data:{productImageId : productImageId.value},
+        success:function(result){
+            if(result){
+                fnImageModal({productId:productId});
+            }
+        }
+    });
 }
 
-function fnSetThumbnail(){
+function fnSetThumbnail(productImageId,productId){
+    console.log(productImageId.value,productId)
+    $.ajax({
+        type:"POST",
+        url:"components/shoppingCart.cfc?method=fnSetThumbnail",
+        data:{  productImageId : productImageId.value,
+                productId  : productId
+        },
+        success:function(result){
+            if(result){
+                fnImageModal({productId:productId});
+            }
 
+        }
+    });
+}
+
+function fnCloseProduct(){
+    document.getElementById("productForm").reset();
+    document.getElementById("btnAddProducts").innerHTML="Add Product"
+    document.getElementById("modalAddProductsHeading").innerHTML="Add Product"
 }
