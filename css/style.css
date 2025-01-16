@@ -282,4 +282,86 @@ header{
     font-weight: 700; 
 }
 
+.editBtndiv{
+    position: relative;
+    display: inline-block;
+}
+
+.editBtndiv .tooltiptext{
+    visibility: hidden;
+    width: 50px;
+    height: 30px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.editBtndiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.deleteBtndiv{
+    position: relative;
+    display: inline-block;
+}
+
+.deleteBtndiv .tooltiptext{
+    visibility: hidden;
+    width: 50px;
+    height: 30px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.deleteBtndiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.forwardBtndiv{
+    position: relative;
+    display: inline-block;
+}
+
+.forwardBtndiv .tooltiptext{
+    visibility: hidden;
+    width: 81px;
+    height: 30px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.forwardBtndiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+
 

@@ -39,9 +39,18 @@
                             <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#result.fldCategory_ID#">
                                 <span>#result.fldCategoryName#</span>
                                 <div class="categoryButtons">
-                                    <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <div class="editBtndiv">
+                                        <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <span class="tooltiptext">Edit</span>
+                                    </div>
+                                    <div class="deleteBtndiv">
+                                        <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <span class="tooltiptext">Delete</span>
+                                    </div>
+                                    <div class="forwardBtndiv">
+                                        <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <span class="tooltiptext">Subcategory</span>
+                                    </div>
                                 </div>
                             </div>
                         </cfloop>
@@ -55,12 +64,12 @@
                     <div class="modal-content d-flex  flex-column justify-content-between px-3 pt-4">
                         <div class="modalInputCategory">
                             <input type="text" class="newCategoryName mt-4 w-100" id="newCategoryName"><br>
-                            <span id="errorNewCategory" class="text-danger fw-bold fs-6"></span>
+                            <span id="errorNewCategory" class="text-danger fw-bold fs-6"></span><br>
                             <span class="ms-5" id="categoryModalHeading">Add Category</span>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btnModalClose p-2" onClick="fnCloseModalSubcategory()"  data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
+                          <button type="button" class="btnModalClose p-2" onClick="fnCloseModalCategory()"  data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btnAddCategory  p-2" id="btnAddCategory" onClick="fnAddCategory()">Add Category</button>
                         </div>
                     </div>
                 </form>

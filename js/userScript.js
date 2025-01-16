@@ -51,3 +51,30 @@ function fnsignupValidation(){
         event.preventDefault()
     }
 }
+
+function fnLoginValidation(){
+    let userName = document.getElementById("userNameLogin").value;
+    let password = document.getElementById("passwordLogin").value;
+    let flag = true
+
+    if(userName.trim().length <1)
+    {
+        document.getElementById("errorUserName").innerHTML="Enter the Username";
+        flag = false;
+    }
+
+    if(password.trim().length <1)
+    {
+        document.getElementById("errorPasswordLogin").innerHTML="Enter the Password";
+        flag = false;
+    }
+
+    if(flag == false)
+    {
+        event.preventDefault()
+    }
+}
+
+function fnUserLogout(){
+    
+}
