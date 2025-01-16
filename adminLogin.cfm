@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
     <head>
         <title>ADMIN LOGIN</title>
@@ -7,7 +6,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-
+<!---     <cfset onApplicationStart()> --->
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -35,15 +34,19 @@
                         <div id="errorUserName"  class="text-danger fw-bold"></div>
                         <input type="password" name="password" placeholder="Password" id="password" class="my-3">
                         <div id="errorPassword" class="text-danger fw-bold"></div>
+                        <cfif structKeyExists(form, "loginBtn")>
+                            <cfset structAdminLoginReturn = application.objShoppingCart.fnAdminLogin(form)>
+                            <cfif NOT structAdminLoginReturn["error"]>
+                                <cflocation  url="adminCategory.cfm" addtoken="no">
+                            <cfelse>
+                                <cfoutput>
+                                    <span id="errorPassword" class="text-danger fw-bold">#structAdminLoginReturn["errorMessage"]#</span>
+                                </cfoutput>
+                            </cfif>
+                        </cfif>
                         <button type="submit" name="loginBtn" class="mt-3" onClick="fnValAdminLogin()">LOGIN</button>
                     </div>
                 </form>
-                <cfif structKeyExists(form, "loginBtn")>
-                    <cfset result = application.objShoppingCart.fnAdminLogin(form)>
-                    <cfif NOT result>
-                        <span class="fw-bold text-danger">Invalid Username or Password</span>
-                    </cfif>
-                </cfif>
             </div>
         </div>
      

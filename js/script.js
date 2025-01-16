@@ -62,43 +62,45 @@ function fnAddCategory(){
         document.getElementById("errorNewCategory").innerHTML="Enter the category name."
         event.preventDefault;
     }
-    else if(categoryId.length > 0)
-    {
-        $.ajax({
-            type:"GET",
-            url:"components/shoppingCart.cfc?method=fnUpdateCategory",
-            data:{categoryName : categoryName , categoryId : categoryId},
-            success:function(result){
-                if(result == "true")
-                {
-                    location.reload()
+    else {
+        if(categoryId.length > 0)
+        {
+            $.ajax({
+                type:"GET",
+                url:"components/shoppingCart.cfc?method=fnUpdateCategory",
+                data:{categoryName : categoryName , categoryId : categoryId},
+                success:function(result){
+                    if(result == "true")
+                    {
+                        location.reload()
+                    }
+                    else
+                    {
+                        document.getElementById("errorNewCategory").innerHTML="CategoryName Already Exists"
+                    }
                 }
-                else
-                {
-                    document.getElementById("errorNewCategory").innerHTML="CategoryName Already Exists"
+            });
+        }
+        else
+        {
+            $.ajax({
+                type:"GET",
+                url:"components/shoppingCart.cfc?method=fnAddCategory",
+                data:{categoryName},
+                success:function(result){
+                    if(result == "true")
+                    {
+                        location.reload()
+                    }
+                    else
+                    {
+                        document.getElementById("errorNewCategory").innerHTML="CategoryName Already Exists"
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-    else
-    {
-        $.ajax({
-            type:"GET",
-            url:"components/shoppingCart.cfc?method=fnAddCategory",
-            data:{categoryName},
-            success:function(result){
-                if(result == "true")
-                {
-                    location.reload()
-                }
-                else
-                {
-                    document.getElementById("errorNewCategory").innerHTML="CategoryName Already Exists"
-                }
-            }
-        });
-    }
-}
+}   
 
 function fnCloseModalCategory(){
     document.getElementById("errorNewCategory").innerHTML=" ";
@@ -127,8 +129,6 @@ function fnAddSubcategory(){
     let subcategoryName=document.getElementById("newSubcategoryName").value;
     let categoryId=document.getElementById("categoryListing").value;
     let subcategoryId=document.getElementById("btnAddSubcategory").value;
-    console.log(categoryId ,"catid")
-    console.log(subcategoryId,subcategoryName)
     if(subcategoryName.length < 1)
     {
         document.getElementById("errorNewSubcategory").innerHTML="Enter the category name."

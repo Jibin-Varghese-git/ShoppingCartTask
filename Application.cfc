@@ -17,4 +17,8 @@
             <cfinclude  template="adminLogin.cfm">
         </cfif>
     </cffunction>
+<!---     <cffunction  name="onRequestStart" returntype="any"> 
+        <cfif >
+        </cfif>
+    </cffunction>--->
 </cfcomponent>

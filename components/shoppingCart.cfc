@@ -2,6 +2,17 @@
 
     <cffunction  name="fnAdminLogin">
         <cfargument  name="structAdminDetails">
+        <cfset local.structAdminLoginReturn = structNew()>
+        <cfset local.structAdminLoginReturn["error"] = false>
+        <cfif Len(trim(arguments.structAdminDetails.userName)) EQ 0>
+            <cfset local.structAdminLoginReturn["error"] = true>
+            <cfset local.structAdminLoginReturn["errorMessage"] = "Enter the username">
+        </cfif>
+        <cfif Len(trim(arguments.structAdminDetails.password)) EQ 0>
+            <cfset local.structAdminLoginReturn["error"] = true>
+            <cfset local.structAdminLoginReturn["errorMessage"] = "Enter the password">
+        </cfif>
+        <cfif  NOT local.structAdminLoginReturn["error"]>
             <cfquery name="local.qrySelectAdmin">
                 SELECT 
                     fldUser_ID,
@@ -15,29 +26,35 @@
                 FROM 
                     tblUser
                 WHERE  
-                    (fldEmail = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="cf_sql_varchar">
+                    (fldEmail = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="varchar">
                 OR 
-                    fldPhone = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="cf_sql_varchar">)
+                    fldPhone = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="varchar">)
                 AND
-                    fldRoleId = <cfqueryparam value='0' cfsqltype="cf_sql_varchar">
+                    fldRoleId = <cfqueryparam value=0 cfsqltype="integer">
                 AND
                     fldActive = 1
             </cfquery>
-            <cfset local.password = arguments.structAdminDetails.password & local.qrySelectAdmin.fldUserSaltString>
-            <cfset local.hashedPassword = hash(local.password,"SHA-256","UTF-8")>
-            <cfif local.hashedPassword EQ local.qrySelectAdmin.fldHashedPassword>
-                <cfset session.structUserDetails["userId"] = local.qrySelectAdmin.flduser_ID>
-                <cfset session.structUserDetails["firstName"] = local.qrySelectAdmin.fldFirstName>
-                <cfset session.structUserDetails["lastName"] = local.qrySelectAdmin.fldLastName>
-                <cfset session.structUserDetails["phone"] = local.qrySelectAdmin.fldPhone>
-                <cfset session.structUserDetails["email"] = local.qrySelectAdmin.fldEmail>
-                <cfset session.structUserDetails["roleId"] = local.qrySelectAdmin.fldRoleId>
-                <cfset local.result = true>
-                <cflocation  url="adminCategory.cfm" addToken="no">
+            <cfif queryRecordCount(local.qrySelectAdmin)>
+                <cfset local.password = arguments.structAdminDetails.password & local.qrySelectAdmin.fldUserSaltString>
+                <cfset local.hashedPassword = hash(local.password,"SHA-256","UTF-8")>
+                <cfif local.hashedPassword EQ local.qrySelectAdmin.fldHashedPassword>
+                    <cfset session.structUserDetails["userId"] = local.qrySelectAdmin.flduser_ID>
+                    <cfset session.structUserDetails["firstName"] = local.qrySelectAdmin.fldFirstName>
+                    <cfset session.structUserDetails["lastName"] = local.qrySelectAdmin.fldLastName>
+                    <cfset session.structUserDetails["phone"] = local.qrySelectAdmin.fldPhone>
+                    <cfset session.structUserDetails["email"] = local.qrySelectAdmin.fldEmail>
+                    <cfset session.structUserDetails["roleId"] = local.qrySelectAdmin.fldRoleId>
+                    <cfset local.structAdminLoginReturn["error"] = false>
+                <cfelse>
+                    <cfset local.structAdminLoginReturn["error"] = true>
+                    <cfset local.structAdminLoginReturn["errorMessage"] = "Invalid password">                
+                </cfif>
             <cfelse>
-                <cfset local.result = false>
+                <cfset local.structAdminLoginReturn["error"] = true>
+                <cfset local.structAdminLoginReturn["errorMessage"] = "Invalid Username">
             </cfif>
-            <cfreturn local.result>
+        </cfif>
+        <cfreturn local.structAdminLoginReturn>
     </cffunction>
 
     <cffunction  name="fnLogout" access="remote">
@@ -68,7 +85,7 @@
             FROM
                 tblCategory
             WHERE
-                fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">
+                fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="varchar">
             AND
                 fldActive = 1
         </cfquery>
@@ -82,8 +99,8 @@
                     )
                 VALUES
                     (
-                        <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_varchar">
+                        <cfqueryparam value="#arguments.categoryName#" cfsqltype="varchar">,
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="varchar">
                     )
             </cfquery>
             <cfset local.result = true>
@@ -99,9 +116,9 @@
             UPDATE 
                 tblCategory
             SET
-                fldActive = <cfqueryparam value='0' cfsqltype="cf_sql_integer">
+                fldActive = <cfqueryparam value='0' cfsqltype="integer">
             WHERE
-                fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+                fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
         </cfquery>
         <cfreturn true>
     </cffunction>
@@ -114,7 +131,7 @@
             FROM
                 tblCategory
             WHERE
-                fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_varchar">
+                fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="varchar">
             AND
                 fldActive = 1
         </cfquery>
@@ -132,11 +149,11 @@
             FROM
                 tblCategory
             WHERE 
-                fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">
+                fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="varchar">
             AND
                 fldActive = 1
             AND NOT 
-                fldcategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+                fldcategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
         </cfquery>
         <cfif qrycategoryNameCount.categoryNameCount LT 1> 
             <cfset local.todayDate = now()>
@@ -144,11 +161,11 @@
                 UPDATE 
                     tblCategory
                 SET
-                    fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
-                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_varchar">,
-                    fldUpdatedDate = <cfqueryparam value="#local.todayDate#" cfsqltype="cf_sql_date">
+                    fldCategoryName = <cfqueryparam value="#arguments.categoryName#" cfsqltype="varchar">,
+                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="varchar">,
+                    fldUpdatedDate = <cfqueryparam value="#local.todayDate#" cfsqltype="date">
                 WHERE
-                    fldcategory_ID=<cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+                    fldcategory_ID=<cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
             </cfquery>
             <cfset local.result = true>
         <cfelse>
@@ -166,7 +183,7 @@
             FROM
                 tblSubCategory
             WHERE
-                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
             AND
                 fldActive = 1
         </cfquery>
@@ -188,11 +205,11 @@
             FROM
                 tblSubCategory
             WHERE
-                fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">
+                fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="varchar">
             AND
                 fldActive = 1
             AND
-                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_varchar">
+                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="varchar">
         </cfquery>
         <cfif qrycategoryNameCount.subcategoryNameCount LT 1> 
             <cfquery name="qryAddSubcategory">
@@ -205,9 +222,9 @@
                     )
                 VALUES
                     (
-                        <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_varchar">
+                        <cfqueryparam value="#arguments.categoryId#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="varchar">,
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="varchar">
                     )
             </cfquery>
             <cfset local.result = true>
@@ -228,7 +245,7 @@
             FROM
                 tblSubCategory
             WHERE
-                fldSubCategory_Id = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+                fldSubCategory_Id = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
         </cfquery>
         <cfset local.structSubcategoryDetails["subcategoryId"] = qrySelectSubcategoryDetails.fldSubCategory_ID>
         <cfset local.structSubcategoryDetails["subcategoryName"] = qrySelectSubcategoryDetails.fldSubCategoryName>
@@ -248,13 +265,13 @@
             FROM
                 tblSubCategory
             WHERE 
-                fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">
+                fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="varchar">
             AND
                 fldActive = 1
             AND
-                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">
+                fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
             AND NOT 
-                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
         </cfquery>
         <cfif qrySubcategoryNameCount.subcategoryNameCount LT 1> 
             <cfset local.todayDate = now()>
@@ -262,12 +279,12 @@
                 UPDATE 
                     tblSubCategory
                 SET
-                    fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="cf_sql_varchar">,
-                    fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="cf_sql_integer">,
-                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_varchar">,
-                    fldUpdatedDate = <cfqueryparam value="#local.todayDate#" cfsqltype="cf_sql_date">
+                    fldSubCategoryName = <cfqueryparam value="#arguments.subcategoryName#" cfsqltype="varchar">,
+                    fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">,
+                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="varchar">,
+                    fldUpdatedDate = <cfqueryparam value="#local.todayDate#" cfsqltype="date">
                 WHERE
-                    fldSubCategory_ID=<cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+                    fldSubCategory_ID=<cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
             </cfquery>
             <cfset local.result = true>
         <cfelse>
@@ -282,9 +299,9 @@
             UPDATE 
                 tblSubCategory
             SET
-                fldActive = <cfqueryparam value='0' cfsqltype="cf_sql_integer">
+                fldActive = <cfqueryparam value='0' cfsqltype="integer">
             WHERE
-                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="cf_sql_integer">
+                fldSubCategory_ID = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
         </cfquery>
         <cfreturn true>
     </cffunction>
@@ -317,11 +334,11 @@
             FROM
                 tblProduct
             WHERE
-                fldProductName = <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="cf_sql_varchar">
+                fldProductName = <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="varchar">
             AND
                 fldActive = 1
             AND
-                fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_varchar">
+                fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="varchar">
         </cfquery>
         <cfif local.qryProductNameCheck.productNameCount LT 1>
             <cfset local.imageLocation="../Assets/productImages">
@@ -348,13 +365,13 @@
                     )
                 VALUES
                     (
-                        <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.brandListing#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.productDescription#" cfsqltype="cf_sql_varchar">,
-                        <cfqueryparam value="#arguments.productPrice#" cfsqltype="cf_sql_decimal" scale="2">,
-                        <cfqueryparam value="#arguments.productTax#" cfsqltype="cf_sql_decimal" scale="2">,
-                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">
+                        <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="integer">,
+                        <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.brandListing#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.productDescription#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.productPrice#" cfsqltype="decimal" scale="2">,
+                        <cfqueryparam value="#arguments.productTax#" cfsqltype="decimal" scale="2">,
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
                     )
             </cfquery>
             <cfset local.defaultValue = 1>
@@ -370,20 +387,18 @@
                         )   
                     VALUES
                         (
-                            <cfqueryparam value="#local.qryAddProducts.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#local.arrayFileName.SERVERFILE#" cfsqltype="cf_sql_varchar">,
-                            <cfqueryparam value="#local.defaultValue#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">
+                            <cfqueryparam value="#local.qryAddProducts.GENERATEDKEY#" cfsqltype="integer">,
+                            <cfqueryparam value="#local.arrayFileName.SERVERFILE#" cfsqltype="varchar">,
+                            <cfqueryparam value="#local.defaultValue#" cfsqltype="integer">,
+                            <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
                         )
                 </cfquery>
                 <cfset local.defaultValue = 0>
-                <cfreturn true>
             </cfloop>
             <cfset local.result=true>
         <cfelse>
             <cfset local.result=false>
         </cfif>
-        
         <cfreturn local.result>
     </cffunction>
 
@@ -411,7 +426,7 @@
             ON
                 tp.fldProduct_ID=tpi.fldProductId
             WHERE
-                fldSUbCategoryId=<cfqueryparam value="#arguments.subCategoryId#" cfsqltype="cf_sql_integer">
+                fldSUbCategoryId=<cfqueryparam value="#arguments.subCategoryId#" cfsqltype="integer">
             AND
                 tp.fldActive=1
             AND
@@ -446,7 +461,7 @@
             ON
                 tp.fldProduct_ID=tpi.fldProductId
             WHERE
-                tp.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+                tp.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="integer">
             AND
                 tp.fldActive=1
             AND
@@ -475,14 +490,14 @@
             FROM
                 tblProduct
             WHERE
-                fldProductName = <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="cf_sql_varchar">
+                fldProductName = <cfqueryparam value="#trim(arguments.productName)#" cfsqltype="varchar">
             AND
                 fldActive = 1
             AND
-                fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_varchar">
+                fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="varchar">
             AND
                 NOT
-                fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="cf_sql_decimal">
+                fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="decimal">
         </cfquery>
         <cfif local.qryProductNameCheck.productNameCount LT 1>
             <cfset local.imageLocation="../Assets/productImages">
@@ -499,16 +514,16 @@
                 UPDATE
                     tblProduct
                 SET
-                    fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="cf_sql_integer">,
-                    fldProductName = <cfqueryparam value="#arguments.productName#" cfsqltype="cf_sql_varchar">,
-                    fldBrandId = <cfqueryparam value="#arguments.brandListing#" cfsqltype="cf_sql_varchar">,
-                    fldDescription =  <cfqueryparam value="#arguments.productDescription#" cfsqltype="cf_sql_varchar">,
-                    fldPrice = <cfqueryparam value="#arguments.productPrice#" cfsqltype="cf_sql_decimal" scale="2">,
-                    fldTax = <cfqueryparam value="#arguments.productTax#" cfsqltype="cf_sql_decimal" scale="2">,
-                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">,
-                    fldUpdatedDate = <cfqueryparam value="#local.today#" cfsqltype="cf_sql_date">
+                    fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="integer">,
+                    fldProductName = <cfqueryparam value="#arguments.productName#" cfsqltype="varchar">,
+                    fldBrandId = <cfqueryparam value="#arguments.brandListing#" cfsqltype="varchar">,
+                    fldDescription =  <cfqueryparam value="#arguments.productDescription#" cfsqltype="varchar">,
+                    fldPrice = <cfqueryparam value="#arguments.productPrice#" cfsqltype="decimal" scale="2">,
+                    fldTax = <cfqueryparam value="#arguments.productTax#" cfsqltype="decimal" scale="2">,
+                    fldUpdatedBy = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                    fldUpdatedDate = <cfqueryparam value="#local.today#" cfsqltype="date">
                 WHERE
-                    fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="cf_sql_decimal">
+                    fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="decimal">
                 AND
                     fldActive = 1
             </cfquery>
@@ -525,10 +540,10 @@
                             )   
                         VALUES
                             (
-                                <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#local.arrayFileName.SERVERFILE#" cfsqltype="cf_sql_varchar">,
-                                <cfqueryparam value="#local.defaultValue#" cfsqltype="cf_sql_integer">,
-                                <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="cf_sql_integer">
+                                <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="integer">,
+                                <cfqueryparam value="#local.arrayFileName.SERVERFILE#" cfsqltype="varchar">,
+                                <cfqueryparam value="#local.defaultValue#" cfsqltype="integer">,
+                                <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
                             )
                     </cfquery>
             </cfloop>
@@ -548,7 +563,7 @@
             SET
                 fldActive = 0
             WHERE
-                fldProduct_ID =<cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+                fldProduct_ID =<cfqueryparam value="#arguments.productId#" cfsqltype="integer">
         </cfquery>
         <cfreturn true>
     </cffunction>
@@ -563,7 +578,7 @@
             FROM
                 tblProductImages
             WHERE
-                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_decimal">
+                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="decimal">
             AND
                 fldActive = 1
             ORDER BY 
@@ -605,7 +620,7 @@
             SET
                 fldDefaultImage = 0
             WHERE
-                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
         </cfquery>
         <cfquery>
             UPDATE
@@ -613,9 +628,9 @@
             SET
                 fldDefaultImage = 1
             WHERE
-                fldProductImage_ID = <cfqueryparam value="#arguments.productImageId#" cfsqltype="cf_sql_integer">
+                fldProductImage_ID = <cfqueryparam value="#arguments.productImageId#" cfsqltype="integer">
             AND
-                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="cf_sql_integer">
+                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
         </cfquery>
         <cfreturn true>
     </cffunction>

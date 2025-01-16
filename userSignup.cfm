@@ -19,13 +19,13 @@
                 <h5 class="logoHeading ms-1 mt-3">E-CART</h5>
             </a>
             <div class="loginBtnClass mt-1">
-                <button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Login</button>
+                <a href="userLogin.cfm"> <button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Login</button></a>
             </div>  
         </header>
         <div class="mainContainerSignup p-2 mt-3">
             <div class="containerSignup mt-3 py-2 px-4 ">
                 <div class="signupHeading my-1">
-                    <h2>Sign Up</h2>
+                    <h2>SIGN UP</h2>
                 </div>
                 <form method="post" class="">
                     <div class="subContainerSignup d-flex flex-column justify-content-around">
@@ -66,11 +66,13 @@
                     </div>
                     <cfif structKeyExists(form,"btnSignup")>
                         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-                        <cfset local.result = local.objUserShoppingCart.fnAddUser(structForm = form)>
-                        <cfif local.result>
-                            <cflocation  url="userLogin.cfm">
+                        <cfset local.structAddUserReturn = local.objUserShoppingCart.addUser(structForm = form)>
+                        <cfif NOT local.structAddUserReturn["error"]>
+                            <cflocation  url="userLogin.cfm" addtoken="no">
                         <cfelse>
-                            <span class="text-danger fw-bold ms-5">User already Exists</span>
+                            <cfoutput>
+                                <span class="text-danger fw-bold ms-5">#local.structAddUserReturn["errorMessage"]#</span>
+                            </cfoutput>
                         </cfif>
                     </cfif>
                     <div class="d-flex justify-content-center">

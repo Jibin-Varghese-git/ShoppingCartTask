@@ -44,11 +44,11 @@
                                 <cfset imagePath = "Assets/productImages/">
                                 <button type="button" class="productThumbNail" onclick="fnImageModal({productId:#ProductListing.fldProduct_ID#})" data-bs-toggle="modal" data-bs-target="##modalImageShow"><img src="#imagePath##ProductListing.fldImageFileName#" alt="Image Not Found"></button>
                                 <div class="">
-                                    <span>#ProductListing.fldProductName#</span><br>
+                                    <span class="text-nowrap">#ProductListing.fldProductName#</span><br>
                                     <span class="fs-6">#ProductListing.fldBrandName#</span><br>
                                     <span class="fw-bold fs-5">Price : <i class="fa-solid fa-indian-rupee-sign"></i> #ProductListing.fldPrice#</span>
                                 </div>
-                                <div class="categoryButtons">
+                                <div class="categoryButtons d-flex flex-column">
                                     <button type="button" class="editProduct" value="#ProductListing.fldProduct_ID#" data-bs-toggle="modal" data-bs-target="##modalAddProducts" onClick="fnEditProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#,productId:#ProductListing.fldProduct_ID#})"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="30" width="30"></button>
                                     <button type="button" class="deleteProduct" id="deleteCategory" onClick="fnDeleteProduct(this)" value="#ProductListing.fldProduct_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="30" width="30  "></button>
                                 </div>
