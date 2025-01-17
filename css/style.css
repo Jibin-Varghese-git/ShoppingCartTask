@@ -149,6 +149,7 @@ header{
 .categoryButtons button{
     background: none;
     border:none;
+    padding: 0;
 }
 
 .singleItemCategory{
@@ -363,5 +364,83 @@ header{
     visibility: visible;
 }
 
+.editBtnSubCatdiv {
+    position: relative;
+    display: inline-block;
+}
 
+.editBtnSubCatdiv  .tooltiptext{
+    visibility: hidden;
+    width: 50px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
 
+.editBtnSubCatdiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.deleteBtnSubCatdiv {
+    position: relative;
+    display: inline-block;
+}
+
+.deleteBtnSubCatdiv  .tooltiptext{
+    visibility: hidden;
+    width: 50px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.deleteBtnSubCatdiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.forwardBtnSubCatdiv{
+    position: relative;
+    display: inline-block;
+}
+
+.forwardBtnSubCatdiv .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.forwardBtnSubCatdiv:hover .tooltiptext{
+    visibility: visible;
+}

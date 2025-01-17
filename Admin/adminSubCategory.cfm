@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>ADMIN LOGIN</title>
-        <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <header class="p-2">
@@ -11,7 +11,7 @@
                 <div class="headerCartName">
                     <a href="" class="d-flex"> 
                         <div class="headerImageDiv">
-                            <img src="Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
+                            <img src="../Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
                         </div>
                         <h5 class="color-white ms-2 mt-2">E-CART</h5>
                     </a>
@@ -22,7 +22,7 @@
                     </cfoutput>
                 </div>
                 <div class="logoutBtnClass">
-                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
+                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="../Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
                 </div>  
             </div>
         </header>
@@ -33,7 +33,7 @@
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
                     <cfoutput>
                         <a href="adminCategory.cfm"><span>#CategoryName#</span></a>
-                        <button type="button" value="#url.catId#" onClick="fnModalAddSubCategory(this)" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                        <button type="button" value="#url.catId#" onClick="fnModalAddSubCategory(this)" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory">Add New <img src="../Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
                     </cfoutput>
                 </div>
                 <div class="categoryListingDiv">
@@ -42,9 +42,18 @@
                             <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#item#">
                                 <span>#result[item]#</span>
                                 <div class="categoryButtons">
-                                    <button type="button" class="editSubCategory" value="#item#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditSubCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteSubCategory(this)" value="#item#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
-                                    <a href="adminProducts.cfm?categoryId=#url.catId#&subcategoryId=#item#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <div class="editBtnSubCatdiv">
+                                        <button type="button" class="editSubCategory" value="#item#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditSubCategory(this)"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <span class="tooltiptext">Edit</span>
+                                    </div>
+                                    <div class="deleteBtnSubCatdiv">
+                                        <button type="button" class="deleteSubCategory" id="deleteSubCategory" onClick="fnDeleteSubCategory(this)" value="#item#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <span class="tooltiptext">delete</span>
+                                    </div>
+                                    <div class="forwardBtnSubCatdiv">
+                                        <a href="adminProducts.cfm?categoryId=#url.catId#&subcategoryId=#item#"><img src="../Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                    <span class="tooltiptext">Product</span>
+                                    </div>
                                 </div>
                             </div>
                         </cfloop>
@@ -84,6 +93,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="js/script.js"></script>
+        <script src="../js/script.js"></script>
     </body>
 </html>

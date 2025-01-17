@@ -341,7 +341,7 @@
                 fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryListing#" cfsqltype="varchar">
         </cfquery>
         <cfif local.qryProductNameCheck.productNameCount LT 1>
-            <cfset local.imageLocation="../Assets/productImages">
+            <cfset local.imageLocation="../../Assets/productImages">
             <cfif NOT directoryExists(expandPath(local.imageLocation))>
                 <cfset directoryCreate(expandPath(local.imageLocation))>
             </cfif>
@@ -500,7 +500,7 @@
                 fldProduct_ID = <cfqueryparam value="#arguments.hiddenProductId#" cfsqltype="decimal">
         </cfquery>
         <cfif local.qryProductNameCheck.productNameCount LT 1>
-            <cfset local.imageLocation="../Assets/productImages">
+            <cfset local.imageLocation="../../Assets/productImages">
             <cfif NOT directoryExists(expandPath(local.imageLocation))>
                 <cfset directoryCreate(expandPath(local.imageLocation))>
             </cfif>
@@ -586,7 +586,7 @@
             DESC 
         </cfquery>
 
-        <cfset local.imagePath="Assets/productImages/">
+        <cfset local.imagePath="../Assets/productImages/">
         <cfloop query="local.qrySelectImage">
             <cfif local.qrySelectImage.fldDefaultImage EQ 1>
                 <cfset local.structImageDetails["thumbnailImage"][local.qrySelectImage.fldProductImage_ID] = local.imagePath & local.qrySelectImage.fldImageFileName>

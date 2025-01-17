@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>ADMIN LOGIN</title>
-        <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <header class="p-2">
@@ -11,7 +11,7 @@
                 <div class="headerCartName">
                     <a href="" class="d-flex"> 
                         <div class="headerImageDiv">
-                            <img src="Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
+                            <img src="../Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
                         </div>
                         <h5 class="color-white ms-2 mt-2">E-CART</h5>
                     </a>
@@ -22,7 +22,7 @@
                     </cfoutput>
                 </div>
                 <div class="logoutBtnClass">
-                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
+                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="../Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
                 </div>  
             </div>
         </header>
@@ -31,7 +31,7 @@
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
                     <span>Category</span>
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddCategory">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddCategory">Add New <img src="../Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
                 </div>
                 <div class="categoryListingDiv">
                     <cfoutput>
@@ -40,15 +40,15 @@
                                 <span>#result.fldCategoryName#</span>
                                 <div class="categoryButtons">
                                     <div class="editBtndiv">
-                                        <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
                                         <span class="tooltiptext">Edit</span>
                                     </div>
                                     <div class="deleteBtndiv">
-                                        <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
                                         <span class="tooltiptext">Delete</span>
                                     </div>
                                     <div class="forwardBtndiv">
-                                        <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                        <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="../Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
                                     <span class="tooltiptext">Subcategory</span>
                                     </div>
                                 </div>
@@ -79,6 +79,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="js/script.js"></script>
+        <script src="../js/script.js"></script>
     </body>
 </html>

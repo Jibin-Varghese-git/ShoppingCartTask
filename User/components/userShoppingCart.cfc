@@ -174,4 +174,80 @@
         <cfreturn local.qryRandomProducts>
     </cffunction>
 
+    <cffunction  name="selectDistinctSubCategory" access="remote" returnformat="JSON">
+        <cfargument  name="categoryId">
+        <cfquery name="local.qryDistinctSelectSubCategory">
+            SELECT
+                DISTINCT(ts.fldSubCategory_ID),
+                ts.fldSubCategoryName
+            FROM
+                tblSubCategory AS ts
+            INNER JOIN 
+                tblproduct AS tp 
+            ON 
+                ts.fldsubcategory_ID = tp.fldsubcategoryId 
+                AND 
+                    tp.fldActive = 1
+            WHERE
+                ts.fldActive = 1
+                <cfif structKeyExists(arguments, "categoryId")>
+                AND
+                    ts.fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
+                </cfif>
+        </cfquery>
+        <cfreturn local.qryDistinctSelectSubCategory>
+    </cffunction>
+
+    <cffunction  name="selectSubcategory">
+        <cfquery name="local.qrySelectSubcategory">
+            SELECT
+                fldSubCategory_ID,
+                fldSubCategoryName,
+                fldCategoryId
+            FROM
+                tblSubCategory
+            WHERE
+                fldActive = 1
+        </cfquery>
+        <cfreturn local.qrySelectSubcategory>
+    </cffunction>
+
+
+
+    <cffunction  name="logoutUser" access="remote">
+        <cfset structClear(session)>
+        <cflocation  url="../userHome.cfm" addToken="no">
+    </cffunction>
+
+
+    <cffunction  name="selectAllProducts" description="Function to select random products" >
+        <cfquery name="local.qryRandomProducts">
+        	SELECT 
+                tp.fldProduct_ID,
+                tp.fldProductName,
+                tp.fldDescription,
+                tp.fldPrice,
+                tp.fldTax,
+                tp.fldSubCategoryId,
+                tb.fldBrandName,
+				tpi.fldImageFileName
+            FROM
+				tblBrands as tb
+			INNER JOIN
+                tblProduct as tp
+			ON
+				tb.fldBrand_ID=tp.fldBrandId
+			INNER JOIN 
+				tblProductImages as tpi
+			ON
+				tp.fldProduct_ID=tpi.fldProductId
+            WHERE 
+                tp.fldActive = 1
+			AND
+				tpi.fldDefaultImage = 1
+        </cfquery>
+        <cfreturn local.qryRandomProducts>
+    </cffunction>
+
+
 </cfcomponent>

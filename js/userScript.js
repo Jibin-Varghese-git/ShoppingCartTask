@@ -75,6 +75,21 @@ function fnLoginValidation(){
     }
 }
 
-function fnUserLogout(){
-    
+function logoutUser(){
+    if(confirm("Do you want to logout?"))
+        {
+            $.ajax({
+                type:"GET",
+                url:"components/userShoppingCart.cfc?method=logoutUser",
+                success:function(result){
+                    if(result)
+                    {
+                        location.reload();
+                    }
+                }
+            });
+        } 
+        else{
+            alert("error")
+        } 
 }
