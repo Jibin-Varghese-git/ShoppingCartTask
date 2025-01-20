@@ -2,9 +2,7 @@
     <cfset this.datasource="dataSource_shoppingCart">
     <cfset this.sessionmanagement = "true">
     
-    <cffunction  name="onApplicationStart">
-        <cfset application.objShoppingCart = createObject("component", "components.userShoppingCart")>
-    </cffunction>
+ 
     
     <cffunction  name="onrequestStart" returntype="any">
         <cfargument name="requestpage">
@@ -12,10 +10,10 @@
         <cfif NOT (arrayContains(local.arrayExculdes,arguments.requestpage) OR structKeyExists(session, "structUserDetails"))>
             <cflocation  url="userLogin.cfm" addToken="no">
         </cfif>
-        <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
+<!---         <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
             <cfset onApplicationStart()>
-        </cfif>
-    </cffunction>
+        </cfif>--->
+    </cffunction> 
 <!---     <cffunction  name="onRequestStart" returntype="any"> 
         <cfif >
         </cfif>

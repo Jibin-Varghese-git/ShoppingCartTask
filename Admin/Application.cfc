@@ -12,6 +12,9 @@
         <cfif NOT (arrayContains(local.arrayExculdes,arguments.requestpage) OR structKeyExists(session, "structUserDetails"))>
             <cflocation  url="adminLogin.cfm" addToken="no">
         </cfif>
+        <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
+            <cfset onApplicationStart()>
+        </cfif>
     </cffunction>
 <!---     <cffunction  name="onRequestStart" returntype="any"> 
         <cfif >

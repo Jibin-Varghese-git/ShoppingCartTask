@@ -43,7 +43,7 @@
                 <div class="categorySubcontainer mt-2 px-3 py-2">
                     <cfoutput>
                         <div class="w-100">
-                            <h3>#subcategoryListing.fldSubCategoryName#</h3>
+                            <a href="userSubCategory.cfm?subcategoryId=#subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#subcategoryListing.fldSubCategoryName#</h3></a>
                         </div>
                         <cfloop query="productListing">
                             <cfif subcategoryListing.fldSubCategory_ID EQ productListing.fldSubCategoryId>

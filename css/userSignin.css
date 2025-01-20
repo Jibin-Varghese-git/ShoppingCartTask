@@ -134,7 +134,7 @@ header a{
 
 .productListingSubContainer{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 
@@ -257,12 +257,23 @@ header a{
     background-color: #ffffff;
     width:100%;
     height:auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
  }
 
 
  .categorySubcontainer{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
+    border-radius: 20px;
  }
 
+ .dropdown-item{
+    background-color: #bd8dc9;
+    color: #ffffff;
+ }
+
+ .dropdown-item:hover{
+    background-color: #986da3;
+    color: #ffffff;
+ }
