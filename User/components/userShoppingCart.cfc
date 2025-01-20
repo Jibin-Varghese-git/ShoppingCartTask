@@ -160,6 +160,95 @@
                 tblProduct as tp
 			ON
 				tb.fldBrand_ID=tp.fldBrandId
+			LEFT JOIN 
+				tblProductImages as tpi
+			ON
+				tp.fldProduct_ID=tpi.fldProductId
+            LEFT JOIN
+                tblSubCategory AS tsc
+            ON
+                tsc.fldSubCategory_ID = tp.fldSubCategoryId
+            LEFT JOIN
+                tblCategory AS tc
+            ON
+                tc.fldCategory_ID = tsc.fldCategoryId
+            WHERE 
+                tp.fldActive = 1
+			AND
+                tsc.fldActive = 1 
+            AND
+                tc.fldActive = 1 
+            AND
+				tpi.fldDefaultImage = 1
+            ORDER BY 
+                NEWID()
+        </cfquery>
+        <cfreturn local.qryRandomProducts>
+    </cffunction>
+
+    <cffunction  name="selectDistinctSubCategory" access="remote" returnformat="JSON">
+        <cfargument  name="categoryId">
+        <cfquery name="local.qryDistinctSelectSubCategory">
+            SELECT
+                DISTINCT(ts.fldSubCategory_ID),
+                ts.fldSubCategoryName
+            FROM
+                tblSubCategory AS ts
+            INNER JOIN 
+                tblproduct AS tp 
+            ON 
+                ts.fldsubcategory_ID = tp.fldsubcategoryId 
+                AND 
+                    tp.fldActive = 1
+            WHERE
+                ts.fldActive = 1
+                <cfif structKeyExists(arguments, "categoryId")>
+                AND
+                    ts.fldCategoryId = <cfqueryparam value="#arguments.categoryId#" cfsqltype="integer">
+                </cfif>
+        </cfquery>
+        <cfreturn local.qryDistinctSelectSubCategory>
+    </cffunction>
+
+    <cffunction  name="selectSubcategory">
+        <cfquery name="local.qrySelectSubcategory">
+            SELECT
+                fldSubCategory_ID,
+                fldSubCategoryName,
+                fldCategoryId
+            FROM
+                tblSubCategory
+            WHERE
+                fldActive = 1
+        </cfquery>
+        <cfreturn local.qrySelectSubcategory>
+    </cffunction>
+
+
+
+    <cffunction  name="logoutUser" access="remote">
+        <cfset structClear(session)>
+        <cflocation  url="../userHome.cfm" addToken="no">
+    </cffunction>
+
+
+    <cffunction  name="selectAllProducts" description="Function to select all products" >
+        <cfquery name="local.qrySelectAllProducts">
+        	SELECT 
+                tp.fldProduct_ID,
+                tp.fldProductName,
+                tp.fldDescription,
+                tp.fldPrice,
+                tp.fldTax,
+                tp.fldSubCategoryId,
+                tb.fldBrandName,
+				tpi.fldImageFileName
+            FROM
+				tblBrands as tb
+			INNER JOIN
+                tblProduct as tp
+			ON
+				tb.fldBrand_ID=tp.fldBrandId
 			INNER JOIN 
 				tblProductImages as tpi
 			ON
@@ -168,10 +257,109 @@
                 tp.fldActive = 1
 			AND
 				tpi.fldDefaultImage = 1
-            ORDER BY 
-                NEWID()
         </cfquery>
-        <cfreturn local.qryRandomProducts>
+        <cfreturn local.qrySelectAllProducts>
     </cffunction>
+
+    <cffunction  name="selectSubcategoryProducts" description="Select products according to subcategory">
+        <cfargument  name="subcategoryId">
+        <cfargument  name="sort">
+        <cfquery name="local.qryselectSubcategoryProducts">
+            SELECT
+                tp.fldProduct_Id AS productId,
+                tp.fldProductName AS productName,
+                tp.fldDescription AS productDescription,
+                tp.fldPrice AS productPrice,
+                tp.fldTax AS productTax,
+                tp.fldSubCategoryId AS subcategoryId,
+                tb.fldBrandName productBrand,
+				tpi.fldImageFileName AS productImage,
+                ts.fldSubCategoryName AS subcategoryName
+            FROM
+				tblBrands as tb
+			INNER JOIN
+                tblProduct as tp
+			ON
+				tb.fldBrand_ID=tp.fldBrandId
+            INNER JOIN
+                tblSubCategory as ts
+			ON
+                tp.fldSubCategoryId= ts.fldSubCategory_ID
+			INNER JOIN 
+				tblProductImages as tpi
+			ON
+				tp.fldProduct_ID=tpi.fldProductId
+            WHERE 
+                tp.fldActive = 1
+			AND
+				tpi.fldDefaultImage = 1
+            AND
+                tp.fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
+            <cfif structKeyExists(arguments, "sort")>
+                ORDER BY tp.fldPrice #arguments.sort#
+            </cfif>
+        </cfquery>
+        <cfreturn local.qryselectSubcategoryProducts>
+    </cffunction>
+
+    <cffunction  name="filterProducts" description="Function to filter producs" access="remote" returnformat="JSON">
+        <cfargument  name="subcategoryId">
+        <cfargument  name="minValue">
+        <cfargument  name="maxValue">
+        <cfquery name="local.qryFilterProducts">
+            SELECT
+                tp.fldProduct_Id AS productId,
+                tp.fldProductName AS productName,
+                tp.fldDescription AS productDescription,
+                tp.fldPrice AS productPrice,
+                tp.fldTax AS productTax,
+                tp.fldSubCategoryId AS subcategoryId,
+                tb.fldBrandName productBrand,
+				tpi.fldImageFileName AS productImage,
+                ts.fldSubCategoryName AS subcategoryName
+            FROM
+				tblBrands as tb
+			INNER JOIN
+                tblProduct as tp
+			ON
+				tb.fldBrand_ID=tp.fldBrandId
+            INNER JOIN
+                tblSubCategory as ts
+			ON
+                tp.fldSubCategoryId= ts.fldSubCategory_ID
+			INNER JOIN 
+				tblProductImages as tpi
+			ON
+				tp.fldProduct_ID=tpi.fldProductId
+            WHERE 
+                tp.fldActive = 1
+			AND
+				tpi.fldDefaultImage = 1
+            AND
+                tp.fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
+            <cfif structKeyExists(arguments, "minValue")>
+                AND
+                tp.fldPrice >= <cfqueryparam value="#arguments.minValue#" cfsqltype="decimal">
+            </cfif>
+            <cfif structKeyExists(arguments, "maxValue")>
+                AND
+                tp.fldPrice <= <cfqueryparam value="#arguments.maxValue#" cfsqltype="decimal">
+            </cfif>
+        </cfquery>
+        <cfset local.arrayFilterProducts = arrayNew(1)>
+        <cfloop query="local.qryFilterProducts">
+            <cfset arrayAppend(local.arrayFilterProducts, {
+                productId=local.qryFilterProducts.productId,
+                productName=local.qryFilterProducts.productName,
+                productPrice=local.qryFilterProducts.productPrice,
+                subcategoryId=local.qryFilterProducts.subcategoryId,
+                productBrand=local.qryFilterProducts.productBrand,
+                productImage=local.qryFilterProducts.productImage,
+                subcategoryName=local.qryFilterProducts.subcategoryName
+            })>
+        </cfloop>
+        <cfreturn local.arrayFilterProducts>
+    </cffunction>
+
 
 </cfcomponent>

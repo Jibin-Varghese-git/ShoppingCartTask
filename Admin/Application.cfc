@@ -6,15 +6,14 @@
         <cfset application.objShoppingCart = createObject("component", "components.shoppingCart")>
     </cffunction>
     
-    <cffunction  name="onrequest" returntype="any">
+    <cffunction  name="onrequestStart" returntype="any">
         <cfargument name="requestpage">
-        <cfset local.arrayExculdes = ["/adminLogin.cfm"]>
-        <cfif arrayContains(local.arrayExculdes,arguments.requestpage)>
-            <cfinclude  template="#arguments.requestpage#" >
-        <cfelseif structKeyExists(session, "structUserDetails")>
-            <cfinclude  template="#arguments.requestpage#">
-        <cfelse>
-            <cfinclude  template="adminLogin.cfm">
+        <cfset local.arrayExculdes = ["/ShoppingCartTask/Admin/adminLogin.cfm"]>
+        <cfif NOT (arrayContains(local.arrayExculdes,arguments.requestpage) OR structKeyExists(session, "structUserDetails"))>
+            <cflocation  url="adminLogin.cfm" addToken="no">
+        </cfif>
+        <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
+            <cfset onApplicationStart()>
         </cfif>
     </cffunction>
 <!---     <cffunction  name="onRequestStart" returntype="any"> 

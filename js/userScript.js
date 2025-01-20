@@ -75,6 +75,82 @@ function fnLoginValidation(){
     }
 }
 
-function fnUserLogout(){
-    
+function logoutUser(){
+    if(confirm("Do you want to logout?"))
+        {
+            $.ajax({
+                type:"GET",
+                url:"components/userShoppingCart.cfc?method=logoutUser",
+                success:function(result){
+                    if(result)
+                    {
+                        location.reload();
+                    }
+                }
+            });
+        } 
+        else{
+            alert("error")
+        } 
+}
+
+function filterPrice(subcategoryId)
+{ 
+    if($('#filter1').is(':checked')) 
+    { 
+       var minValue=0;
+       var maxValue=1000;
+    }
+    else if($('#filter2').is(':checked'))
+    {
+        var minValue=1000;
+        var maxValue=10000;
+    }
+    else if($('#filter3').is(':checked'))
+    {
+        var minValue=10000;
+        var maxValue=20000;
+    }
+    else
+    {
+        var minValue = $('#filterMin').val()
+        var maxValue = $('#filterMax').val()
+    }
+
+    $.ajax({
+        type:"Post",
+        url:"components/userShoppingCart.cfc?method=filterProducts",
+        data:{  subcategoryId : subcategoryId,
+                minValue : minValue,
+                maxValue : maxValue
+            },
+        success:function(result){
+            if(result)
+            {
+                arrayFilterProducts = JSON.parse(result)
+                console.log(arrayFilterProducts) 
+                $('[name=filter]').prop('checked', false);
+                $('#filterMin').val(' ')
+                $('#filterMax').val(' ')
+                $("#productContainer").empty()
+                arrayFilterProducts.forEach(element => {
+                    var singleProduct = `
+                        <a href="userProduct?productId=${element.PRODUCTID}" class="text-decoration-none">
+                            <div class="card p-2 my-3">
+                                <div class="productImageDiv">
+                                    <img src="../Assets/productImages/${element.PRODUCTIMAGE}" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                </div>
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <h5 class="card-title">${element.PRODUCTNAME}</h5>
+                                    <span class="fw-bold text-wrap ">${element.PRODUCTBRAND}</span>
+                                    <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
+                                </div>
+                            </div>
+                        </a>`
+                    $('#productContainer').append(singleProduct)
+                });
+            }
+        }
+    });
+
 }

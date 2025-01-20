@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>ADMIN LOGIN</title>
-        <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
@@ -12,7 +12,7 @@
                 <div class="headerCartName">
                     <a href="" class="d-flex"> 
                         <div class="headerImageDiv">
-                            <img src="Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
+                            <img src="../Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
                         </div>
                         <h5 class="color-white ms-2 mt-2">E-CART</h5>
                     </a>
@@ -23,7 +23,7 @@
                     </cfoutput>
                 </div>
                 <div class="logoutBtnClass">
-                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
+                    <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="../Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
                 </div>  
             </div>
         </header>
@@ -34,14 +34,14 @@
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
                     <cfoutput>
                         <a href="adminSubCategory.cfm?catId=#url.categoryId#"><span>#subCategoryName["subcategoryName"]#</span></a>
-                        <button type="button" value="#url.subcategoryId#" onClick="openProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#})" data-bs-toggle="modal" data-bs-target="##modalAddProducts">Add New <img src="Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
+                        <button type="button" value="#url.subcategoryId#" onClick="openProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#})" data-bs-toggle="modal" data-bs-target="##modalAddProducts">Add New <img src="../Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
                     </cfoutput>
                 </div>
                 <div class="productListingDiv">
                     <cfoutput>
                         <cfloop query="ProductListing">
                             <div class="singleItemCategory  p-2 my-2 d-flex justify-content-between " id="#ProductListing.fldProduct_ID#">
-                                <cfset imagePath = "Assets/productImages/">
+                                <cfset imagePath = "../Assets/productImages/">
                                 <button type="button" class="productThumbNail" onclick="fnImageModal({productId:#ProductListing.fldProduct_ID#})" data-bs-toggle="modal" data-bs-target="##modalImageShow"><img src="#imagePath##ProductListing.fldImageFileName#" alt="Image Not Found"></button>
                                 <div class="">
                                     <span class="text-nowrap">#ProductListing.fldProductName#</span><br>
@@ -49,8 +49,8 @@
                                     <span class="fw-bold fs-5">Price : <i class="fa-solid fa-indian-rupee-sign"></i> #ProductListing.fldPrice#</span>
                                 </div>
                                 <div class="categoryButtons d-flex flex-column">
-                                    <button type="button" class="editProduct" value="#ProductListing.fldProduct_ID#" data-bs-toggle="modal" data-bs-target="##modalAddProducts" onClick="fnEditProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#,productId:#ProductListing.fldProduct_ID#})"><img src="Assets/Images/editIcon2.png" alt="No Image Found" height="30" width="30"></button>
-                                    <button type="button" class="deleteProduct" id="deleteCategory" onClick="fnDeleteProduct(this)" value="#ProductListing.fldProduct_ID#"><img src="Assets/Images/deleteIcon2.png" alt="No Image Found" height="30" width="30  "></button>
+                                    <button type="button" class="editProduct" value="#ProductListing.fldProduct_ID#" data-bs-toggle="modal" data-bs-target="##modalAddProducts" onClick="fnEditProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#,productId:#ProductListing.fldProduct_ID#})"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="30" width="30"></button>
+                                    <button type="button" class="deleteProduct" id="deleteCategory" onClick="fnDeleteProduct(this)" value="#ProductListing.fldProduct_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="30" width="30  "></button>
                                 </div>
                             </div>
                         </cfloop>
@@ -152,6 +152,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="js/script.js"></script>
+        <script src="../js/script.js"></script>
     </body>
 </html>

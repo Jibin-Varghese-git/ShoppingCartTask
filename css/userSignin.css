@@ -134,7 +134,7 @@ header a{
 
 .productListingSubContainer{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 
@@ -173,3 +173,107 @@ header a{
     border-radius: 12px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+.cartBtn{
+    color: #bd8dc9;
+    font-size: 20px;
+}
+
+
+.subcategoryTooltip{
+    position: relative;
+    display: inline-block;
+}
+
+.subcategoryTooltip .tooltipContainer{
+    visibility: hidden;
+    min-width:13vw;
+    max-height: 34vh;
+    overflow: auto;
+    background-color: #706c6c;
+    text-align: center;
+    border-radius: 6px;
+    padding: 9px 0;
+    top: 100%;
+    left: 50%;
+     margin-left: -60px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltipContainer::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+.subcategoryTooltip .tooltipContainer .tooltiptext{
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #bbb4db;
+    white-space: nowrap;
+    color: #ffffff;
+}
+
+.subcategoryTooltip:hover .tooltipContainer{
+    visibility: visible;
+}
+
+.subcategoryTooltip .tooltipContainer .tooltiptext:hover{
+    background-color: #e4e4e4;
+    color:#877cb8 ;
+}
+
+.headerBtnClass button{
+    padding: 0;
+    background:none;
+    border: none;
+    color:#ccc2ff;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.searchbarDiv .searchInput{
+   border:1px solid #b3a7e7;
+   border-radius: 12px;
+   height: 42px;
+   width:40vw;
+   margin-right: 1px;
+}
+
+.searchbarDiv .searchInput:focus{
+    outline: none;
+ }
+
+.searchbarDiv .searchBtn{
+    background: #ffffff;
+    border:1px solid #bbb4db;
+    border-radius: 12px;
+    height: 42px;
+    width:3vw;
+ }
+
+ .categorySubcontainer{
+    background-color: #ffffff;
+    width:100%;
+    height:auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+ }
+
+
+ .categorySubcontainer{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    border-radius: 20px;
+ }
+
+ .dropdown-item{
+    background-color: #bd8dc9;
+    color: #ffffff;
+ }
+
+ .dropdown-item:hover{
+    background-color: #986da3;
+    color: #ffffff;
+ }

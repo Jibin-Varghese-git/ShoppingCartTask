@@ -2,17 +2,16 @@
 <html>
     <head>
         <title>ADMIN LOGIN</title>
-        <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-<!---     <cfset onApplicationStart()> --->
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
                     <a href="" class="d-flex"> 
                         <div class="headerImageDiv">
-                            <img src="Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
+                            <img src="../Assets/Images/shoppingCart_icon2.png" alt="No Image Found">
                         </div>
                         <h5 class="color-white ms-2 mt-2">E-CART</h5>
                     </a>
@@ -50,6 +49,6 @@
             </div>
         </div>
      
-        <script src="js/script.js"></script>
+        <script src="../js/script.js"></script>
     </body>
 </html>
