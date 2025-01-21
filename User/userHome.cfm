@@ -12,27 +12,7 @@
     </head>
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-        <header class="py-2 px-3 d-flex justify-content-between align-item-center">
-            <a href="" class="d-flex"> 
-                <div class="headerImageDiv">
-                    <img src="../Assets/Images/iconCartUser.png" alt="No Image Found">
-                </div>
-                <h5 class="logoHeading ms-1 mt-3">E-CART</h5>
-            </a>
-            <div class="searchbarDiv d-flex">
-                <input type="text" class="searchInput" name="searchInput" id="searchInput">
-                <button name="searchBtn" class="searchBtn" type="button"><i class="fa-solid fa-magnifying-glass" style="color: #ccc2ff;"></i></button>
-            </div>
-            <div class="headerBtnClass mt-1">
-                <button name="cartBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-cart-shopping" style="color: #d2c9ff;"></i></button>
-                <button name="profileBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-user" style="color: #d2c9ff;;"></i></button>
-                <cfif structKeyExists(session,"structUserDetails")>
-                    <button name="logoutBtn" onClick="logoutUser()" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i>Logout</button>
-                <cfelse>
-                    <a href="userLogin.cfm"><button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i>Login</button></a>
-                </cfif>
-            </div>  
-        </header>
+        <cfinclude  template="userHeader.cfm">
         <div class="mainContainer px-2">
             <div class="categoryListingHeader mt-2 p-2">
                 <cfset structCategoryListing = local.objUserShoppingCart.selectCategory()>
@@ -56,13 +36,13 @@
                 <img src="../Assets/Images/homeImage3.webp">
             </div>
 <!-- Product Listing  -->
-            <div class="productListingContainer bg-white my-3 p-3">
+            <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">
                 <div class="productListingSubContainer">
                     <cfset qryRandomProducts = local.objUserShoppingCart.selectRandomProducts()>
                     <cfoutput>
                         <cfloop query="qryRandomProducts">
-                            <a href="userProduct?productId=#qryRandomProducts.fldProduct_ID#" class="text-decoration-none">
-                                <div class="card p-2 my-3">
+                            <div class="card p-2 m-3">
+                                <a href="userProduct.cfm?productId=#qryRandomProducts.fldProduct_ID#" class="text-decoration-none">
                                     <div class="productImageDiv">
                                         <img src="../Assets/productImages/#qryRandomProducts.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                     </div>
@@ -71,14 +51,14 @@
                                         <span class="fw-bold text-wrap ">#qryRandomProducts.fldBrandName#</span>
                                         <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#qryRandomProducts.fldPrice#</span>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                      </cfloop>
                     </cfoutput>
                 </div>
             </div>
-
         </div>
+        <cfinclude  template="userFooter.cfm">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

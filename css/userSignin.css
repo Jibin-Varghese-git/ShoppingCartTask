@@ -134,17 +134,17 @@ header a{
 
 .productListingSubContainer{
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
 }
 
-.cartBtn{
-    white-space: nowrap;;
+.productListingSubContainer .card{
+    width:16vw;
+    height:50vh;
 }
 
 .productImageDiv{
     height:30vh;
-    width:20vw;
+    width:14vw;
 }
 
 
@@ -159,6 +159,8 @@ header a{
     background-color: #8cbdd1;
     color: #ffffff;
     font-weight: 700;
+    height:10vh;
+    white-space: nowrap;
 }
 
 .buyBtn{
@@ -166,6 +168,7 @@ header a{
     border-radius: 5px;
     background-color: #bd8dc9;
     color: #ffffff;
+    height:10vh;
     font-weight: 700;
 }
 
@@ -174,11 +177,9 @@ header a{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-.cartBtn{
-    color: #bd8dc9;
-    font-size: 20px;
+.productListingSubContainer .card a{
+    color:#494848
 }
-
 
 .subcategoryTooltip{
     position: relative;
@@ -263,7 +264,6 @@ header a{
 
  .categorySubcontainer{
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
     border-radius: 20px;
  }
@@ -277,3 +277,71 @@ header a{
     background-color: #986da3;
     color: #ffffff;
  }
+
+
+ .productSubContainer{
+    background-color: #ffffff;
+    width:100%;
+    height:auto;
+    border-radius: 16px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    max-height: 75vh;
+    display: flex;  
+    justify-content: space-between;
+ }
+
+ .productSubContainer .imageContainer{
+    background-color: #ffffff;
+    width:40%;
+    height:70vh;
+    height:100%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+ }
+
+ .productSubContainer .imageContainer .carousel-item{
+    width:100%;
+    height:70vh;
+ }
+
+ .productSubContainer .imageContainer .carousel-item img{
+    width:100%;
+    height:100%;
+ }
+ .productDetails{
+    width:55%;
+    height:70vh;
+ }
+
+ .productDetails .pathOfProduct span{
+    color: #b4b1b1;
+    font-size: 15px;
+ }
+
+ .productDetails .pathOfProduct a{
+    text-decoration-color: #b4b1b1;
+ }
+
+ .productDesc{
+    height:15vh;
+    max-width:100%;
+    overflow:scroll;
+ }
+
+ .productDesc::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+ .productPrice{
+    color: #8aac5e;
+    height:20vh;
+ }
+
+ .productPrice sub{
+    font-size: 15px;
+    vertical-align:sub;
+ }
+
+
+
+ 
+

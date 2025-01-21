@@ -12,27 +12,7 @@
     </head>
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-        <header class="py-2 px-3 d-flex justify-content-between align-item-center">
-            <a href="userHome.cfm" class="d-flex"> 
-                <div class="headerImageDiv">
-                    <img src="../Assets/Images/iconCartUser.png" alt="No Image Found">
-                </div>
-                <h5 class="logoHeading ms-1 mt-3">E-CART</h5>
-            </a>
-            <div class="searchbarDiv d-flex">
-                <input type="text" class="searchInput" name="searchInput" id="searchInput">
-                <button name="searchBtn" class="searchBtn" type="button"><i class="fa-solid fa-magnifying-glass" style="color: #ccc2ff;"></i></button>
-            </div>
-            <div class="headerBtnClass mt-1">
-                <button name="cartBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-cart-shopping" style="color: #d2c9ff;"></i></button>
-                <button name="profileBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-user" style="color: #d2c9ff;;"></i></button>
-                <cfif structKeyExists(session,"structUserDetails")>
-                    <button name="logoutBtn" onClick="logoutUser()" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i>Logout</button>
-                <cfelse>
-                    <a href="userLogin.cfm"><button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i>Login</button></a>
-                </cfif>
-            </div>  
-        </header>
+        <cfinclude  template="userHeader.cfm">
         <cfset subcategoryListing=local.objUserShoppingCart.selectDistinctSubCategory(url.categoryId)>
         <cfset productListing = local.objUserShoppingCart.selectAllProducts()>
         <div class="categoryMainContainer mt-2 px-2">
@@ -40,22 +20,22 @@
                 <h1>No Products Found</h1>
             </cfif>
             <cfloop query="subcategoryListing"> 
-                <div class="categorySubcontainer mt-2 px-3 py-2">
+                <div class="categorySubcontainer  my-3 ps-5 pe-3 py-3">
                     <cfoutput>
                         <div class="w-100">
                             <a href="userSubCategory.cfm?subcategoryId=#subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#subcategoryListing.fldSubCategoryName#</h3></a>
                         </div>
                         <cfloop query="productListing">
-                            <cfif subcategoryListing.fldSubCategory_ID EQ productListing.fldSubCategoryId>
-                               <a href="userProduct?productId=#productListing.fldProduct_ID#" class="text-decoration-none">
-                                   <div class="card p-2 my-3">
+                            <cfif subcategoryListing.fldSubCategory_ID EQ productListing.subcategoryId>
+                               <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
+                                   <div class="card p-2 m-3">
                                        <div class="productImageDiv">
-                                           <img src="../Assets/productImages/#productListing.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                           <img src="../Assets/productImages/#productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                        </div>
                                        <div class="card-body d-flex flex-column align-items-center">
-                                           <h5 class="card-title">#productListing.fldProductName#</h5>
-                                           <span class="fw-bold text-wrap ">#productListing.fldBrandName#</span>
-                                           <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.fldPrice#</span>
+                                           <h5 class="card-title">#productListing.productName#</h5>
+                                           <span class="fw-bold text-wrap ">#productListing.brandName#</span>
+                                           <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.price#</span>
                                        </div>
                                    </div>
                                </a>

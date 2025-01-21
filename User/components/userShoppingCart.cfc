@@ -232,17 +232,21 @@
     </cffunction>
 
 
-    <cffunction  name="selectAllProducts" description="Function to select all products" >
+    <cffunction  name="selectAllProducts" description="Function to select all products">
+        <cfargument  name="productId">
         <cfquery name="local.qrySelectAllProducts">
         	SELECT 
-                tp.fldProduct_ID,
-                tp.fldProductName,
-                tp.fldDescription,
-                tp.fldPrice,
-                tp.fldTax,
-                tp.fldSubCategoryId,
-                tb.fldBrandName,
-				tpi.fldImageFileName
+                tp.fldProduct_ID AS productId,
+                tp.fldProductName AS productName,
+                tp.fldDescription AS productDesc,
+                tp.fldPrice AS price,
+                tp.fldTax AS tax,
+                tp.fldSubCategoryId AS subcategoryId,
+                tb.fldBrandName AS brandName,
+				tpi.fldImageFileName AS imageName   ,
+                tsc.fldSubCategoryName AS subcategoryName,
+                tsc.fldCategoryId As categoryId,
+                tc.fldCategoryName AS categoryName
             FROM
 				tblBrands as tb
 			INNER JOIN
@@ -250,6 +254,14 @@
 			ON
 				tb.fldBrand_ID=tp.fldBrandId
 			INNER JOIN 
+                tblSubCategory as tsc
+            ON
+                tsc.fldSubCategory_ID=tp.fldSubCategoryId
+            INNER JOIN
+                tblCategory as tc
+            ON
+                tc.fldCategory_ID=tsc.fldCategoryId
+            INNER JOIN
 				tblProductImages as tpi
 			ON
 				tp.fldProduct_ID=tpi.fldProductId
@@ -257,6 +269,14 @@
                 tp.fldActive = 1
 			AND
 				tpi.fldDefaultImage = 1
+            AND
+                tsc.fldActive = 1
+            AND
+                tc.fldActive = 1
+            <cfif structKeyExists(arguments, "productId")>
+                AND
+                    tp.fldProduct_ID = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
+            </cfif>
         </cfquery>
         <cfreturn local.qrySelectAllProducts>
     </cffunction>
@@ -264,6 +284,7 @@
     <cffunction  name="selectSubcategoryProducts" description="Select products according to subcategory">
         <cfargument  name="subcategoryId">
         <cfargument  name="sort">
+        <cfargument  name="search">
         <cfquery name="local.qryselectSubcategoryProducts">
             SELECT
                 tp.fldProduct_Id AS productId,
@@ -272,7 +293,7 @@
                 tp.fldPrice AS productPrice,
                 tp.fldTax AS productTax,
                 tp.fldSubCategoryId AS subcategoryId,
-                tb.fldBrandName productBrand,
+                tb.fldBrandName brandName,
 				tpi.fldImageFileName AS productImage,
                 ts.fldSubCategoryName AS subcategoryName
             FROM
@@ -293,9 +314,21 @@
                 tp.fldActive = 1
 			AND
 				tpi.fldDefaultImage = 1
-            AND
-                tp.fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
-            <cfif structKeyExists(arguments, "sort")>
+            <cfif structKeyExists(arguments, "subcategoryId")>
+                AND
+                    tp.fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
+            </cfif>
+            <cfif structKeyExists(arguments, "search")>
+                AND
+                (
+			        	tp.fldProductName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			        OR
+			        	tp.fldDescription LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			        OR
+			        	tb.fldBrandName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+                )
+            </cfif>
+             <cfif structKeyExists(arguments, "sort")>
                 ORDER BY tp.fldPrice #arguments.sort#
             </cfif>
         </cfquery>
@@ -306,6 +339,7 @@
         <cfargument  name="subcategoryId">
         <cfargument  name="minValue">
         <cfargument  name="maxValue">
+        <cfargument  name="search">
         <cfquery name="local.qryFilterProducts">
             SELECT
                 tp.fldProduct_Id AS productId,
@@ -314,7 +348,7 @@
                 tp.fldPrice AS productPrice,
                 tp.fldTax AS productTax,
                 tp.fldSubCategoryId AS subcategoryId,
-                tb.fldBrandName productBrand,
+                tb.fldBrandName brandName,
 				tpi.fldImageFileName AS productImage,
                 ts.fldSubCategoryName AS subcategoryName
             FROM
@@ -335,8 +369,10 @@
                 tp.fldActive = 1
 			AND
 				tpi.fldDefaultImage = 1
-            AND
+            <cfif structKeyExists(arguments, "subcategoryId")>
+                AND
                 tp.fldSubCategoryId = <cfqueryparam value="#arguments.subcategoryId#" cfsqltype="integer">
+             </cfif>
             <cfif structKeyExists(arguments, "minValue")>
                 AND
                 tp.fldPrice >= <cfqueryparam value="#arguments.minValue#" cfsqltype="decimal">
@@ -344,6 +380,16 @@
             <cfif structKeyExists(arguments, "maxValue")>
                 AND
                 tp.fldPrice <= <cfqueryparam value="#arguments.maxValue#" cfsqltype="decimal">
+            </cfif>
+            <cfif structKeyExists(arguments, "search")>
+                AND
+                (
+			        	tp.fldProductName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			        OR
+			        	tp.fldDescription LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			        OR
+			        	tb.fldBrandName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+                )
             </cfif>
         </cfquery>
         <cfset local.arrayFilterProducts = arrayNew(1)>
@@ -353,12 +399,79 @@
                 productName=local.qryFilterProducts.productName,
                 productPrice=local.qryFilterProducts.productPrice,
                 subcategoryId=local.qryFilterProducts.subcategoryId,
-                productBrand=local.qryFilterProducts.productBrand,
+                brandName=local.qryFilterProducts.brandName,
                 productImage=local.qryFilterProducts.productImage,
                 subcategoryName=local.qryFilterProducts.subcategoryName
             })>
         </cfloop>
         <cfreturn local.arrayFilterProducts>
+    </cffunction>
+
+    <cffunction  name="selectProductImages">
+        <cfargument  name="productId">
+        <cfquery name="local.qrySelectProductImages">
+            SELECT
+                fldProductImage_ID AS imageId,
+                fldImageFileName AS productImage,
+                fldDefaultImage AS defaultImage
+            FROM
+                tblProductImages
+            WHERE
+                fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
+            AND
+                fldACtive = 1
+        </cfquery>
+        <cfreturn local.qrySelectProductImages>
+    </cffunction>
+
+    <cffunction  name="selectSearchProducts" returntype="query">
+        <cfargument  name="search">
+        <cfquery name="local.qrySelectSearchProducts">
+            SELECT 
+                tp.fldProduct_ID AS productId,
+                tp.fldProductName AS productName,
+                tp.fldDescription AS productDesc,
+                tp.fldPrice AS productPrice,
+                tp.fldTax AS tax,
+                tp.fldSubCategoryId AS subcategoryId,
+                tb.fldBrandName AS brandName,
+				tpi.fldImageFileName AS productImage
+            FROM
+				tblBrands as tb
+			INNER JOIN
+                tblProduct as tp
+			ON
+				tb.fldBrand_ID=tp.fldBrandId
+			INNER JOIN 
+                tblSubCategory as tsc
+            ON
+                tsc.fldSubCategory_ID=tp.fldSubCategoryId
+            INNER JOIN
+                tblCategory as tc
+            ON
+                tc.fldCategory_ID=tsc.fldCategoryId
+            INNER JOIN
+				tblProductImages as tpi
+			ON
+				tp.fldProduct_ID=tpi.fldProductId
+            WHERE 
+                tp.fldActive = 1
+			AND
+				tpi.fldDefaultImage = 1
+            AND
+                tsc.fldActive = 1
+            AND
+                tc.fldActive = 1
+			AND
+            (
+			    	tp.fldProductName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			    OR
+			    	tp.fldDescription LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+			    OR
+			    	tb.fldBrandName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
+            )
+        </cfquery>
+        <cfreturn local.qrySelectSearchProducts>
     </cffunction>
 
 
