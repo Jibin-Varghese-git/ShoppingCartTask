@@ -94,7 +94,7 @@ function logoutUser(){
         } 
 }
 
-function filterPrice(subcategoryId)
+function filterPrice(filterArguments)
 { 
     if($('#filter1').is(':checked')) 
     { 
@@ -116,13 +116,13 @@ function filterPrice(subcategoryId)
         var minValue = $('#filterMin').val()
         var maxValue = $('#filterMax').val()
     }
-
     $.ajax({
         type:"Post",
         url:"components/userShoppingCart.cfc?method=filterProducts",
-        data:{  subcategoryId : subcategoryId,
+        data:{  subcategoryId : filterArguments.subcategoryId,
                 minValue : minValue,
-                maxValue : maxValue
+                maxValue : maxValue,
+                search : filterArguments.search
             },
         success:function(result){
             if(result)
@@ -135,14 +135,14 @@ function filterPrice(subcategoryId)
                 $("#productContainer").empty()
                 arrayFilterProducts.forEach(element => {
                     var singleProduct = `
-                        <a href="userProduct?productId=${element.PRODUCTID}" class="text-decoration-none">
+                        <a href="userProduct.cfm?productId=${element.PRODUCTID}" class="text-decoration-none">
                             <div class="card p-2 my-3">
                                 <div class="productImageDiv">
                                     <img src="../Assets/productImages/${element.PRODUCTIMAGE}" class="card-img-top" alt="No Image Found" height="200" width="50">
                                 </div>
                                 <div class="card-body d-flex flex-column align-items-center">
                                     <h5 class="card-title">${element.PRODUCTNAME}</h5>
-                                    <span class="fw-bold text-wrap ">${element.PRODUCTBRAND}</span>
+                                    <span class="fw-bold text-wrap ">${element.BRANDNAME}</span>
                                     <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
                                 </div>
                             </div>
