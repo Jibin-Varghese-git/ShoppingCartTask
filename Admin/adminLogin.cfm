@@ -6,6 +6,8 @@
         <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
+<!---         <cfset onApplicationStart()> --->
+        <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -34,7 +36,7 @@
                         <input type="password" name="password" placeholder="Password" id="password" class="my-3">
                         <div id="errorPassword" class="text-danger fw-bold"></div>
                         <cfif structKeyExists(form, "loginBtn")>
-                            <cfset structAdminLoginReturn = application.objShoppingCart.fnAdminLogin(form)>
+                            <cfset structAdminLoginReturn = local.objShoppingCart.fnAdminLogin(form)>
                             <cfif NOT structAdminLoginReturn["error"]>
                                 <cflocation  url="adminCategory.cfm" addtoken="no">
                             <cfelse>

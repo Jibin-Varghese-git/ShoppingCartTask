@@ -125,18 +125,18 @@ function filterPrice(filterArguments)
                 search : filterArguments.search
             },
         success:function(result){
+            $("#productContainerSubcategory").empty()
             if(result)
             {
                 arrayFilterProducts = JSON.parse(result)
-                console.log(arrayFilterProducts) 
+                console.log("arrayFilterProducts") 
                 $('[name=filter]').prop('checked', false);
                 $('#filterMin').val(' ')
                 $('#filterMax').val(' ')
-                $("#productContainer").empty()
                 arrayFilterProducts.forEach(element => {
                     var singleProduct = `
                         <a href="userProduct.cfm?productId=${element.PRODUCTID}" class="text-decoration-none">
-                            <div class="card p-2 my-3">
+                            <div class="card p-2 m-3">
                                 <div class="productImageDiv">
                                     <img src="../Assets/productImages/${element.PRODUCTIMAGE}" class="card-img-top" alt="No Image Found" height="200" width="50">
                                 </div>
@@ -147,10 +147,25 @@ function filterPrice(filterArguments)
                                 </div>
                             </div>
                         </a>`
-                    $('#productContainer').append(singleProduct)
+                    $('#productContainerSubcategory').append(singleProduct)
                 });
             }
         }
     });
-
 }
+
+function viewMore(){
+    var btnValue=$('#viewmoreBtn').val()
+    if(btnValue == "more")
+    {
+        $("#productContainerSubcategory").removeClass("productContainerSubcategory")
+        $('#viewmoreBtn').html("View Less")
+        $('#viewmoreBtn').prop("value","less")
+    }
+    else{
+        $("#productContainerSubcategory").addClass("productContainerSubcategory")
+        $('#viewmoreBtn').html("View More")
+        $('#viewmoreBtn').prop("value","more")
+    }
+}
+

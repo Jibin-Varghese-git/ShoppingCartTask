@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
+        <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -27,13 +28,16 @@
                 </div>  
             </div>
         </header>
-        <cfset ProductListing=application.objShoppingCart.fnSelectProduct(subcategoryId=url.subcategoryId)>
-        <cfset subCategoryName=application.objShoppingCart.fnSelectSubcategoryDetails(subcategoryId=url.subcategoryId)>
+        <cfset ProductListing=local.objShoppingCart.fnSelectProduct(subcategoryId=url.subcategoryId)>
+        <cfset subCategoryName=local.objShoppingCart.fnSelectSubcategoryDetails(subcategoryId=url.subcategoryId)>
         <div class="mainContentDivProduct p-5">
             <div class="productDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
                     <cfoutput>
-                        <a href="adminSubCategory.cfm?catId=#url.categoryId#"><span>#subCategoryName["subcategoryName"]#</span></a>
+                        <div class="backBtnProductdiv m-2">
+                            <a href="adminSubCategory.cfm?catId=#url.categoryId#"><span><i class="fa-solid fa-backward"></i> #subCategoryName["subcategoryName"]#</span></a>
+                            <span class="tooltiptext">Back</span>
+                        </div>
                         <button type="button" value="#url.subcategoryId#" onClick="openProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#})" data-bs-toggle="modal" data-bs-target="##modalAddProducts">Add New <img src="../Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
                     </cfoutput>
                 </div>
@@ -49,8 +53,14 @@
                                     <span class="fw-bold fs-5">Price : <i class="fa-solid fa-indian-rupee-sign"></i> #ProductListing.fldPrice#</span>
                                 </div>
                                 <div class="categoryButtons d-flex flex-column">
-                                    <button type="button" class="editProduct" value="#ProductListing.fldProduct_ID#" data-bs-toggle="modal" data-bs-target="##modalAddProducts" onClick="fnEditProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#,productId:#ProductListing.fldProduct_ID#})"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="30" width="30"></button>
-                                    <button type="button" class="deleteProduct" id="deleteCategory" onClick="fnDeleteProduct(this)" value="#ProductListing.fldProduct_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="30" width="30  "></button>
+                                    <div class="editBtnProductdiv m-2">
+                                        <button type="button" class="editProduct" value="#ProductListing.fldProduct_ID#" data-bs-toggle="modal" data-bs-target="##modalAddProducts" onClick="fnEditProductModal({categoryId:#url.categoryId#,subcategoryId:#url.subcategoryId#,productId:#ProductListing.fldProduct_ID#})"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="30" width="30"></button>
+                                        <span class="tooltiptext">Edit</span>
+                                    </div>
+                                    <div class="deleteBtnProductdiv m-2">
+                                        <button type="button" class="deleteProduct" id="deleteCategory" onClick="fnDeleteProduct(this)" value="#ProductListing.fldProduct_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="30" width="30  "></button>
+                                        <span class="tooltiptext">Delete</span>
+                                    </div>
                                 </div>
                             </div>
                         </cfloop>
@@ -92,7 +102,7 @@
                                 <span id="modalAddProductsHeading">Add Product</span>
                             </div>
                             <div class="modalAddProductsBody">
-                                    <cfset categoryListingValues=application.objShoppingCart.fnSelectCategory()> 
+                                    <cfset categoryListingValues=local.objShoppingCart.fnSelectCategory()> 
                                     <span class="my-2">Category</span>
                                     <select  class="w-100 my-2" name="CategoryListing" id="CategoryListing" onchange="fnGetCategory()">
                                         <cfoutput>
@@ -101,9 +111,9 @@
                                             </cfloop> 
                                         </cfoutput>
                                     </select>
-                                    <cfset categoryListingValues=application.objShoppingCart.fnSelectCategory()> 
+                                    <cfset categoryListingValues=local.objShoppingCart.fnSelectCategory()> 
                                     <span class="my-2">Subcategory</span>
-                                    <cfset subcategoryListing=application.objShoppingCart.fnSelectSubCategory(categoryId=url.categoryId)>
+                                    <cfset subcategoryListing=local.objShoppingCart.fnSelectSubCategory(categoryId=url.categoryId)>
                                     <select  class="w-100 my-2" name="subcategoryListing" id="subcategoryListing" >
                                         <cfoutput>
                                             <cfloop collection="#subcategoryListing#"  item="item"> 
@@ -115,7 +125,7 @@
                                     <input type="text" class="productName mt-2 w-100" name="productName" id="productName"><br>
                                     <span id="errorProductName" class="text-danger fw-bold fs-6"></span><br>
                                     <span class="my-2">Product Brand</span>
-                                    <cfset brandListing=application.objShoppingCart.fnSelectBrand()>
+                                    <cfset brandListing=local.objShoppingCart.fnSelectBrand()>
                                     <select  class="w-100 my-2" name="brandListing" id="brandListing" >
                                         <cfoutput>
                                             <cfloop query="brandListing"> 

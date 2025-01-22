@@ -54,7 +54,7 @@
                                 <span><i class="fa-solid fa-chevron-right"></i></span>
                                 <a href="userSubcategory.cfm?subcategoryId=#productListing.subcategoryId#" class="mx-2"><span>#productListing.subcategoryName#</span></a>
                                 <span><i class="fa-solid fa-chevron-right"></i></span>
-                                <a href="" class="mx-2"><span>#productListing.productName#</span></a>
+                                <span class="ms-2">#productListing.productName#</span>
                             </div>
                             <div class="productName w-100 d-flex justify-content-center">
                                 <div><h2>#productListing.productName#</h2></div>
@@ -74,6 +74,30 @@
                     </cfoutput>
                 </div>
             </cfif>
+<!---    Random product listing          --->
+            <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">
+                <div class="productListingSubContainer">
+                    <cfset qryRandomProducts = local.objUserShoppingCart.selectRandomProducts()>
+                    <cfoutput>
+                        <div class="w-100">
+                            <h3>Random Products</h3>
+                        </div>
+                        <cfloop query="qryRandomProducts">
+                            <div class="card p-2 m-3">
+                                <a href="userProduct.cfm?productId=#qryRandomProducts.fldProduct_ID#" class="text-decoration-none">
+                                    <div class="productImageDiv">
+                                        <img src="../Assets/productImages/#qryRandomProducts.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                    </div>
+                                    <div class="card-body d-flex flex-column align-items-center">
+                                        <h5 class="card-title text-truncate">#qryRandomProducts.fldProductName#</h5>
+                                        <span class="fw-bold text-wrap ">#qryRandomProducts.fldBrandName#</span>
+                                        <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#qryRandomProducts.fldPrice#</span>
+                                    </div>
+                                </a>
+                            </div>
+                     </cfloop>
+                    </cfoutput>
+                </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

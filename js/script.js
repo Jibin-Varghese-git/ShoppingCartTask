@@ -55,8 +55,8 @@ function fnDeleteCategory(categoryId)
 }
 
 function fnAddCategory(){
-    let categoryName=document.getElementById("newCategoryName").value;
-    let categoryId=document.getElementById("btnAddCategory").value;
+    let categoryName=document.getElementById("newCategoryName").value.trim();
+    let categoryId=document.getElementById("btnAddCategory").value.trim();
     if(categoryName.length < 1)
     {
         document.getElementById("errorNewCategory").innerHTML="Enter the category name."
@@ -126,9 +126,10 @@ function fnModalEditCategory(categoryId){
 }
 
 function fnAddSubcategory(){
-    let subcategoryName=document.getElementById("newSubcategoryName").value;
-    let categoryId=document.getElementById("categoryListing").value;
-    let subcategoryId=document.getElementById("btnAddSubcategory").value;
+    let subcategoryName=document.getElementById("newSubcategoryName").value.trim();
+    let categoryId=document.getElementById("categoryListing").value.trim();
+    let subcategoryId=document.getElementById("btnAddSubcategory").value.trim();
+    alert(subcategoryId)
     if(subcategoryName.length < 1)
     {
         document.getElementById("errorNewSubcategory").innerHTML="Enter the category name."
@@ -175,6 +176,7 @@ function fnAddSubcategory(){
 function fnCloseModalSubCategory(){
     document.getElementById("errorNewSubcategory").innerHTML=" ";
     document.getElementById("newSubcategoryName").value=" ";
+    document.getElementById("btnAddSubcategory").value=" "
 }
 
 
@@ -199,7 +201,8 @@ function fnModalEditSubCategory(subcategoryId){
                 document.getElementById("newSubcategoryName").value=structSubcategoryDetails.subcategoryName;
                 document.getElementById("categoryListing").value=structSubcategoryDetails.categoryId;
                 document.getElementById("btnAddSubcategory").value=structSubcategoryDetails.subcategoryId;
-                document.getElementById("subcategoryModalHeading").innerHTML="Edit SubCategory"
+                document.getElementById("subcategoryModalHeading").innerHTML="Edit SubCategory";
+                document.getElementById("btnAddSubcategory").innerHTML="Edit SubCategory"
             }
 
         }
@@ -261,12 +264,18 @@ function openProductModal(structProduct){
 function fnProductModalValidation(){
     event.preventDefault()  
     var error = false;
-    let productName = document.getElementById("productName").value;
-    let productDescription = document.getElementById("productDescription").value;
-    let productPrice = document.getElementById("productPrice").value;
-    let productTax = document.getElementById("productTax").value;
-    let productImage = document.getElementById("productImage").value;
-    let productId = document.getElementById("btnAddProducts").value;
+    let productName = document.getElementById("productName").value.trim();
+    let productDescription = document.getElementById("productDescription").value.trim();
+    let productPrice = document.getElementById("productPrice").value.trim();
+    let productTax = document.getElementById("productTax").value.trim();
+    let productImage = document.getElementById("productImage").value.trim();
+    let productId = document.getElementById("btnAddProducts").value.trim();
+
+    document.getElementById("errorProductDescription").innerHTML=" ";
+    document.getElementById("errorProductPrice").innerHTML=" ";
+    document.getElementById("errorProductTax").innerHTML=" ";
+    document.getElementById("errorProductImage").innerHTML=" "
+
     if(productName.length < 1)
     {
         document.getElementById("errorProductName").innerHTML="Enter the product name"
@@ -503,6 +512,11 @@ function fnSetThumbnail(productImageId,productId){
 
 function fnCloseProduct(){
     document.getElementById("productForm").reset();
-    document.getElementById("btnAddProducts").innerHTML="Add Product"
-    document.getElementById("modalAddProductsHeading").innerHTML="Add Product"
+    document.getElementById("btnAddProducts").innerHTML="Add Product";
+    document.getElementById("modalAddProductsHeading").innerHTML="Add Product";
+    document.getElementById("errorProductName").innerHTML=" ";
+    document.getElementById("errorProductDescription").innerHTML=" ";
+    document.getElementById("errorProductPrice").innerHTML=" ";
+    document.getElementById("errorProductTax").innerHTML=" ";
+    document.getElementById("errorProductImage").innerHTML=" "
 }

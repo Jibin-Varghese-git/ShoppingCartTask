@@ -33,13 +33,42 @@
                 </cfoutput>
             </div>
             <div class="homeImage mt-3">
-                <img src="../Assets/Images/homeImage3.webp">
+                <div id="carouselExampleAutoplaying" class="carousel slide w-100" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img src="../Assets/Images/homeImage3.webp" class="d-block w-100" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../Assets/Images/homeImage4.webp" class="d-block w-100" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../Assets/Images/homeImage7.jpg" class="d-block w-100" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../Assets/Images/homeImage8.jpg" class="d-block w-100" alt="...">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../Assets/Images/homeImage9.jpg" class="d-block w-100" alt="...">
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon bg-secondary" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                      <span class="carousel-control-next-icon bg-secondary" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                <div>
             </div>
 <!-- Product Listing  -->
             <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">
                 <div class="productListingSubContainer">
                     <cfset qryRandomProducts = local.objUserShoppingCart.selectRandomProducts()>
                     <cfoutput>
+                         <div class="w-100">
+                            <h3>Random Products</h3>
+                        </div>
                         <cfloop query="qryRandomProducts">
                             <div class="card p-2 m-3">
                                 <a href="userProduct.cfm?productId=#qryRandomProducts.fldProduct_ID#" class="text-decoration-none">
@@ -47,9 +76,9 @@
                                         <img src="../Assets/productImages/#qryRandomProducts.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                     </div>
                                     <div class="card-body d-flex flex-column align-items-center">
-                                        <h5 class="card-title">#qryRandomProducts.fldProductName#</h5>
+                                        <h5 class="card-title text-truncate">#qryRandomProducts.fldProductName#</h5>
                                         <span class="fw-bold text-wrap ">#qryRandomProducts.fldBrandName#</span>
-                                        <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#qryRandomProducts.fldPrice#</span>
+                                        <span class="productPrice fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#qryRandomProducts.fldPrice#</span>
                                     </div>
                                 </a>
                             </div>
@@ -57,8 +86,8 @@
                     </cfoutput>
                 </div>
             </div>
+            <cfinclude  template="userFooter.cfm"></cfinclude>
         </div>
-        <cfinclude  template="userFooter.cfm">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

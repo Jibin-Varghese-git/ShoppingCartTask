@@ -1,10 +1,10 @@
 <cfoutput>
     <!-- Remove the container if you want to extend the Footer to full width. -->
-<div class="container my-5">
+
 
   <!-- Footer -->
   <footer
-          class="text-center text-lg-start text-white"
+          class="text-center text-lg-start text-white bg-secondary"
 
           >
     <!-- Section: Social media -->
@@ -73,16 +73,16 @@
                 style="width: 60px; height: 2px"
                 />
             <p>
-              <a href="!" class="text-white">MDBootstrap</a>
+              <a href="" class="text-white">MDBootstrap</a>
             </p>
             <p>
-              <a href="!" class="text-white">MDWordPress</a>
+              <a href="" class="text-white">MDWordPress</a>
             </p>
             <p>
-              <a href="!" class="text-white">BrandFlow</a>
+              <a href="" class="text-white">BrandFlow</a>
             </p>
             <p>
-              <a href="!" class="text-white">Bootstrap Angular</a>
+              <a href="" class="text-white">Bootstrap Angular</a>
             </p>
           </div>
           <!-- Grid column -->
@@ -96,16 +96,16 @@
                 style="width: 60px; height: 2px"
                 />
             <p>
-              <a href="!" class="text-white">Your Account</a>
+              <a href="" class="text-white">Your Account</a>
             </p>
             <p>
-              <a href=!" class="text-white">Become an Affiliate</a>
+              <a href="" class="text-white">Become an Affiliate</a>
             </p>
             <p>
-              <a href="!" class="text-white">Shipping Rates</a>
+              <a href="" class="text-white">Shipping Rates</a>
             </p>
             <p>
-              <a href="!" class="text-white">Help</a>
+              <a href="" class="text-white">Help</a>
             </p>
           </div>
           <!-- Grid column -->
