@@ -23,7 +23,7 @@
             <cfset subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId)>
         </cfif>
         <div class="categoryMainContainer mt-2 px-2">
-            <div class="categorySubcontainer mt-2 px-3 py-2" id="categorySubcontainer">
+            <div class="categorySubcontainer my-3 px-3 py-2" id="categorySubcontainer">
                 <cfoutput>
                     <div class="w-100 px-2">
                        <cfif NOT queryRecordCount(subcategoryProductsListing)>
@@ -58,11 +58,11 @@
                                                                                             </cfif>
                                                                                             })" id="filterPrice">Submit</button></li>
                                     </ul>
-                                </div>
+                                   </div>
                             </div>
                         </cfif>
                     </div>
-                    <div class="productContainer d-flex flex-wrap  my-3 ps-5 pe-3 py-3 w-100" id="productContainer">
+                    <div class="productContainerSubcategory d-flex flex-wrap  my-3 ps-5 pe-3 py-3 w-100" id="productContainerSubcategory">
                         <cfloop query="subcategoryProductsListing">
                             <a href="userProduct.cfm?productId=#subcategoryProductsListing.productId#" class="text-decoration-none">
                                 <div class="card p-2 m-3">
@@ -70,17 +70,23 @@
                                         <img src="../Assets/productImages/#subcategoryProductsListing.productImage#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                     </div>
                                     <div class="card-body d-flex flex-column align-items-center">
-                                        <h5 class="card-title">#subcategoryProductsListing.productName#</h5>
+                                        <h5 class="card-title text-truncate">#subcategoryProductsListing.productName#</h5>
                                         <span class="fw-bold text-wrap ">#subcategoryProductsListing.brandName#</span>
-                                        <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#subcategoryProductsListing.productPrice#</span>
+                                        <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#subcategoryProductsListing.productPrice#</span>
                                     </div>
                                 </div>
                             </a>
                         </cfloop>
                     </div>
                 </cfoutput>
+                <cfif queryRecordCount(subcategoryProductsListing) GT 10>
+                    <div class="viewmoreBtnDiv d-flex justify-content-center align-items-center w-100">
+                        <button class="viewmoreBtn" id="viewmoreBtn" onclick="viewMore()" value="more">View More <i class="fa-solid fa-arrow-down" style="color: #bd8dc9;"></i></button>
+                    </div>
+                </cfif>
             </div>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

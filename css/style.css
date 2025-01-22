@@ -68,7 +68,6 @@ header{
     color: #ffffff;
     font-size: large;
     font-weight: 700;
-    cursor: pointer;
 }
 
 
@@ -444,3 +443,94 @@ header{
 .forwardBtnSubCatdiv:hover .tooltiptext{
     visibility: visible;
 }
+
+.editBtnProductdiv{
+    position: relative;
+    display: inline-block;
+}
+
+.editBtnProductdiv .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: -5px;
+    right: 105%;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.editBtnProductdiv button{
+    height: fit-content;
+    width: fit-content;
+}
+
+.editBtnProductdiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.deleteBtnProductdiv{
+    position: relative;
+    display: inline-block;
+}
+
+.deleteBtnProductdiv .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: -5px;
+    right: 105%;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.deleteBtnProductdiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+.deleteBtnProductdiv button{
+    height: fit-content;
+    width: fit-content;
+}
+
+.backBtnProductdiv{
+    position: relative;
+    display: inline-block;
+}
+
+.backBtnProductdiv .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    right:50%;
+    margin-left: -30px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.backBtnProductdiv:hover .tooltiptext{
+    visibility: visible;
+}
+
+

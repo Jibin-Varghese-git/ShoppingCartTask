@@ -146,7 +146,7 @@
     <cffunction  name="selectRandomProducts" description="Function to select random products" >
         <cfquery name="local.qryRandomProducts">
         	SELECT 
-            TOP 12
+            TOP 10
                 tp.fldProduct_ID,
                 tp.fldProductName,
                 tp.fldDescription,
@@ -424,55 +424,5 @@
         <cfreturn local.qrySelectProductImages>
     </cffunction>
 
-    <cffunction  name="selectSearchProducts" returntype="query">
-        <cfargument  name="search">
-        <cfquery name="local.qrySelectSearchProducts">
-            SELECT 
-                tp.fldProduct_ID AS productId,
-                tp.fldProductName AS productName,
-                tp.fldDescription AS productDesc,
-                tp.fldPrice AS productPrice,
-                tp.fldTax AS tax,
-                tp.fldSubCategoryId AS subcategoryId,
-                tb.fldBrandName AS brandName,
-				tpi.fldImageFileName AS productImage
-            FROM
-				tblBrands as tb
-			INNER JOIN
-                tblProduct as tp
-			ON
-				tb.fldBrand_ID=tp.fldBrandId
-			INNER JOIN 
-                tblSubCategory as tsc
-            ON
-                tsc.fldSubCategory_ID=tp.fldSubCategoryId
-            INNER JOIN
-                tblCategory as tc
-            ON
-                tc.fldCategory_ID=tsc.fldCategoryId
-            INNER JOIN
-				tblProductImages as tpi
-			ON
-				tp.fldProduct_ID=tpi.fldProductId
-            WHERE 
-                tp.fldActive = 1
-			AND
-				tpi.fldDefaultImage = 1
-            AND
-                tsc.fldActive = 1
-            AND
-                tc.fldActive = 1
-			AND
-            (
-			    	tp.fldProductName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
-			    OR
-			    	tp.fldDescription LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
-			    OR
-			    	tb.fldBrandName LIKE <cfqueryparam value='%#arguments.search#%' cfsqltype="varchar">
-            )
-        </cfquery>
-        <cfreturn local.qrySelectSearchProducts>
-    </cffunction>
-
-
+    
 </cfcomponent>

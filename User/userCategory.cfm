@@ -25,20 +25,24 @@
                         <div class="w-100">
                             <a href="userSubCategory.cfm?subcategoryId=#subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#subcategoryListing.fldSubCategoryName#</h3></a>
                         </div>
+                        <cfset countVariable = 0>
                         <cfloop query="productListing">
-                            <cfif subcategoryListing.fldSubCategory_ID EQ productListing.subcategoryId>
-                               <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
-                                   <div class="card p-2 m-3">
-                                       <div class="productImageDiv">
-                                           <img src="../Assets/productImages/#productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                            <cfif countVariable LT 5>
+                                <cfif subcategoryListing.fldSubCategory_ID EQ productListing.subcategoryId>
+                                   <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
+                                       <div class="card p-2 m-3">
+                                           <div class="productImageDiv">
+                                               <img src="../Assets/productImages/#productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                           </div>
+                                           <div class="card-body d-flex flex-column align-items-center">
+                                               <h5 class="card-title text-truncate">#productListing.productName#</h5>
+                                               <span class="fw-bold text-wrap ">#productListing.brandName#</span>
+                                               <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.price#</span>
+                                           </div>
                                        </div>
-                                       <div class="card-body d-flex flex-column align-items-center">
-                                           <h5 class="card-title">#productListing.productName#</h5>
-                                           <span class="fw-bold text-wrap ">#productListing.brandName#</span>
-                                           <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.price#</span>
-                                       </div>
-                                   </div>
-                               </a>
+                                   </a>
+                                   <cfset countVariable++>
+                                </cfif>
                             </cfif>
                         </cfloop>
                     </cfoutput>

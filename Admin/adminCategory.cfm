@@ -4,8 +4,10 @@
         <title>ADMIN LOGIN</title>
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
+        <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -26,7 +28,7 @@
                 </div>  
             </div>
         </header>
-        <cfset result=application.objShoppingCart.fnSelectCategory()>
+        <cfset result=local.objShoppingCart.fnSelectCategory()>
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">

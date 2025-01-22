@@ -2,9 +2,9 @@
     <cfset this.datasource="dataSource_shoppingCart">
     <cfset this.sessionmanagement = "true">
     
-    <cffunction  name="onApplicationStart">
+<!---     <cffunction  name="onApplicationStart"> 
         <cfset application.objShoppingCart = createObject("component", "components.shoppingCart")>
-    </cffunction>
+    </cffunction>--->
     
     <cffunction  name="onrequestStart" returntype="any">
         <cfargument name="requestpage">
