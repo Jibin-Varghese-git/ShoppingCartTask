@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="../css/userSignin.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
+    <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
     <body>
         <header class="py-2 px-3 d-flex justify-content-between align-item-center">
             <a href="" class="d-flex"> 
@@ -19,7 +20,17 @@
                 <h5 class="logoHeading ms-1 mt-3">E-CART</h5>
             </a>
             <div class="loginBtnClass mt-1">
-                <a href="userSignup.cfm"> <button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Sign Up</button></a>
+                <cfif structKeyExists(url, "productId")>
+                    <cfoutput>
+                        <a href="userSignup.cfm?redirect=#url.redirect#&productId=#url.productId#">
+                    </cfoutput>
+                <cfelse>
+                    <a href="userSignup.cfm">
+                </cfif>
+                    <button name="loginBtn" onClick="" type="button">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Sign Up
+                    </button>
+                </a>
             </div>  
         </header>
         <div class="mainContainerLogin p-4 mt-3">
@@ -44,10 +55,21 @@
                         </div>
                     </div>
                     <cfif structKeyExists(form,"btnLogin")>
-                        <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
                         <cfset local.structUserLoginReturn = local.objUserShoppingCart.userLogin(structForm = form)>
                         <cfif NOT local.structUserLoginReturn["error"]>
-                            <cflocation  url="userHome.cfm" addToken="no">
+                            <cfif structKeyExists(url, "productId")>
+                                <cfif url.redirect EQ "cart">
+                                    <cfset local.cartAddProduct = local.objUserShoppingCart.addProductCart(productId=url.productId)>
+                                    <cfif local.cartAddProduct>
+                                        <cflocation  url="userCart.cfm" addToken="no">
+                                    </cfif>
+                                </cfif>
+                                <cfif url.redirect EQ "order">
+                                    <cflocation  url="userOrder.cfm" addToken="no">
+                                </cfif>
+                            <cfelse>
+                                <cflocation  url="userHome.cfm" addToken="no">
+                            </cfif>
                         <cfelse>
                             <cfoutput>
                                 <span class="text-danger fw-bold ms-5">#local.structUserLoginReturn["errorMessage"]#</span>

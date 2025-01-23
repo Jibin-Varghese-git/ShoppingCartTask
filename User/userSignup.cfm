@@ -68,7 +68,19 @@
                         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
                         <cfset local.structAddUserReturn = local.objUserShoppingCart.addUser(structForm = form)>
                         <cfif NOT local.structAddUserReturn["error"]>
-                            <cflocation  url="userLogin.cfm" addtoken="no">
+                            <cfif structKeyExists(url, "productId")>
+                                <cfif url.redirect EQ "cart">
+                                    <cfset local.cartAddProduct = local.objUserShoppingCart.addProductCart(productId=url.productId)>
+                                    <cfif local.cartAddProduct>
+                                        <cflocation  url="userCart.cfm" addToken="no">
+                                    </cfif>
+                                </cfif>
+                                <cfif url.redirect EQ "order">
+                                    <cflocation  url="userOrder.cfm" addToken="no">
+                                </cfif>
+                            <cfelse>
+                                <cflocation  url="userHome.cfm" addToken="no">
+                            </cfif>
                         <cfelse>
                             <cfoutput>
                                 <span class="text-danger fw-bold ms-5">#local.structAddUserReturn["errorMessage"]#</span>

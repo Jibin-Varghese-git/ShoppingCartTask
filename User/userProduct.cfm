@@ -56,23 +56,33 @@
                                 <span><i class="fa-solid fa-chevron-right"></i></span>
                                 <span class="ms-2">#productListing.productName#</span>
                             </div>
-                            <div class="productName w-100 d-flex justify-content-center">
-                                <div><h2>#productListing.productName#</h2></div>
+                            <div class="productName w-100 d-flex justify-content-center my-2">
+                                <h2>#productListing.productName#</h2>
                             </div>
                             <div class="productDesc">
-                                <div><h6 class="w-100">#productListing.productDesc#</h6></div>
+                                <p class="w-100">#productListing.productDesc#</p>
                             </div>
                             <div class="productPrice w-100 overflow-hidden ">
                                 <div class="d-flex w-100 m-2"><h5><i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price# <sub>+#productListing.tax#(tax)</sub></h5></div>
                                 <div class="ms-2 mt-4"><h4>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price + productListing.tax#</h4></div>
                             </div>
                             <div class="productListingBtns w-100 d-flex flex-column align-items-center">
-                                <button class="cartBtn w-50 p-2 my-1" value="">Add to Cart</button>
-                                <button class="buyBtn w-50 p-2 mt-1" value="">Buy Now</button>
+                                <form method="POST" class="w-100">
+                                    <button type="submit" class="cartBtn w-50 p-2 my-1" name="cartBtn" id="cartBtn" value="#productListing.productId#">Add to Cart</button>
+                                    <button type="submit" class="buyBtn w-50 p-2 mt-1" name="buyBtn" id="buyBtn" value="#productListing.productId#">Buy Now</button>
+                                </form>
                             </div>
                         </div>
                     </cfoutput>
                 </div>
+            </cfif>
+            <cfif structKeyExists(form, "cartBtn")>
+                <cfif structKeyExists(session, "structUserDetails")>
+                    <cfset local.cartAddProduct = local.objUserShoppingCart.addProductCart(productId=form.cartBtn)>
+                    <cflocation  url="userCart.cfm" addToken="no">
+                <cfelse>
+                    <cflocation  url="userLogin.cfm?redirect=cart&productId=#form.cartBtn#" addToken="no">
+                </cfif>
             </cfif>
 <!---    Random product listing          --->
             <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">

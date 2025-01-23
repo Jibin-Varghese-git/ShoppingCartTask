@@ -42,7 +42,7 @@
                 <cfset local.structAddUserReturn["error"] = true>
                 <cfset local.structAddUserReturn["errorMessage"] = "User Already Exists">
             <cfelse>
-                <cfquery>
+                <cfquery result="local.userSignup">
                     INSERT INTO
                         tblUser
                         (
@@ -65,6 +65,13 @@
                             <cfqueryparam value='1' cfsqltype="varchar">
                         )
                 </cfquery>
+                <cfset local.structUserLoginReturn["error"] = false>
+                    <cfset session.structUserDetails["userId"] = local.userSignup.generatedkey>
+                    <cfset session.structUserDetails["firstName"] = arguments.structForm.firstName>
+                    <cfset session.structUserDetails["lastName"] = arguments.structForm.lastName>
+                    <cfset session.structUserDetails["phone"] = arguments.structForm.userPhone>
+                    <cfset session.structUserDetails["email"] = arguments.structForm.userEmail>
+                    <cfset session.structUserDetails["roleId"] = 1>
                 <cfset local.structAddUserReturn["error"] = false>
             </cfif>
         </cfif>
@@ -306,6 +313,10 @@
                 tblSubCategory as ts
 			ON
                 tp.fldSubCategoryId= ts.fldSubCategory_ID
+            INNER JOIN
+                tblCategory as tc
+            ON
+                tc.fldCategory_ID=ts.fldCategoryId
 			INNER JOIN 
 				tblProductImages as tpi
 			ON
@@ -313,6 +324,10 @@
             WHERE 
                 tp.fldActive = 1
 			AND
+                tc.fldActive = 1
+            AND
+                ts.fldActive = 1
+            AND
 				tpi.fldDefaultImage = 1
             <cfif structKeyExists(arguments, "subcategoryId")>
                 AND
@@ -422,6 +437,94 @@
                 fldACtive = 1
         </cfquery>
         <cfreturn local.qrySelectProductImages>
+    </cffunction>
+
+    <cffunction  name="addProductCart">
+        <cfargument  name="productId">
+        <cfquery name="local.qryCheckCart">
+                SELECT
+                    fldCart_ID,
+                    fldUserId,
+                    fldProductId,
+                    fldQuantity
+                FROM
+                    tblCart
+                WHERE
+                    fldProductId = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
+                AND
+                    fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+        </cfquery>
+        
+        <cfif queryRecordCount(local.qryCheckCart) LT 1>
+            <cfquery>
+                INSERT INTO
+                    tblCart
+                    (
+                        fldUserId,
+                        fldProductId,
+                        fldQuantity
+                    )
+                VALUES
+                    (
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                        <cfqueryparam value="#arguments.productId#" cfsqltype="integer">,
+                        <cfqueryparam value='1' cfsqltype="integer">
+                    )
+
+            </cfquery>
+        <cfelse>
+            <cfset local.productQuantity = local.qryCheckCart.fldQuantity + 1>
+            <cfquery>
+                UPDATE
+                    tblCart
+                SET
+                    fldQuantity = <cfqueryparam value="#local.productQuantity#" cfsqltype="integer">
+                FROM
+                    tblCart
+                WHERE
+                    fldCart_ID = <cfqueryparam value="#local.qryCheckCart.fldCart_ID#" cfsqltype="integer">
+            </cfquery>
+        </cfif>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="selectProductCart">
+        <cfquery name="local.qrySelectProductCart">
+                SELECT 
+                	tc.fldCart_ID AS cartId,
+                	tc.fldProductId AS productId,
+                	tc.fldQuantity AS productQuantity,
+                	tp.fldProductName AS productName,
+                	tp.fldPrice AS price,
+                    tp.fldTax AS tax,
+                	tb.fldBrandName AS brandName,
+                	tpi.fldImageFileName AS imageName
+                FROM
+                	tblCart AS tc
+                INNER JOIN 
+                	tblProduct AS tp
+                ON
+                	tc.fldProductId = tp.fldProduct_ID
+                INNER JOIN 
+                	tblBrands AS tb
+                ON
+                	tb.fldBrand_ID = tp.fldBrandId
+                INNER JOIN 
+                	tblProductImages AS tpi
+                ON
+                	tpi.fldProductId = tp.fldProduct_ID
+                WHERE
+                	tp.fldActive = 1
+                AND
+                	tpi.fldDefaultImage = 1
+                AND 
+                	tc.fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+        </cfquery>
+        <cfreturn local.qrySelectProductCart>
+    </cffunction>
+
+    <cffunction  name="dumpFunction">
+        <cfreturn true>
     </cffunction>
 
     
