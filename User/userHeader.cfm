@@ -1,4 +1,5 @@
 <cfoutput>
+    <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
     <header class="py-2 px-3 d-flex justify-content-between align-item-center">
         <a href="userHome.cfm" class="d-flex"> 
             <div class="headerImageDiv">
@@ -13,8 +14,17 @@
             </form>
         </div>
         <div class="headerBtnClass mt-1">
-            <button name="cartBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-cart-shopping" ></i></button>
-            <button name="profileBtn" onClick="" class="mx-2" type="button"><i class="fa-solid fa-user" ></i></button>
+            
+            <a href="userCart.cfm" class="cartBtnHeader mx-3">
+               <i class="fa-solid fa-cart-shopping"></i>
+                <cfif structKeyExists(session,"structUserDetails")> 
+                    <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
+                    <cfoutput>
+                        <span class="badge">#queryRecordCount(productListingCart)#</span>
+                    </cfoutput>
+               </cfif> 
+            </a>
+            <button name="profileBtn" onClick="" class="mx-3" type="button"><i class="fa-solid fa-user" ></i></button>
             <cfif structKeyExists(session,"structUserDetails")>
                 <button name="logoutBtn" onClick="logoutUser()" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Logout</button>
             <cfelse>

@@ -159,12 +159,12 @@ function viewMore(){
     if(btnValue == "more")
     {
         $("#productContainerSubcategory").removeClass("productContainerSubcategory")
-        $('#viewmoreBtn').html("View Less")
+        $('#viewmoreBtn').html("View Less <i class='fa-solid fa-arrow-up-long' style='color: #bd8dc9;'></i>")
         $('#viewmoreBtn').prop("value","less")
     }
     else{
         $("#productContainerSubcategory").addClass("productContainerSubcategory")
-        $('#viewmoreBtn').html("View More")
+        $('#viewmoreBtn').html("View More <i class='fa-solid fa-arrow-down' style='color: #bd8dc9;'></i>")
         $('#viewmoreBtn').prop("value","more")
     }
 }
