@@ -523,6 +523,32 @@
         <cfreturn local.qrySelectProductCart>
     </cffunction>
 
+    <cffunction  name="removeCartProduct" access="remote">
+        <cfargument  name="cartId">
+            <cfquery>
+                DELETE
+                FROM
+                    tblCart
+                WHERE
+                    fldCart_ID = <cfqueryparam value="#arguments.cartId#" cfsqltype="integer">
+            </cfquery>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="cartUpdate" access="remote">
+        <cfargument  name="cartId">
+        <cfargument  name="quantity">
+        <cfquery>
+            UPDATE
+                tblCart
+            SET
+                fldQuantity = <cfqueryparam value="#arguments.quantity#" cfsqltype="integer">
+            WHERE
+                fldCart_ID = <cfqueryparam value="#arguments.cartId#" cfsqltype="integer">
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+
     <cffunction  name="dumpFunction">
         <cfreturn true>
     </cffunction>

@@ -40,7 +40,7 @@
                                     <a class="text-decoration-none me-2" href="userSubcategory.cfm?<cfif structKeyExists(url, "subCategoryId")>subCategoryId=#url.subCategoryId#<cfelse>search=#url.search#</cfif>&sort=desc">Price:High to Low</a>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-secondary" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                         <i class="fa-solid fa-arrow-down-short-wide"></i> Filter
                                     </button>
                                     <ul class="dropdown-menu p-2">
