@@ -13,8 +13,8 @@
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
-        <div class="mainContainer px-2">
-            <div class="categoryListingHeader mt-2 p-2">
+        <div class="mainContainer">
+            <div class="categoryListingHeader mt-2 p-2 mx-2">
                 <cfset structCategoryListing = local.objUserShoppingCart.selectCategory()>
                 <cfset subCategoryListing = local.objUserShoppingCart.selectSubcategory()>
                 <cfoutput>
@@ -32,7 +32,7 @@
                     </cfloop>
                 </cfoutput>
             </div>
-            <div class="homeImage mt-3">
+            <div class="homeImage mt-3 mx-2">
                 <div id="carouselExampleAutoplaying" class="carousel slide w-100" data-bs-ride="carousel">
                     <div class="carousel-inner">
                       <div class="carousel-item active">
@@ -86,8 +86,9 @@
                     </cfoutput>
                 </div>
             </div>
+                <cfinclude  template="userFooter.cfm"></cfinclude>
         </div>
-        <cfinclude  template="userFooter.cfm"></cfinclude>
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

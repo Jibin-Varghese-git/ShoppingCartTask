@@ -13,7 +13,7 @@
     <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
     <body>
         <header class="py-2 px-3 d-flex justify-content-between align-item-center">
-            <a href="" class="d-flex"> 
+            <a href="userHome.cfm" class="d-flex"> 
                 <div class="headerImageDiv">
                     <img src="../Assets/Images/iconCartUser.png" alt="No Image Found">
                 </div>

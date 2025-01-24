@@ -169,3 +169,95 @@ function viewMore(){
     }
 }
 
+function removeCartItem(cartDetails){
+    if(confirm("Do you want to Delete this item?"))
+    {
+        $.ajax({
+            type : "POST",
+            url : "components/userShoppingCart.cfc?method=removeCartProduct",
+            data : {cartId:cartDetails.cartId},
+            success : function(result){
+                if(result)
+                {
+                    document.getElementById(cartDetails.cartId).remove();
+                }
+            }
+        });
+    }
+}
+
+
+$( document ).ready(function() {
+    checkQuantity();
+});
+
+function checkQuantity(){
+    var quantity=$('.cartQuantity');
+    for (let index = 0; index < quantity.length; index++) {
+        if(quantity[index].value ==1)
+        {
+            quantity[index].previousElementSibling.disabled = true;
+        }
+        else{
+            quantity[index].previousElementSibling.disabled =  false;
+        }
+    }
+}
+
+function addQuantity(cartDetails){
+    var quantity=document.getElementById(cartDetails.cartId+"Input").value;
+    var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
+    var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
+    var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
+    var totalTax=document.getElementById("totalTax").innerHTML;
+
+    price=price/quantity;
+    totalProductPrice=parseFloat(totalProductPrice) + price;
+    totalTax=parseFloat(totalTax)  + parseFloat(tax);
+
+    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)+1;
+    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)+1)*price;
+    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
+    document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
+    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
+
+    $.ajax({
+       type : "POST",
+        url : "components/userShoppingCart.cfc?method=cartUpdate",
+        data : {cartId : cartDetails.cartId,quantity : parseInt(quantity)+1},
+        success : function(){}
+    });
+    checkQuantity();
+}
+
+
+function removeQuantity(cartDetails){
+    var quantity=document.getElementById(cartDetails.cartId+"Input").value;
+    var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
+    var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
+    var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
+    var totalTax=document.getElementById("totalTax").innerHTML;
+
+    price=price/quantity;
+    totalProductPrice=parseFloat(totalProductPrice) - price;
+    totalTax=parseFloat(totalTax) - parseFloat(tax);
+
+    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)-1;
+    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)-1)*price;
+    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
+    document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
+    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
+
+    $.ajax({
+        type : "POST",
+        url : "components/userShoppingCart.cfc?method=cartUpdate",
+        data : {cartId : cartDetails.cartId,quantity : parseInt(quantity)-1},
+         success : function(result){
+            if(result){
+
+            }
+        }
+    });
+    checkQuantity();
+}
+

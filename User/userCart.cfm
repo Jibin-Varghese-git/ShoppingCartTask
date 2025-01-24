@@ -13,6 +13,8 @@
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
+        <cfset totalProductPrice = 0>
+        <cfset totalTax = 0>
         <cfinclude  template="userHeader.cfm">
         <cfoutput>
             <div class="mainContainer px-2 d-flex">
@@ -26,7 +28,7 @@
                         <hr class="my-4">
 <!---                  Product        --->
                         <cfloop query="productListingCart">
-                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                            <div class="row mb-4 d-flex justify-content-between align-items-center" id="#productListingCart.cartId#">
                                 <div class="col-md-2 col-lg-2 col-xl-2">
                                   <img
                                     src="../Assets/productImages/#productListingCart.imageName#"
@@ -37,25 +39,27 @@
                                   <h6 class="mb-0">#productListingCart.brandName#</h6>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2">
+                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" class="qtyDeleteBtn" id="#productListingCart.cartId#DeleteBtn" onclick="removeQuantity({cartId:#productListingCart.cartId#})">
                                     <i class="fas fa-minus"></i>
                                   </button>
+                                  <input id="#productListingCart.cartId#Input" class="cartQuantity" min="0" name="quantity" value="#productListingCart.productQuantity#" type="text"
+                                    class="form-control form-control-sm px-2"disabled/>
 
-                                  <input id="form1" class="cartQuantity" min="0" name="quantity" value="#productListingCart.productQuantity#" type="number"
-                                    class="form-control form-control-sm px-2" />
-
-                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2">
+                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="addQuantity({cartId:#productListingCart.cartId#})">
                                     <i class="fas fa-plus"></i>
                                   </button>
                                 </div>
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                  <h6 class="mb-0">#productListingCart.productQuantity * (productListingCart.price + productListingCart.tax)#</h6>
+                                  <h6 class="mb-0" id="#productListingCart.cartId#ProductPrice">#productListingCart.productQuantity * productListingCart.price#</h6>
+                                  <input type="hidden" value="#productListingCart.tax#" id="#productListingCart.cartId#ProductTax">
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                  <button value="#productListingCart.cartId#" class="border-0 bg-transparent"><i class="fas fa-times"></i></button>
+                                  <button  class="border-0 bg-transparent" onclick="removeCartItem({cartId:#productListingCart.cartId#})"><i class="fas fa-times"></i></button>
                                 </div>
+                                <hr class="my-4">
                             </div>
-                            <hr class="my-4">
+                            <cfset totalProductPrice += (productListingCart.price * productListingCart.productQuantity)>
+                            <cfset totaltax += (productListingCart.tax * productListingCart.productQuantity)>
                         </cfloop>
                     </div>
                 </div>
@@ -67,23 +71,32 @@
                             <hr class="my-4">
 
                             <div class="d-flex justify-content-between mb-4">
-                              <h5 class="text-uppercase"> </h5>
-                              <h5> 132.00</h5>
+                              <h5 class="text-uppercase">Products Price</h5>
+                              <div class="d-flex">
+                                <span class="me-1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <h5 id="totalProductPrice">#totalProductPrice#</h5>
+                              </div>
                             </div>
 
 
                             <div class="d-flex justify-content-between mb-4 pb-2">
-                              <h5 class="text-uppercase">Delivery Charge </h5>
-                              <h5> 132.00</h5>
+                              <h5 class="text-uppercase">Total Tax</h5>
+                              <div class="d-flex">
+                                <span class="me-1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <h5 id="totalTax">#totaltax#</h5>
+                              </div>
                             </div>
                             <hr class="my-2">
                             <div class="d-flex justify-content-between mb-5">
                               <h5 class="text-uppercase">Total price</h5>
-                              <h5> 137.00</h5>
+                              <div class="d-flex">
+                                <span class="me-1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <h5 id="totalPrice">#totalProductPrice + totaltax#</h5>
+                              </div>
                             </div>
 
                             <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
-                              data-mdb-ripple-color="dark">Register</button>
+                              data-mdb-ripple-color="dark">Place Order</button>
                         </div>
                     </div>
                 </div>
