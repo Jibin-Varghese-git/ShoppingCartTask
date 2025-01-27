@@ -4,24 +4,26 @@ function fnsignupValidation(){
     let userEmail = document.getElementById("userEmail").value;
     let userPhone = document.getElementById("userPhone").value;
     let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var flag = true;
     var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/;
-
+    alert(confirmPassword)
     document.getElementById("errorFirstName").innerHTML=" ";
     document.getElementById("errorEmailId").innerHTML=" ";
     document.getElementById("errorPhone").innerHTML=" ";
     document.getElementById("errorPassword").innerHTML=" ";
+    document.getElementById("errorConfirmPassword").innerHTML=" ";
 
     if(firstName.trim().length <1)
     {
-        document.getElementById("errorFirstName").innerHTML="Enter the first name";
+        document.getElementById("errorFirstName").innerHTML="Enter first name";
         flag = false;
     }
 
     if(userEmail.trim().length <1)
     {
-        document.getElementById("errorEmailId").innerHTML="Enter the email";
+        document.getElementById("errorEmailId").innerHTML="Enter  email";
         flag = false;
     }else if(emailPattern.test(userEmail) == false){
         document.getElementById("errorEmailId").innerHTML="Invalid Format";
@@ -30,7 +32,7 @@ function fnsignupValidation(){
 
     if(userPhone.trim().length <1)
     {
-        document.getElementById("errorPhone").innerHTML="Enter the Phone number";
+        document.getElementById("errorPhone").innerHTML="Enter Phone number";
         flag = false;
     }else if(phonePattern.test(userPhone) === false){
         document.getElementById("errorPhone").innerHTML="Invalid Input";
@@ -39,10 +41,14 @@ function fnsignupValidation(){
 
     if(password.trim().length <1)
     {
-        document.getElementById("errorPassword").innerHTML="Enter the password";
+        document.getElementById("errorPassword").innerHTML="Enter  password";
         flag = false;    
     }else if(password.length < 6){
         document.getElementById("errorPassword").innerHTML="Must Contain 6 characters";
+        flag = false;
+    }
+    else if(password.trim() != confirmPassword.trim()){
+        document.getElementById("errorConfirmPassword").innerHTML="Password Missmatch";
         flag = false;
     }
 
@@ -129,7 +135,10 @@ function filterPrice(filterArguments)
             if(result)
             {
                 arrayFilterProducts = JSON.parse(result)
-                console.log("arrayFilterProducts") 
+                if(arrayFilterProducts.length < 10)
+                {
+                    $('#viewmoreBtn').remove()
+                }
                 $('[name=filter]').prop('checked', false);
                 $('#filterMin').val(' ')
                 $('#filterMax').val(' ')
@@ -172,6 +181,16 @@ function viewMore(){
 function removeCartItem(cartDetails){
     if(confirm("Do you want to Delete this item?"))
     {
+        var cartItemQuantity=document.getElementById("cartItemQuantity").innerHTML;
+        var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
+        var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
+        var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
+        var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
+        var totalTax=document.getElementById("totalTax").innerHTML;
+    
+        totalProductPrice=parseFloat(totalProductPrice) - price;
+        totalTax=parseFloat(totalTax) - parseFloat(tax);
+        
         $.ajax({
             type : "POST",
             url : "components/userShoppingCart.cfc?method=removeCartProduct",
@@ -180,6 +199,18 @@ function removeCartItem(cartDetails){
                 if(result)
                 {
                     document.getElementById(cartDetails.cartId).remove();
+                    document.getElementById("cartItemQuantity").innerHTML=cartItemQuantity - 1;
+                    document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader - 1;
+                    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
+                    if((totalProductPrice + totalTax) < 1){
+                        document.getElementById("totalTax").innerHTML = 0;
+                        document.getElementById("totalPrice").innerHTML= 0;
+                    }
+                    else{
+                        document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
+                        document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
+                    }
+                    checkQuantity()
                 }
             }
         });
@@ -201,6 +232,15 @@ function checkQuantity(){
         else{
             quantity[index].previousElementSibling.disabled =  false;
         }
+    }
+
+    var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
+    console.log(cartItemQuantityHeader)
+    if(cartItemQuantityHeader < 1){
+        document.getElementById("placeOrderCartBtn").disabled=true;
+    }
+    else{
+        document.getElementById("placeOrderCartBtn").disabled=false;
     }
 }
 
@@ -254,10 +294,9 @@ function removeQuantity(cartDetails){
         data : {cartId : cartDetails.cartId,quantity : parseInt(quantity)-1},
          success : function(result){
             if(result){
-
+                checkQuantity()
             }
         }
     });
-    checkQuantity();
 }
 

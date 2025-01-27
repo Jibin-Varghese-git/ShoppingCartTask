@@ -9,27 +9,36 @@
         </a>
         <div class="searchbarDiv d-flex">
             <form method="post">
-                <input type="text" class="searchInput" name="searchInput" id="searchInput">
+                <input type="text" class="searchInput" name="searchInput" id="searchInput" required>
                 <button name="searchBtn" class="searchBtn" type="submit"><i class="fa-solid fa-magnifying-glass" ></i></button>
             </form>
         </div>
         <div class="headerBtnClass mt-1">
             
+            
             <a href="userCart.cfm" class="cartBtnHeader mx-3">
-               <i class="fa-solid fa-cart-shopping"></i>
-                <cfif structKeyExists(session,"structUserDetails")> 
-                    <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
-                    <cfoutput>
-                        <span class="badge">#queryRecordCount(productListingCart)#</span>
-                    </cfoutput>
-               </cfif> 
+                <div class="cartTooltip">
+                   <i class="fa-solid fa-cart-shopping"></i>
+                    <cfif structKeyExists(session,"structUserDetails")> 
+                        <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
+                        <cfoutput>
+                            <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(productListingCart)#</span>
+                        </cfoutput>
+                   </cfif> 
+                    <span class="tooltiptext">Cart</span>
+                </div>
             </a>
-            <button name="profileBtn" onClick="" class="mx-3" type="button"><i class="fa-solid fa-user" ></i></button>
-            <cfif structKeyExists(session,"structUserDetails")>
-                <button name="logoutBtn" onClick="logoutUser()" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Logout</button>
-            <cfelse>
-                <a href="userLogin.cfm"><button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Login</button></a>
-            </cfif>
+         
+            <div class="profileTooltip">
+                <button name="profileBtn" onClick="" class="mx-3" type="button"><i class="fa-solid fa-user" ></i></button>
+                <span class="tooltiptext">Profile</span>
+            </div>
+                <cfif structKeyExists(session,"structUserDetails")>
+                    <button name="logoutBtn" onClick="logoutUser()" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Logout</button>
+                <cfelse>
+                    <a href="userLogin.cfm"><button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Login</button></a>
+                </cfif>
+
         </div>  
         <cfif structKeyExists(form, "searchBtn")>
             <cfif len(trim(form.searchInput)) GT 0>
