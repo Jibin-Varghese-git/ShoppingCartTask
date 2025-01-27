@@ -50,7 +50,7 @@
                     <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
                         <span>Password</span>
                         <div class=" ms-3">
-                            <input type="password" class="passwordLogin" name="passwordLogin" id="passwordLogin"><br>
+                            <input type="password"  class="passwordLogin" name="passwordLogin" id="passwordLogin"><br>
                             <span class="errorPasswordLogin text-danger" id="errorPasswordLogin"></span>
                         </div>
                     </div>

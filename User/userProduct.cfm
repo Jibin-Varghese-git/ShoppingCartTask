@@ -12,7 +12,7 @@
     </head>
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-         <cfinclude  template="userHeader.cfm">
+        <cfinclude  template="userHeader.cfm">
         <cfset productListing=local.objUserShoppingCart.selectAllProducts(url.productId)>
         <cfset productImageListing = local.objUserShoppingCart.selectProductImages(url.productId)>  
         <div class="categoryMainContainer mt-2 px-2">
@@ -56,7 +56,7 @@
                                 <span><i class="fa-solid fa-chevron-right"></i></span>
                                 <span class="ms-2">#productListing.productName#</span>
                             </div>
-                            <div class="productName w-100 d-flex justify-content-center my-2">
+                            <div class="productName w-100 d-flex  my-2">
                                 <h2>#productListing.productName#</h2>
                             </div>
                             <div class="productDesc">
@@ -108,7 +108,9 @@
                      </cfloop>
                     </cfoutput>
                 </div>
+            </div>
         </div>
+        <cfinclude  template="userFooter.cfm">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

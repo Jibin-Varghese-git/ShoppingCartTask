@@ -21,6 +21,10 @@ header a{
     text-decoration: none;
 }
 
+.mainContainer{
+    height: auto;
+}
+
 .mainContainerSignup{
     height: auto;
     width: 80vw;
@@ -192,9 +196,9 @@ header a{
 .subcategoryTooltip .tooltipContainer{
     visibility: hidden;
     min-width:13vw;
-    max-height: 34vh;
+    max-height: auto;
     overflow: auto;
-    background-color: #706c6c;
+    background-color: #ebebeb;
     text-align: center;
     border-radius: 6px;
     padding: 9px 0;
@@ -204,6 +208,7 @@ header a{
     /* Position the tooltip */
     position: absolute;
     z-index: 2;
+    border: 1px solid #ccc2ff;
 }
 
 .tooltipContainer::-webkit-scrollbar {
@@ -211,7 +216,6 @@ header a{
   }
 
 .subcategoryTooltip .tooltipContainer .tooltiptext{
-    border-radius: 12px;
     font-size: 18px;
     font-weight: 600;
     background-color: #bbb4db;
@@ -265,7 +269,14 @@ header a{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
  }
 
-
+ .subcategorySubcontainer{
+    background-color: #ffffff;
+    width:100%;
+    min-height: 30vw;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+ }
 
 
  .categorySubcontainer{
@@ -472,7 +483,71 @@ header a{
     border-radius: 5px;
   }
 
+  .cartTooltip{
+    position: relative;
+    display: inline-block;
+  }
 
+  .cartTooltip .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    right:50%;
+    margin-left: -30px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+
+  .cartTooltip:hover .tooltiptext{
+    visibility: visible;
+  }
+
+  .profileTooltip{
+    position: relative;
+    display: inline-block;
+  }
+
+  .profileTooltip .tooltiptext{
+    visibility: hidden;
+    width: 60px;
+    height: 25px;
+    background-color: rgb(97, 119, 91);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 2px 0;
+    top: 100%;
+    right:50%;
+    margin-left: -30px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+
+  .profileTooltip:hover .tooltiptext{
+    visibility: visible;
+  }
+
+  .card-body .productPrice {
+    height: 5vh;
+  }
+
+.categorySubcontainer .card a{
+    color: #5f5f5f;
+}
+
+.productContainerSubcategory .card a{
+    color: #5f5f5f;
+}
 
 
 

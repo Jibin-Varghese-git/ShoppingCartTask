@@ -22,7 +22,10 @@
                 <div class="cartSubcontainerLeft my-3  p-4 d-flex flex-column align-items-center">
                     <div class="cartHeading w-100 p-3 d-flex justify-content-between">
                         <h4>USER CART</h4>
-                        <h5 class="me-2">Items : #queryRecordCount(productListingCart)#</h5>
+                        <div class="d-flex">
+                          <h5 class="me-2">Items : </h5>
+                          <h5 class="me-2" id="cartItemQuantity">#queryRecordCount(productListingCart)#</h5>
+                        </div>
                     </div>
                     <div class="productListingContainerCart pt-3">
                         <hr class="my-4">
@@ -96,7 +99,7 @@
                             </div>
 
                             <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
-                              data-mdb-ripple-color="dark">Place Order</button>
+                              data-mdb-ripple-color="dark" id="placeOrderCartBtn">Place Order</button>
                         </div>
                     </div>
                 </div>

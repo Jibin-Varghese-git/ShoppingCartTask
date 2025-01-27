@@ -27,41 +27,48 @@
                 <div class="signupHeading my-1">
                     <h2>SIGN UP</h2>
                 </div>
-                <form method="post" class="">
+                <form method="post" class="px-3">
                     <div class="subContainerSignup d-flex flex-column justify-content-around">
-                    <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
+                    <div class="userInputFields mt-3 d-flex justify-content-between">
                         <span>First Name *</span>
-                        <div class="ms-3">
+                        <div class="">
                             <input type="text" class="firstName" name="firstName" id="firstName"><br>
                             <span class="errorFirstName text-danger" id="errorFirstName"></span>
                         </div>
                     </div>
-                    <div class="userInputFields ms-4  d-flex justify-content-around">
+                    <div class="userInputFields mt-3 d-flex justify-content-between">
                         <span>Last Name</span>
-                        <div class="ms-4">
+                        <div class="">
                             <input type="text" class="lastname" name="lastName" id="lastName"><br>
                             <span class="errorLastName" id="errorLastName"></span>
                         </div>
                     </div>
-                    <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
+                    <div class="userInputFields mt-3 d-flex justify-content-between">
                         <span>Email Id *</span>
-                        <div class="  ms-4">
+                        <div class="">
                             <input type="text" class="userEmail" name="userEmail" id="userEmail"><br>
                             <span class="errorEmailId text-danger" id="errorEmailId"></span>
                         </div>
                     </div>
-                    <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
+                    <div class="userInputFields  mt-3 d-flex justify-content-between">
                         <span>Phone No *</span>
-                        <div class="ms-3">
+                        <div class="">
                             <input type="text" class="userPhone" name="userPhone" id="userPhone"><br>
                             <span class="errorPhone text-danger" id="errorPhone"></span>
                         </div>
                     </div>
-                    <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
+                    <div class="userInputFields  mt-3 d-flex justify-content-between">
                         <span>Password *</span>
-                        <div class=" ms-3">
+                        <div class="">
                             <input type="password" class="password" name="password" id="password"><br>
                             <span class="errorPassword text-danger" id="errorPassword"></span>
+                        </div>
+                    </div>
+                    <div class="userInputFields  mt-3 d-flex justify-content-between">
+                        <span>Confirm Password *</span>
+                        <div class="">
+                            <input type="password" class="confirmPassword" name="confirmPassword" id="confirmPassword"><br>
+                            <span class="errorConfirmPassword text-danger" id="errorConfirmPassword"></span>
                         </div>
                     </div>
                     <cfif structKeyExists(form,"btnSignup")>

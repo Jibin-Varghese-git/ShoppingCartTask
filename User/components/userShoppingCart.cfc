@@ -284,6 +284,8 @@
                 AND
                     tp.fldProduct_ID = <cfqueryparam value="#arguments.productId#" cfsqltype="integer">
             </cfif>
+              ORDER BY
+                NEWID()
         </cfquery>
         <cfreturn local.qrySelectAllProducts>
     </cffunction>
@@ -376,6 +378,10 @@
                 tblSubCategory as ts
 			ON
                 tp.fldSubCategoryId= ts.fldSubCategory_ID
+            INNER JOIN
+                tblCategory as tc
+            ON
+                tc.fldCategory_ID=ts.fldCategoryId
 			INNER JOIN 
 				tblProductImages as tpi
 			ON
@@ -383,6 +389,10 @@
             WHERE 
                 tp.fldActive = 1
 			AND
+                tc.fldActive = 1
+            AND
+                ts.fldActive = 1
+            AND
 				tpi.fldDefaultImage = 1
             <cfif structKeyExists(arguments, "subcategoryId")>
                 AND

@@ -29,8 +29,8 @@
                         <cfloop query="productListing">
                             <cfif countVariable LT 5>
                                 <cfif subcategoryListing.fldSubCategory_ID EQ productListing.subcategoryId>
-                                   <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
-                                       <div class="card p-2 m-3">
+                                    <div class="card p-2 m-3">
+                                        <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
                                            <div class="productImageDiv">
                                                <img src="../Assets/productImages/#productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                            </div>
@@ -39,17 +39,17 @@
                                                <span class="fw-bold text-wrap ">#productListing.brandName#</span>
                                                <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.price#</span>
                                            </div>
-                                       </div>
-                                   </a>
+                                        </a>
+                                    </div>
                                    <cfset countVariable++>
                                 </cfif>
                             </cfif>
                         </cfloop>
                     </cfoutput>
                 </div>
-                
             </cfloop>
         </div>
+        <cfinclude  template="userFooter.cfm">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
