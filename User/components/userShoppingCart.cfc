@@ -150,7 +150,7 @@
         <cfreturn local.structCategoryListing>
     </cffunction>
 
-    <cffunction  name="selectRandomProducts" description="Function to select random products" >
+    <cffunction  name="selectRandomProducts" description="Function to select random products" returntype="query">
         <cfquery name="local.qryRandomProducts">
         	SELECT 
             TOP 10
@@ -193,7 +193,7 @@
         <cfreturn local.qryRandomProducts>
     </cffunction>
 
-    <cffunction  name="selectDistinctSubCategory" access="remote" returnformat="JSON">
+    <cffunction  name="selectDistinctSubCategory" access="remote" returnformat="JSON" description="Function to select subcategories with products">
         <cfargument  name="categoryId">
         <cfquery name="local.qryDistinctSelectSubCategory">
             SELECT
@@ -217,7 +217,7 @@
         <cfreturn local.qryDistinctSelectSubCategory>
     </cffunction>
 
-    <cffunction  name="selectSubcategory">
+    <cffunction  name="selectSubcategory" returntype="query" description="Function to select subcategory">
         <cfquery name="local.qrySelectSubcategory">
             SELECT
                 fldSubCategory_ID,
@@ -233,13 +233,13 @@
 
 
 
-    <cffunction  name="logoutUser" access="remote">
+    <cffunction  name="logoutUser" access="remote" dsecription="Function for user logout">
         <cfset structClear(session)>
         <cflocation  url="../userHome.cfm" addToken="no">
     </cffunction>
 
 
-    <cffunction  name="selectAllProducts" description="Function to select all products">
+    <cffunction  name="selectAllProducts" description="Function to select all products" returntype="query">
         <cfargument  name="productId">
         <cfquery name="local.qrySelectAllProducts">
         	SELECT 
@@ -290,7 +290,7 @@
         <cfreturn local.qrySelectAllProducts>
     </cffunction>
 
-    <cffunction  name="selectSubcategoryProducts" description="Select products according to subcategory">
+    <cffunction  name="selectSubcategoryProducts" description="Select products according to subcategory" returntype="query">
         <cfargument  name="subcategoryId">
         <cfargument  name="sort">
         <cfargument  name="search">
@@ -432,7 +432,7 @@
         <cfreturn local.arrayFilterProducts>
     </cffunction>
 
-    <cffunction  name="selectProductImages">
+    <cffunction  name="selectProductImages" description="Function to select images of product" returntype="query">
         <cfargument  name="productId">
         <cfquery name="local.qrySelectProductImages">
             SELECT
@@ -449,7 +449,7 @@
         <cfreturn local.qrySelectProductImages>
     </cffunction>
 
-    <cffunction  name="addProductCart">
+    <cffunction  name="addProductCart" description="Function to add and update product in cart" returntype="boolean">
         <cfargument  name="productId">
         <cfquery name="local.qryCheckCart">
                 SELECT
@@ -498,7 +498,7 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="selectProductCart">
+    <cffunction  name="selectProductCart" description="Select cart products to list in cart" returntype="query">
         <cfquery name="local.qrySelectProductCart">
                 SELECT 
                 	tc.fldCart_ID AS cartId,
@@ -533,7 +533,7 @@
         <cfreturn local.qrySelectProductCart>
     </cffunction>
 
-    <cffunction  name="removeCartProduct" access="remote">
+    <cffunction  name="removeCartProduct" access="remote" description="Function to remove product from cart">
         <cfargument  name="cartId">
             <cfquery>
                 DELETE
@@ -545,7 +545,7 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="cartUpdate" access="remote">
+    <cffunction  name="cartUpdate" access="remote" description="Function to update cart">
         <cfargument  name="cartId">
         <cfargument  name="quantity">
         <cfquery>
@@ -557,6 +557,95 @@
                 fldCart_ID = <cfqueryparam value="#arguments.cartId#" cfsqltype="integer">
         </cfquery>
         <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="addAddress" description="Function to add Address">
+        <cfargument  name="formAddress">
+        <cfset local.structResult["error"] = false>
+        <cfset local.structResult["errorMessage"] = "No Error">
+        <cfdump  var="#arguments.formAddress#">
+        <cfif len(arguments.formAddress.FIRSTNAME.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the Firstname">
+        </cfif>
+
+        <cfif len(arguments.formAddress.ADDRESSLINE1.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the Address">
+        </cfif>
+
+        <cfif len(arguments.formAddress.CITY.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the city">
+        </cfif>
+
+        <cfif len(arguments.formAddress.STATE.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the state">
+        </cfif>
+
+        <cfif len(arguments.formAddress.PINCODE.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the pincode">
+        </cfif>
+
+        <cfif len(arguments.formAddress.PHONENUMBER.trim()) EQ 0>
+            <cfset local.structResult["error"] = true>
+            <cfset local.structResult["errorMessage"] = "Enter the phone number">
+        </cfif>
+
+        <cfif local.structResult["error"] EQ false> 
+            <cfquery name="local.qryAddAddress">
+                INSERT INTO
+                    tblAddress
+                    (
+                        fldUserId,
+                        fldFirstName,
+                        fldLastName,
+                        fldAddressLine1,
+                        fldAddressLine2,
+                        fldCity,
+                        fldState,
+                        fldPincode,
+                        fldPhoneNumber,
+                        fldActive
+                    )
+                VALUES
+                    (
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                        <cfqueryparam value="#arguments.formAddress.FIRSTNAME.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.LASTNAME.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.ADDRESSLINE1.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.ADDRESSLINE2.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.CITY.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.STATE.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.PINCODE.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formAddress.PHONENUMBER.trim()#" cfsqltype="varchar">,
+                        <cfqueryparam value='1' cfsqltype="integer">
+                    )
+            </cfquery>
+        </cfif>
+        <cfreturn local.structResult>
+    </cffunction>
+
+    <cffunction  name="selectAddress" description="Function to address">
+        <cfquery name="local.qrySelectAddress">
+            SELECT
+                fldAddress_ID AS addressId,
+                fldFirstName AS firstName,
+                fldLastName AS lastName,
+                fldAddressLine1 AS addressline1,
+                fldAddressLine2 AS addressline2,
+                fldCity AS city,
+                fldState AS state,
+                fldPincode AS pincode,
+                fldPhoneNumber AS phoneNumber
+            FROM
+                tblAddress
+            WHERE
+                fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+        </cfquery>
+        <cfreturn local.qrySelectAddress>
     </cffunction>
 
     <cffunction  name="dumpFunction">

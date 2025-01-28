@@ -30,7 +30,7 @@
             </a>
          
             <div class="profileTooltip">
-                <button name="profileBtn" onClick="" class="mx-3" type="button"><i class="fa-solid fa-user" ></i></button>
+                <a href="userProfile.cfm" class="profileBtn mx-3"><i class="fa-solid fa-user" ></i></a>
                 <span class="tooltiptext">Profile</span>
             </div>
                 <cfif structKeyExists(session,"structUserDetails")>
