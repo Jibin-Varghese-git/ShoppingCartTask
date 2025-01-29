@@ -84,6 +84,9 @@
                     <cflocation  url="userLogin.cfm?redirect=cart&productId=#form.cartBtn#" addToken="no">
                 </cfif>
             </cfif>
+            <cfif structKeyExists(form, "buyBtn")>
+                <cflocation  url="userOrder.cfm?productId=#productListing.productId#" addToken="no">
+            </cfif>
 <!---    Random product listing          --->
             <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">
                 <div class="productListingSubContainer">

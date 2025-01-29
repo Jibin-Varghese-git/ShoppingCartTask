@@ -30,9 +30,11 @@
                 FROM
                     tblUser
                 WHERE
-                    fldPhone = <cfqueryparam value="#arguments.structForm.userPhone#" cfsqltype="varchar">
-                OR
-                    fldEmail = <cfqueryparam value="#arguments.structForm.userEmail#" cfsqltype="varchar">
+                    (
+                        fldPhone = <cfqueryparam value="#arguments.structForm.userPhone#" cfsqltype="varchar">
+                    OR
+                        fldEmail = <cfqueryparam value="#arguments.structForm.userEmail#" cfsqltype="varchar">
+                    )
                 AND
                     fldRoleId = <cfqueryparam value='1' cfsqltype="varchar">
                 AND
@@ -100,11 +102,11 @@
                     fldPhone,
                     fldEmail,
                     fldRoleId
-                FROM 
+                FROM
                     tblUser
-                WHERE  
+                WHERE
                     (fldEmail = <cfqueryparam value="#arguments.structForm.userNameLogin#" cfsqltype="varchar">
-                OR 
+                OR
                     fldPhone = <cfqueryparam value="#arguments.structForm.userNameLogin#" cfsqltype="varchar">)
                 AND
                     fldRoleId = <cfqueryparam value=1 cfsqltype="integer">
@@ -152,7 +154,7 @@
 
     <cffunction  name="selectRandomProducts" description="Function to select random products" returntype="query">
         <cfquery name="local.qryRandomProducts">
-        	SELECT 
+        	SELECT
             TOP 10
                 tp.fldProduct_ID,
                 tp.fldProductName,
@@ -167,7 +169,7 @@
                 tblProduct as tp
 			ON
 				tb.fldBrand_ID=tp.fldBrandId
-			LEFT JOIN 
+			LEFT JOIN
 				tblProductImages as tpi
 			ON
 				tp.fldProduct_ID=tpi.fldProductId
@@ -179,7 +181,7 @@
                 tblCategory AS tc
             ON
                 tc.fldCategory_ID = tsc.fldCategoryId
-            WHERE 
+            WHERE
                 tp.fldActive = 1
 			AND
                 tsc.fldActive = 1 
@@ -187,7 +189,7 @@
                 tc.fldActive = 1 
             AND
 				tpi.fldDefaultImage = 1
-            ORDER BY 
+            ORDER BY
                 NEWID()
         </cfquery>
         <cfreturn local.qryRandomProducts>
@@ -201,11 +203,11 @@
                 ts.fldSubCategoryName
             FROM
                 tblSubCategory AS ts
-            INNER JOIN 
+            INNER JOIN
                 tblproduct AS tp 
-            ON 
+            ON
                 ts.fldsubcategory_ID = tp.fldsubcategoryId 
-                AND 
+                AND
                     tp.fldActive = 1
             WHERE
                 ts.fldActive = 1
@@ -250,7 +252,7 @@
                 tp.fldTax AS tax,
                 tp.fldSubCategoryId AS subcategoryId,
                 tb.fldBrandName AS brandName,
-				tpi.fldImageFileName AS imageName   ,
+				tpi.fldImageFileName AS imageName,
                 tsc.fldSubCategoryName AS subcategoryName,
                 tsc.fldCategoryId As categoryId,
                 tc.fldCategoryName AS categoryName
@@ -272,7 +274,7 @@
 				tblProductImages as tpi
 			ON
 				tp.fldProduct_ID=tpi.fldProductId
-            WHERE 
+            WHERE
                 tp.fldActive = 1
 			AND
 				tpi.fldDefaultImage = 1
@@ -563,7 +565,6 @@
         <cfargument  name="formAddress">
         <cfset local.structResult["error"] = false>
         <cfset local.structResult["errorMessage"] = "No Error">
-        <cfdump  var="#arguments.formAddress#">
         <cfif len(arguments.formAddress.FIRSTNAME.trim()) EQ 0>
             <cfset local.structResult["error"] = true>
             <cfset local.structResult["errorMessage"] = "Enter the Firstname">
@@ -644,13 +645,98 @@
                 tblAddress
             WHERE
                 fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+            AND
+                fldActive = 1
         </cfquery>
         <cfreturn local.qrySelectAddress>
+    </cffunction>
+
+    <cffunction  name="removeAddress" description="Function to remove user address" access="remote">
+        <cfargument  name="addressId">
+        <cfquery>
+            UPDATE
+                tblAddress
+            SET
+                fldActive = 0
+            WHERE
+                fldAddress_ID = <cfqueryparam value="#arguments.addressId#" cfsqltype="integer">
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+
+    <cffunction  name="editUserProfile" description="Function to edit user" returnFormat="JSON" access="remote">
+        <cfargument  name="userId">
+        <cfargument  name="userFirstName">
+        <cfargument  name="userLastName">
+        <cfargument  name="userEmail">
+        <cfargument  name="userPhoneNumber">
+
+        <cfset local.structAddUserReturn["error"] = false>
+        <cfif Len(trim(arguments.userFirstName)) EQ 0>
+            <cfset local.structAddUserReturn["error"] = true>
+            <cfset local.structAddUserReturn["errorMessage"] = "Enter the username">
+        </cfif>
+        <cfif Len(trim(arguments.userPhoneNumber)) EQ 0>
+            <cfset local.structAddUserReturn["error"] = true>
+            <cfset local.structAddUserReturn["errorMessage"] = "Enter the phone number">
+        </cfif>
+        <cfif Len(trim(arguments.userEmail)) EQ 0>
+            <cfset local.structAddUserReturn["error"] = true>
+            <cfset local.structAddUserReturn["errorMessage"] = "Enter the Email">
+        </cfif>
+
+        <cfif NOT local.structAddUserReturn["error"]>
+
+            <cfquery name="local.qryCheckUser">
+                SELECT
+                    fldEmail
+                FROM
+                    tblUser
+                WHERE
+                    (
+                        fldPhone = <cfqueryparam value="#arguments.userPhoneNumber#" cfsqltype="varchar">
+                    OR
+                        fldEmail = <cfqueryparam value="#arguments.userEmail#" cfsqltype="varchar">
+                    )
+                AND
+                    fldRoleId = <cfqueryparam value='1' cfsqltype="varchar">
+                AND
+                    fldActive = 1
+                AND
+                    fldUser_ID != <cfqueryparam value="#arguments.userId#" cfsqltype="integer">
+            </cfquery>
+            <cfif queryRecordCount(local.qryCheckUser)>
+                <cfset local.structAddUserReturn["error"] = true>
+                <cfset local.structAddUserReturn["errorMessage"] = "User Already Exists">
+            <cfelse>
+                <cfquery>
+                    UPDATE
+                        tblUser
+                    SET
+                        fldFirstName = <cfqueryparam value="#arguments.userFirstName#" cfsqltype="varchar">,
+                        fldLastName = <cfqueryparam value="#arguments.userLastName#" cfsqltype="varchar">,
+                        fldPhone = <cfqueryparam value="#arguments.userPhoneNumber#" cfsqltype="varchar">,
+                        fldEmail = <cfqueryparam value="#arguments.userEmail#" cfsqltype="varchar">
+                    WHERE
+                        fldRoleId = <cfqueryparam value='1' cfsqltype="varchar">
+                    AND
+                        fldActive = 1
+                    AND
+                        fldUser_ID = <cfqueryparam value="#arguments.userId#" cfsqltype="integer">
+                </cfquery>
+                <cfset session.structUserDetails["userId"] = arguments.userId>
+                <cfset session.structUserDetails["firstName"] = arguments.userFirstName>
+                <cfset session.structUserDetails["lastName"] = arguments.userLastName>
+                <cfset session.structUserDetails["phone"] = arguments.userPhoneNumber>
+                <cfset session.structUserDetails["email"] = arguments.userEmail>
+                <cfset session.structUserDetails["roleId"] = 1>
+            </cfif>
+        </cfif>
+            <cfreturn local.structAddUserReturn>
     </cffunction>
 
     <cffunction  name="dumpFunction">
         <cfreturn true>
     </cffunction>
 
-    
 </cfcomponent>

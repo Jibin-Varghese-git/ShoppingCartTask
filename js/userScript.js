@@ -202,7 +202,8 @@ function removeCartItem(cartDetails){
                     document.getElementById("cartItemQuantity").innerHTML=cartItemQuantity - 1;
                     document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader - 1;
                     document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
-                    if((totalProductPrice + totalTax) < 1){
+                    if(totalProductPrice < 1){
+                        document.getElementById("totalProductPrice").innerHTML = 0;
                         document.getElementById("totalTax").innerHTML = 0;
                         document.getElementById("totalPrice").innerHTML= 0;
                     }
@@ -309,7 +310,7 @@ function checkAddress(){
     var phoneNumber = document.getElementById("phoneNumber").value;
     var pincodeRegex = /^[0-9]{6}$/;
     var flag = true;
-    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/;
+    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
 
     document.getElementById("errorFirstName").innerHTML=" ";
     document.getElementById("errorAddressline1").innerHTML=" ";
@@ -386,3 +387,143 @@ function closeAddressModal(){
     document.getElementById("formAddressModal").reset();
 }
 
+function removeAddress(addressId){
+    if(confirm("Do you want to remove this address?"))
+    {
+        $.ajax({
+            type : "POST",
+            url : "components/userShoppingCart.cfc?method=removeAddress",
+            data : {addressId : addressId.value},
+            success: function(result){
+                if(result){
+                    document.getElementById(addressId.value).remove();
+                }
+            }
+        });
+    }
+}
+
+function profileModalOpen(userDetails){
+    document.getElementById("userFirstName").value=userDetails.userFirstName;
+    document.getElementById("userLastName").value=userDetails.userLastName;
+    document.getElementById("userEmail").value=userDetails.userEmail;
+    document.getElementById("userPhoneNumber").value=userDetails.userPhoneNumber;
+    document.getElementById("editProfileSubmitBtn").value=userDetails.userId;
+}
+
+function editUserProfle(){
+    document.getElementById("errorUserFirstName").innerHTML=" ";
+    document.getElementById("errorUserEmail").innerHTML=" ";
+    document.getElementById("errorUserPhoneNumber").innerHTML=" ";
+    document.getElementById("userProfileEditError").innerHTML=" ";
+    var userFirstName = document.getElementById("userFirstName").value;
+    var userLastName = document.getElementById("userLastName").value;
+    var userEmail = document.getElementById("userEmail").value;
+    var userPhoneNumber = document.getElementById("userPhoneNumber").value;
+    var userId = document.getElementById("editProfileSubmitBtn").value;
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var flag = true;
+    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+
+    document.getElementById("errorUserFirstName").innerHTML=" ";
+    document.getElementById("errorUserEmail").innerHTML=" ";
+    document.getElementById("errorUserPhoneNumber").innerHTML=" ";
+
+    if(userPhoneNumber.trim().length <1)
+    {
+        document.getElementById("errorUserPhoneNumber").innerHTML="Enter Phone number";
+        document.getElementById("userPhoneNumber").focus();
+        flag = false;
+    }else if(phonePattern.test(userPhoneNumber) === false){
+        document.getElementById("errorUserPhoneNumber").innerHTML="Invalid Input";
+        document.getElementById("userPhoneNumber").focus();
+        flag = false;
+    }
+
+    if(userEmail.trim().length <1)
+        {
+            document.getElementById("errorUserEmail").innerHTML="Enter  email";
+            document.getElementById("userEmail").focus();
+            flag = false;
+        }else if(emailPattern.test(userEmail) == false){
+            document.getElementById("errorUserEmail").innerHTML="Invalid Format";
+            document.getElementById("userEmail").focus();
+            flag = false;
+        }
+
+        if(userFirstName.trim().length <1)
+        {
+            document.getElementById("errorUserFirstName").innerHTML="Enter first name";
+            document.getElementById("userFirstName").focus();
+            flag = false;
+        }
+
+    if(flag == false)
+    {
+        event.preventDefault()
+    }
+    else{
+        $.ajax({
+            type : "POST",
+            url : "components/userShoppingCart.cfc?method=editUserProfile",
+            data : {userId : userId,
+                    userFirstName : userFirstName,
+                    userLastName : userLastName,
+                    userEmail : userEmail,
+                    userPhoneNumber : userPhoneNumber
+                    },
+            success : function(result){
+                if(result)
+                {
+                    userEdit=JSON.parse(result)
+                    console.log(userEdit)
+                    if(userEdit.error == false){
+                        document.getElementById("profilUserName").innerHTML=userFirstName + " " + userLastName;
+                        document.getElementById("profileEmail").innerHTML="email : " + userEmail
+                        $("#modalEditProfile").modal("hide")
+                        document.getElementById("editProfileBtn").addEventListener('click', function(){
+                            profileModalOpen({
+                                userId: `${userId}`,
+                                userFirstName: `${userFirstName}`,
+                                userLastName: `${userLastName}`,
+                                userPhoneNumber: `${userPhoneNumber}`,
+                                userEmail: `${userEmail}`
+                            });
+                        });
+                    }
+                    else{
+                        document.getElementById("userProfileEditError").innerHTML=userEdit.errorMessage;
+                    }
+                }
+            }
+        });
+    }
+}
+
+function userProfileModalClose(){
+    document.getElementById("errorUserFirstName").innerHTML=" ";
+    document.getElementById("errorUserEmail").innerHTML=" ";
+    document.getElementById("errorUserPhoneNumber").innerHTML=" ";
+    document.getElementById("userProfileEditError").innerHTML=" ";
+    document.getElementById("formProfileEdit").reset();
+}
+
+function changeAddress(){
+    var selectedAddressId = document.querySelector('input[name="selectedAddress"]:checked').value;
+    var userName = document.getElementById(selectedAddressId + "userName").innerHTML;
+    var userPhoneNumber = document.getElementById(selectedAddressId + "userPhoneNumber").innerHTML;
+    var addressline1 = document.getElementById(selectedAddressId + "addressline1").innerHTML;
+    var addressline2 = document.getElementById(selectedAddressId + "addressline2").innerHTML;
+    var city = document.getElementById(selectedAddressId + "city").innerHTML;
+    var state = document.getElementById(selectedAddressId + "state").innerHTML;
+    var pincode = document.getElementById(selectedAddressId + "pincode").innerHTML;
+    document.getElementById("addressUserName").innerHTML = userName;
+    document.getElementById("addressUserPhoneNumber").innerHTML = userPhoneNumber;
+    document.getElementById("addressUserAddressline1").innerHTML = addressline1;
+    document.getElementById("addressUserAddressline2").innerHTML = addressline2;
+    document.getElementById("addressUserCity").innerHTML = city;
+    document.getElementById("addressUserState").innerHTML = state;
+    document.getElementById("addressUserPincode").innerHTML = pincode;
+    document.getElementById("addressIdHidden").value = selectedAddressId;
+    $("#modalChangeAddress").modal("hide")
+}
