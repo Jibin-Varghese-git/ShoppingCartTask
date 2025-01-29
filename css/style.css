@@ -533,4 +533,8 @@ header{
     visibility: visible;
 }
 
+.profileName{
+    height:fit-content
+}
+
 

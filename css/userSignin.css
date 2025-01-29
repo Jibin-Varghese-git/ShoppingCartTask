@@ -605,7 +605,7 @@ header a{
 
 .addressBtn .addAddressBtn{
     background:none;
-    background-color: #ca7fba;
+    background-color: #970747;
     color: #ffffff;
     font-weight: 700;
     border: none;
@@ -613,7 +613,7 @@ header a{
 
 .addressBtn .orderBtn{
     background:none;
-    background-color: #e9bb65;
+    background-color: #ff6637;
     color: #ffffff;
     font-weight: 700;
     border: none;
@@ -648,6 +648,162 @@ header a{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+.removeAddressBtn{
+    background-color: #ee7373;
+    color: #ffffff;
+    font-weight: 700;
+    border:none;
+    border-radius: 50%;
+}
 
- 
+.editProfileBtn{
+    background-color: #48a388;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+}
+
+.modalEditProfile .modal-header {
+    background-color: #2a886c;
+    color: #ffffff;
+}
+
+.subcontainerOrder{
+    background-color: #ffffff;
+    width: 70%;
+    height:auto;
+    margin: auto;
+}
+
+.subcontainerOrder .innerSubcontainerOrder{
+    height:72vh;
+    overflow: scroll;
+}
+
+.subcontainerOrder .innerSubcontainerOrder::-webkit-scrollbar{
+    display:none;
+}
+
+.subcontainerOrder .container1 .container1Heading{
+    background-color: #506bb3;
+    height:10vh;
+    border-radius: 10px;
+}
+
+.subcontainerOrder .container1 .container1Heading h4{
+    color: #ebebeb;
+}
+
+.subcontainerOrder .container1 {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #e2e4ff;
+    border-radius: 8px;
+}
+
+.subcontainerOrder .container1 .container1Content .btnPart button{
+    background-color: transparent;
+    color: #5454fc;
+    font-weight: 700;
+    border: none;
+}
+
+.subcontainerOrder .container2 .container2Heading{
+    background-color: #506bb3;
+    height:10vh;
+    border-radius: 10px;
+}
+
+.subcontainerOrder .container2 .container2Heading h4{
+    color: #ebebeb;
+}
+
+.subcontainerOrder .container2 {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #e2e4ff;
+    border-radius: 8px;
+}
+
+.subcontainerOrder .container2 .container2Content .productImage{
+    height: 70px;
+    width:70px;
+}
+
+.subcontainerOrder .container2 .container2Content .productImage img{
+    height: 100%;
+    width:100%;
+}
+
+.subcontainerOrder .container2 .container2Content .productNameDesc{
+  width:30vw;
+  height: 15vh;
+}
+
+.subcontainerOrder .container2 .container2Content .productNameDesc .productName{
+    width:28vw;
+    height:30%;
+}
+
+.subcontainerOrder .container2 .container2Content .productNameDesc .productDesc{
+    width:28vw;
+    height:70%;
+}
+
+.subcontainerOrder .container2 .container2Content .productPrice{
+    width:10vw;
+    height:15vh;
+  }
+
+  .selectAddressModal{
+    max-height:45vh;
+    overflow: scroll;
+  }
+
+.selectAddressModal::-webkit-scrollbar{
+    display: none;
+}
+
+.modalChangeAddress .modal-header{
+    background-color: #8cbdd1;
+}
+
+.modalChangeAddress .selectAddressModal{
+    background-color: #aebabe;
+}
+
+.modalChangeAddress .selectAddressModal .modalSingleAddress{
+    background-color: #f6fdff;
+}
+
+.modalChangeAddress .selectAddressModal .modalSingleAddress .selectedAddress{
+    height:20px;
+    width: 20px;
+}
+
+.subcontainerOrder .paymentBtnContainer{
+    height:15vh;
+    background-color: #ffffff;
+    position: sticky;
+}
+
+.subcontainerOrder .paymentBtnContainer span{
+   font-size: 20px;
+   color:#970747;
+   font-weight: 700;
+}
+
+.subcontainerOrder .paymentBtnContainer button{
+    background-color: #506bb3;
+    color: #ffffff;
+    width:60%;
+    border: none;
+    font-weight:800;
+ }
+
+
+
+
+
+
+
 

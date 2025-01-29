@@ -19,11 +19,21 @@
                 <div class="profileImage p-2 ms-3 me-5">
                     <img src="../Assets/Images/user (2).png" alt="No Image Found">
                 </div>
-                <div class="profileName w-100 px-4 py-2">
-                    <h4>HELLO , </h4>
+                <div class="profileName w-100 px-3 d-flex">
                     <cfoutput>
-                        <h5 class="ms-5">#session.structUserDetails["firstName"]# #session.structUserDetails["lastName"]#</h5>
-                        <span class="profileEmail">email : #session.structUserDetails["email"]#</span>
+                    <div class="mx-3">
+                        <h4>HELLO , </h4>
+                        <h5 class="ms-5 profilUserName" id="profilUserName">#session.structUserDetails["firstName"]# #session.structUserDetails["lastName"]#</h5>
+                        <span class="profileEmail" id="profileEmail">email : #session.structUserDetails["email"]#</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center mx-3">
+                        <button class="editProfileBtn p-2" id="editProfileBtn" data-bs-toggle="modal" data-bs-target="##modalEditProfile" onclick="profileModalOpen({userId:#session.structUserDetails['userId']#,
+                                                                                                                                                userFirstName:'#session.structUserDetails['firstName']#',
+                                                                                                                                                userLastName:'#session.structUserDetails['lastName']#',
+                                                                                                                                                userPhoneNumber:'#session.structUserDetails['phone']#',
+                                                                                                                                                userEmail:'#session.structUserDetails['email']#'
+                                                                                                                                                })">Edit Profile</button>
+                    </div>
                     </cfoutput>
                 </div>
             </div>
@@ -34,18 +44,23 @@
                 <div class="addressContainer border">
                     <cfoutput>
                         <cfloop query="variables.addressQuery">
-                            <div class="singleAddress px-5 py-3 m-2">
-                                <div class="w-50 d-flex justify-content-between">
-                                    <span>#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
-                                    <span>#variables.addressQuery.phoneNumber#</span>
+                            <div class="singleAddress px-5 py-3 m-2 d-flex" id="#variables.addressQuery.addressId#">
+                                <div class="w-100">
+                                    <div class="w-50 d-flex justify-content-between">
+                                        <span>#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
+                                        <span>#variables.addressQuery.phoneNumber#</span>
+                                    </div>
+                                    <div class="d-flex w-50">
+                                        <span>#variables.addressQuery.addressline1#,</span>
+                                        <span>#variables.addressQuery.addressline2#,</span>
+                                        <span>#variables.addressQuery.city#,</span>
+                                        <span>#variables.addressQuery.state#</span>
+                                    </div>
+                                    <span>#variables.addressQuery.pincode#</span>
                                 </div>
-                                <div class="d-flex">
-                                    <span>#variables.addressQuery.addressline1#,</span>
-                                    <span>#variables.addressQuery.addressline2#,</span>
-                                    <span>#variables.addressQuery.city#,</span>
-                                    <span>#variables.addressQuery.state#</span>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <button value="#variables.addressQuery.addressId#" class="removeAddressBtn p-3" onclick="removeAddress(this)"><i class="fa-solid fa-trash"></i></button>
                                 </div>
-                                <span>#variables.addressQuery.pincode#</span>
                             </div>
                         </cfloop>
                     </cfoutput>
@@ -53,7 +68,7 @@
                     
                 <div class="addressBtn mt-2 w-100 d-flex justify-content-end">
                     <button class="addAddressBtn p-2 mx-2" data-bs-toggle="modal" data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add New Address</button>
-                    <button class="orderBtn p-2 mx-2"><i class="fa-solid fa-gift"></i> Continue</button>
+                    <button class="orderBtn p-2 mx-2"><i class="fa-solid fa-circle-info"></i> Order Details</button>
                 </div>
             </div>
             <cfif structKeyExists(form, "addAddressBtn")>
@@ -124,6 +139,50 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Edit Profile -->
+        <div class="modalEditProfile modal fade" id="modalEditProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Address</h1>
+                        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" id="formProfileEdit">
+                        <div class="profileEditContent modal-body px-5">
+                            <div class="subDiv w-100 p-2">
+                                <div class="my-2">
+                                    <span>First Name *</span>
+                                    <input type="text" class="w-100" name="userFirstName" id="userFirstName">
+                                    <span id="errorUserFirstName" class="text-danger"></span>
+                                </div>
+                                <div class="my-2">
+                                    <span>Last Name</span>
+                                    <input type="text" class="w-100"  name="userLastName" id="userLastName">
+                                    <span id="errorUserLastName"></span>
+                                </div>
+                                <div class="my-2">
+                                    <span>Email *</span>
+                                    <input type="text" class="w-100"  name="userEmail" id="userEmail">
+                                    <span id="errorUserEmail" class="text-danger"></span>
+                                </div>
+                                <div class="my-2">
+                                    <span>Phone Number *</span>
+                                    <input type="text" class="w-100" name="userPhoneNumber" id="userPhoneNumber">
+                                    <span id="errorUserPhoneNumber" class="text-danger"></span>
+                                </div>
+                                <span class="userProfileEditError text-danger" id="userProfileEditError"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="userProfileModalClose()">Close</button>
+                            <button type="button" name="editProfileSubmitBtn" id="editProfileSubmitBtn" value=" " class="btn btn-primary" onclick="editUserProfle()">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
