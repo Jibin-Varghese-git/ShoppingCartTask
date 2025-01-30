@@ -701,7 +701,7 @@ header a{
     border-radius: 8px;
 }
 
-.subcontainerOrder .container1 .container1Content .btnPart button{
+.subcontainerOrder .container1 .container1Content .btnPart .changeAddressBtn{
     background-color: transparent;
     color: #5454fc;
     font-weight: 700;
@@ -799,6 +799,115 @@ header a{
     border: none;
     font-weight:800;
  }
+
+ .orderQuantity{
+    width: 4vw;
+ }
+
+ .mainContainerOrder .subcontainerOrder{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+ }
+
+ .btnPart .addAddressBtn{
+    background-color: transparent;
+    color: #922653;
+    font-weight: 700;
+    border: none;
+ }
+
+ #summaryContainer span{
+    font-size: 20px;
+    font-weight: 700;
+    color: #3b29a3;
+ }
+
+ .modalCreditCard .modal-header {
+    background-color: #30b5d6;
+    height:6vh;
+    color:#ffffff;
+    font-size: 13px;
+ }
+ .modalCreditCard .modalCardBody .cardImage{
+    height: 40px;
+    width: 50px;
+}
+
+.modalCreditCard .modalCardBody .cardImage img{
+    height: 100%;
+    width: 100%;
+}
+
+.modalCreditCard .modalCardBody .checkImage{
+    height: 25px;
+    width: 25px;
+}
+
+.modalCreditCard .modalCardBody .checkImage img{
+    height: 100%;
+    width: 100%;
+}
+
+.modalCardBody .subHeading{
+    height:7vh;
+}
+
+.modalCardBody{
+    padding: 0;
+}
+
+.cardDetailsConatainer .cardNumberContainer span{
+    color: #299ebb;
+    font-size: 18px;
+}
+
+.cardDetailsConatainer .cardNumberContainer sub{
+    color: #299ebb;
+    font-size: 12px;
+}
+
+.cardDetailsConatainer .cardNumberContainer .cardNumberInput{
+    border: 1px solid #afadad;
+    border-radius: 6px;
+    width:30px;
+}
+
+.cardDetailsConatainer .cardNumberContainer .cardNumberInput:hover{
+    border: 1px solid #114210;
+    border-radius: 6px;
+}
+
+.cardDateContainer input{
+    width: 70px;
+    border: 1px solid #afadad;
+    border-radius: 6px;
+}
+
+.cardDateContainer span{
+    color: #299ebb;
+}
+
+.cardCvvContainer .cardCvvInput{
+    width:6vw;
+    height:35px;
+    border: 1px solid #afadad;
+    border-radius: 6px;
+}
+
+.cardCvvContainer span{
+    color: #299ebb;
+    font-weight: 600;
+}
+
+.cardCvvContainer p{
+    color: #299ebb;
+    font-size: 11px;
+}
+
+
+
+
+
 
 
 

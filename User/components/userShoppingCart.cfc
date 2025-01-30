@@ -507,6 +507,7 @@
                 	tc.fldProductId AS productId,
                 	tc.fldQuantity AS productQuantity,
                 	tp.fldProductName AS productName,
+                    tp.fldDescription AS productDesc,
                 	tp.fldPrice AS price,
                     tp.fldTax AS tax,
                 	tb.fldBrandName AS brandName,
@@ -647,6 +648,8 @@
                 fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
             AND
                 fldActive = 1
+            ORDER BY 
+                fldCreatedDate DESC
         </cfquery>
         <cfreturn local.qrySelectAddress>
     </cffunction>
@@ -704,11 +707,13 @@
                     fldActive = 1
                 AND
                     fldUser_ID != <cfqueryparam value="#arguments.userId#" cfsqltype="integer">
+                LIMIT 1
             </cfquery>
             <cfif queryRecordCount(local.qryCheckUser)>
                 <cfset local.structAddUserReturn["error"] = true>
                 <cfset local.structAddUserReturn["errorMessage"] = "User Already Exists">
             <cfelse>
+                <cfset local.today = now()>
                 <cfquery>
                     UPDATE
                         tblUser
@@ -716,7 +721,9 @@
                         fldFirstName = <cfqueryparam value="#arguments.userFirstName#" cfsqltype="varchar">,
                         fldLastName = <cfqueryparam value="#arguments.userLastName#" cfsqltype="varchar">,
                         fldPhone = <cfqueryparam value="#arguments.userPhoneNumber#" cfsqltype="varchar">,
-                        fldEmail = <cfqueryparam value="#arguments.userEmail#" cfsqltype="varchar">
+                        fldEmail = <cfqueryparam value="#arguments.userEmail#" cfsqltype="varchar">,
+                        fldUpdatedDate = <cfqueryparam value="#local.today#" cfsqltype="date">,
+                        fldUpdatedBy = <cfqueryparam value="#arguments.userId#" cfsqltype="integer">
                     WHERE
                         fldRoleId = <cfqueryparam value='1' cfsqltype="varchar">
                     AND

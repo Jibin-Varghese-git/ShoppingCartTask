@@ -97,13 +97,12 @@
                                 <h5 id="totalPrice">#totalProductPrice + totaltax#</h5>
                               </div>
                             </div>
-
-                            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
-                              data-mdb-ripple-color="dark" id="placeOrderCartBtn">Place Order</button>
+                            <a href="userOrder.cfm?redirected=cart"  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
+                              data-mdb-ripple-color="dark" id="placeOrderCartBtn">Place Order</a>
                         </div>
                     </div>
                 </div>
-
+              
             </div>
         </cfoutput>
         <cfinclude  template="userFooter.cfm"></cfinclude>

@@ -219,7 +219,8 @@ function removeCartItem(cartDetails){
 }
 
 
-$( document ).ready(function() {
+$(document).ready(function() {
+    checkQuantityOrder();
     checkQuantity();
 });
 
@@ -237,10 +238,10 @@ function checkQuantity(){
 
     var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
     console.log(cartItemQuantityHeader)
-    if(cartItemQuantityHeader < 1){
+    if(cartItemQuantityHeader < 1 && document.getElementById("placeOrderCartBtn")){
         document.getElementById("placeOrderCartBtn").disabled=true;
     }
-    else{
+    else if(document.getElementById("placeOrderCartBtn")){
         document.getElementById("placeOrderCartBtn").disabled=false;
     }
 }
@@ -526,4 +527,44 @@ function changeAddress(){
     document.getElementById("addressUserPincode").innerHTML = pincode;
     document.getElementById("addressIdHidden").value = selectedAddressId;
     $("#modalChangeAddress").modal("hide")
+}
+
+function deleteQtyOrder(productId){
+    var qty= document.getElementById(productId + "Input").value;
+    document.getElementById(productId + "Input").value = parseInt(qty)-1;
+    checkQuantityOrder()
+}
+
+function addQtyOrder(productId){
+    var qty = document.getElementById(productId + "Input").value;
+    var totalProductPrice = document.getElementById("totalProductPrice").innerHTML;
+    var totalTax = document.getElementById("totalProductTax").innerHTML;
+
+    totalProductPrice = totalProductPrice/qty;
+    totalTax = totalTax/qty;
+    qty=parseInt(qty) + 1;
+    totalProductPrice = parseFloat(totalProductPrice) * qty;
+    totalTax = parseFloat(totalTax) * qty;
+
+    document.getElementById("totalProductPrice").innerHTML=totalProductPrice;
+    document.getElementById("totalProductTax").innerHTML=totalTax;
+    document.getElementById("totalPrice").innerHTML = totalProductPrice + totalTax;
+    document.getElementById("totalPriceBtn").innerHTML = totalProductPrice + totalTax;
+    document.getElementById(productId + "Input").value = qty;
+    checkQuantityOrder()
+}
+
+
+function checkQuantityOrder(){
+    var quantity=$('.orderQuantity');
+    console.log("qty :" +quantity)
+    for (let index = 0; index < quantity.length; index++) {
+        if(quantity[index].value ==1)
+        {
+            quantity[index].previousElementSibling.disabled = true;
+        }
+        else{
+            quantity[index].previousElementSibling.disabled =  false;
+        }
+    }
 }

@@ -16,7 +16,13 @@
         <div class="headerBtnClass mt-1">
             
             
-            <a href="userCart.cfm" class="cartBtnHeader mx-3">
+            <a  class="cartBtnHeader mx-3" 
+                <cfif structKeyExists(session,"structUserDetails")> 
+                    href="userCart.cfm"
+                <cfelse>
+                    href="userLogin.cfm?redirect=cart"
+                </cfif>
+            >
                 <div class="cartTooltip">
                    <i class="fa-solid fa-cart-shopping"></i>
                     <cfif structKeyExists(session,"structUserDetails")> 

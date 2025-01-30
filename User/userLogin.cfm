@@ -67,6 +67,8 @@
                                 <cfif url.redirect EQ "order">
                                     <cflocation  url="userOrder.cfm" addToken="no">
                                 </cfif>
+                            <cfelseif structKeyExists(url, "redirect") AND url.redirect EQ "cart">
+                                <cflocation  url="userCart.cfm" addToken="no">
                             <cfelse>
                                 <cflocation  url="userHome.cfm" addToken="no">
                             </cfif>
