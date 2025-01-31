@@ -59,7 +59,7 @@
                                     <span>#variables.addressQuery.pincode#</span>
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
-                                    <button value="#variables.addressQuery.addressId#" class="removeAddressBtn p-3" onclick="removeAddress(this)"><i class="fa-solid fa-trash"></i></button>
+                                    <button value="#variables.addressQuery.addressId#" class="removeAddressBtn p-2" onclick="removeAddress(this)"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                         </cfloop>
