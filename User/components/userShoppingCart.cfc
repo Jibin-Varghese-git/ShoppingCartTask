@@ -742,6 +742,87 @@
             <cfreturn local.structAddUserReturn>
     </cffunction>
 
+    <cffunction  name="checkCardDetails" access="remote" description="Function to check card details" returnFormat="JSON">
+        <cfargument  name="cardNumber">
+        <cfargument  name="cardMonth">
+        <cfargument  name="cardYear">
+        <cfargument  name="cardCvv">
+        <cfargument  name="cardName">
+        <cfset local.checkCardReturn["error"] = false>
+
+        <cfif NOT arguments.cardNumber EQ "1234567890123456">
+            <cfset local.checkCardReturn["error"] = true>
+            <cfset local.checkCardReturn["message"] = "Card Number Incorrect">
+        </cfif>
+        <cfif NOT arguments.cardMonth EQ "12">
+            <cfset local.checkCardReturn["error"] = true>
+            <cfset local.checkCardReturn["message"] = "Month Incorrect">
+        </cfif>
+
+        <cfif NOT arguments.cardYear EQ "28">
+            <cfset local.checkCardReturn["error"] = true>
+            <cfset local.checkCardReturn["message"] = "Year Incorrect">
+        </cfif>
+
+        <cfif NOT arguments.cardCvv EQ "123">
+            <cfset local.checkCardReturn["error"] = true>
+            <cfset local.checkCardReturn["message"] = "CVV Incorrect">
+        </cfif>
+
+        <cfif NOT arguments.cardName EQ "User User">
+            <cfset local.checkCardReturn["error"] = true>
+            <cfset local.checkCardReturn["message"] = "Card Name Incorrect">
+        </cfif>
+        <cfreturn local.checkCardReturn>
+    </cffunction>
+
+    <cffunction  name="addOrderItems" description="Function to add order items">
+        <cfargument  name="formOrderItems">
+        <cfset local.generatedUuid = createUUID()>
+        <cfquery name="local.qryOrder">
+            INSERT INTO
+                tblOrder
+                (
+                    fldOrder_ID,
+                    fldUserId,
+                    fldAddressId,
+                    fldTotalPrice,
+                    fldTotalTax,
+                    fldCardPart
+                )
+            VALUES
+                (
+                    <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                    <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                    <cfqueryparam value="#arguments.formOrderItems.addressId#" cfsqltype="integer">,
+                    <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="varchar">,
+                    <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="varchar">,
+                    <cfqueryparam value="3456" cfsqltype="varchar">
+                )
+        </cfquery>
+        <cfset local.productList = selectAllProducts(arguments.formOrderItems.productIdHidden)>
+        <cfquery name="local.qryOrderedItems">
+            INSERT INTO
+                tblOrderedItems
+                (
+                    fldOrderId,
+                    fldProductId,
+                    fldQuantity,
+                    fldUnitPrice,
+                    fldUnitTax
+                )
+            VALUES
+                (
+                    <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                    <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
+                    <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
+                    <cfqueryparam value="#local.productList.price#" cfsqltype="integer">,
+                    <cfqueryparam value="#local.productList.tax#" cfsqltype="integer">
+                )
+
+        </cfquery>
+    </cffunction>
+
     <cffunction  name="dumpFunction">
         <cfreturn true>
     </cffunction>

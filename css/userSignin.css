@@ -653,7 +653,7 @@ header a{
     color: #ffffff;
     font-weight: 700;
     border:none;
-    border-radius: 50%;
+    border-radius: 20%;
 }
 
 .editProfileBtn{
@@ -793,7 +793,7 @@ header a{
 }
 
 .subcontainerOrder .paymentBtnContainer button{
-    background-color: #506bb3;
+    background-color: #9b9b9b;
     color: #ffffff;
     width:60%;
     border: none;
@@ -902,6 +902,49 @@ header a{
 .cardCvvContainer p{
     color: #299ebb;
     font-size: 11px;
+}
+
+.cardDetailsConatainer .cardNameContainer span{
+    color: #299ebb;
+    font-size: 18px;
+}
+
+.cardDetailsConatainer .cardNameContainer .cardNameInput{
+    border: 1px solid #afadad;
+    border-radius: 6px;
+    width:30px;
+}
+
+.modalCardSubmitBtn{
+    width: 40%;
+    background-color: #fd8a1e;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+}
+
+.modalCardCloseBtn{
+    width: 40%;
+    background-color: #ff2727;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+}
+
+#verifyCardBtn {
+    border:1px solid #40cc3d;
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+
+#verifyCardBtn:focus {
+    border:1px solid #40cc3d;
+}
+
+#verifyCardBtn span{
+    color: #40cc3d;
 }
 
 

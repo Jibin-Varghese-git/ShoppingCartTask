@@ -222,6 +222,13 @@ function removeCartItem(cartDetails){
 $(document).ready(function() {
     checkQuantityOrder();
     checkQuantity();
+    if($("#verifyCardBtn"))
+    {
+        $("#verifyCardBtn").focus();
+    }
+    if($("#continuePayBtn")){
+        $("#continuePayBtn").attr("disabled", true);
+    }
 });
 
 function checkQuantity(){
@@ -526,12 +533,25 @@ function changeAddress(){
     document.getElementById("addressUserState").innerHTML = state;
     document.getElementById("addressUserPincode").innerHTML = pincode;
     document.getElementById("addressIdHidden").value = selectedAddressId;
-    $("#modalChangeAddress").modal("hide")
+    $("#modalChangeAddress").modal("hide");
 }
 
 function deleteQtyOrder(productId){
     var qty= document.getElementById(productId + "Input").value;
-    document.getElementById(productId + "Input").value = parseInt(qty)-1;
+    var totalProductPrice = document.getElementById("totalProductPrice").innerHTML;
+    var totalTax = document.getElementById("totalProductTax").innerHTML;
+
+    totalProductPrice = totalProductPrice/qty;
+    totalTax = totalTax/qty;
+    qty=parseInt(qty) - 1;
+    totalProductPrice = parseFloat(totalProductPrice) * qty;
+    totalTax = parseFloat(totalTax) * qty;
+
+    document.getElementById("totalProductPrice").innerHTML=totalProductPrice;
+    document.getElementById("totalProductTax").innerHTML=totalTax;
+    document.getElementById("totalPrice").innerHTML = totalProductPrice + totalTax;
+    document.getElementById("totalPriceBtn").innerHTML = totalProductPrice + totalTax;
+    document.getElementById(productId + "Input").value = qty;
     checkQuantityOrder()
 }
 
@@ -567,4 +587,111 @@ function checkQuantityOrder(){
             quantity[index].previousElementSibling.disabled =  false;
         }
     }
+}
+
+function checkCardDetails(){
+    var cardNumber = $("#cardNumberInput").val();
+    var cardMonth = $("#cardExpiryMonth").val();
+    var cardYear = $("#cardExpiryYear").val();
+    var cardCvv = $("#cardCvvInput").val();
+    var cardName = $("#cardNameInput").val();
+    var re16digit = /^\d{16}$/;
+    var re3digit = /^\d{3}$/;
+    var re2digit = /^\d{2}$/;
+    var flag =true;
+
+    $(".warningCardName").html(" ");
+    $(".warningCardCvv").html(" ");
+    $(".warningCardMonth").html(" ");
+    $(".warningCardYear").html(" ");
+    $(".warningCardNumber").html(" ");
+    
+    if(cardName.trim().length == 0){
+        $(".warningCardName").html("Enter card holder name");
+        $("#cardNameInput").focus();
+        flag=false;
+    }
+
+    if(cardCvv.trim().length == 0){
+        $(".warningCardCvv").html("Enter CVV");
+        $("#cardCvvInput").focus();
+        flag=false;
+    }else if(re3digit.test(cardCvv) === false){
+        $(".warningCardCvv").html("Invalid CVV");
+        $("#cardCvvInput").focus();
+        flag=true;
+    }
+
+    if(cardMonth.trim().length == 0){
+        $(".warningCardMonth").html("Enter Month");
+        $("#cardExpiryMonth").focus();
+        flag=false;
+    }else if(re2digit.test(cardMonth) === false){
+        $(".warningCardMonth").html("Invalid Month");
+        $("#cardExpiryMonth").focus();
+        flag=false;
+    }else if(cardMonth.trim() < 1 || cardMonth.trim() > 12){
+        alert()
+        $(".warningCardMonth").html("Invalid Month");
+        $("#cardExpiryMonth").focus();
+        flag=false;
+    }else if(cardYear.trim().length == 0){
+        $(".warningCardYear").html("Enter Year");
+        $("#cardExpiryYear").focus();
+        flag=false;
+    }else if(re2digit.test(cardYear) === false){
+        $(".warningCardYear").html("Invalid Year");
+        $("#cardExpiryYear").focus();
+        flag=false;
+    }
+    
+    if(cardNumber.trim().length == 0){
+        $(".warningCardNumber").html("Enter Card Number");
+        $("#cardNumberInput").focus();
+        flag=false;
+    }else if(re16digit.test(cardNumber) === false){
+        $(".warningCardNumber").html("Invalid Card Number");
+        $("#cardNumberInput").focus();
+        flag=false;
+    }
+
+    if(flag == true){
+        $.ajax({
+             type : "POST",
+            url : "components/userShoppingCart.cfc?method=checkCardDetails",
+            data : {cardNumber : cardNumber,
+                    cardMonth : cardMonth,
+                    cardYear : cardYear,
+                    cardCvv : cardCvv,
+                    cardName : cardName
+                    },
+            success : function(result){
+                if(result)
+                {
+                    cardReturn=JSON.parse(result)
+                    console.log(cardReturn)
+                    if(cardReturn.error)
+                    {
+                        $(".warningCardCommon").html(cardReturn.message);
+                    }
+                    else{
+                        $("#modalCreditCard").modal("hide")
+                        $("#verifyCardBtn").remove();
+                        $("#continuePayBtn").attr("disabled", false);
+                        $("#continuePayBtn").attr('style', 'background-color:#506bb3;');
+                    }
+                }
+            }
+        });
+    }
+}
+
+function cardModalClose(){
+    $(".warningCardName").html(" ");
+    $(".warningCardCvv").html(" ");
+    $(".warningCardMonth").html(" ");
+    $(".warningCardYear").html(" ");
+    $(".warningCardNumber").html(" ");
+    $(".warningCardCommon").html(" ");
+    $("#formCardModal")[0].reset();
 }

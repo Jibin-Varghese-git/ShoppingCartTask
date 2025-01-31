@@ -25,6 +25,7 @@
     <body>
         <cfinclude  template="userHeader.cfm">
         <div class="mainContainerOrder p-3">
+            <form method="POST">
             <div class="subcontainerOrder p-2">
 
                 <div class="innerSubcontainerOrder">
@@ -100,14 +101,14 @@
                                                 <cfset variables.totalProductTax = variables.totalProductTax + (variables.productListing.tax * variables.productListing.productQuantity)>
                                                 <span class="me-2">Quantity : </span>
                                             </cfif>
-                                            <input id="#productListing.productId#Input" class="orderQuantity" min="0" name="quantity" 
+                                            <input id="#productListing.productId#Input" class="orderQuantity"  min="0" name="orderQuantity" 
                                                 value=
                                                     <cfif structKeyExists(variables.productListing, "productQuantity")>
                                                         #variables.productListing.productQuantity#
                                                     <cfelse>
                                                         1
                                                     </cfif>
-                                                type="text" class="form-control form-control-sm px-2"disabled
+                                                type="text" class="form-control form-control-sm px-2"readonly
                                              />
                                             <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
                                                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyAddBtnOrder" id="#productListing.productId#addBtn" onclick="addQtyOrder(#productListing.productId#)">
@@ -152,19 +153,47 @@
                             </div>
                         </cfoutput>
                     </div>
+                    <div class="container2 p-2 my-2">
+                        <div class="container2Heading px-5 py-3">
+                            <h4>4.Verify Card</h4>
+                        </div>
+                        <div class="d-flex justify-content-center p-4">
+                            <button id="verifyCardBtn" type="button" data-bs-toggle="modal"  data-bs-target="#modalCreditCard">
+                                <div class="cardImage">
+                                    <img src="../Assets/Images/icons8-credit-card.gif" alt="No image Found">
+                                </div>
+                                <span>Verify Card</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="paymentBtnContainer d-flex justify-content-between p-3">
-                <cfoutput>
-                <div>
-                    <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>    
-                    <span id="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
+                    <cfoutput>
+                        <div>
+                            <input type="hidden" name="totalPriceHidden" value="#variables.totalProductPrice#">
+                            <input type="hidden" name="totalTaxHidden" value="#variables.totalProductTax#">
+                            <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>    
+                            <span id="totalPriceBtn" name="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
+                        </div>
+                    </cfoutput>
+                    <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" ><i class="fa-solid fa-wallet"></i> Continue to Payment</button>
                 </div>
-                </cfoutput>
-                    <button  data-bs-toggle="modal"  data-bs-target="#modalCreditCard"><i class="fa-solid fa-wallet"></i> Continue to Payment</button>
-                </div>
-
             </div>
+                
+                <cfif structKeyExists(form, "continuePayBtn")>
+                    <cfif structKeyExists(url, "productId")>
+                        <cfoutput>
+                            <input type="hidden" name="productIdHidden" value="#url.productId#">
+                        </cfoutput>
+                        <cfset variables.result=variables.objUserShoppingCart.addOrderItems(form)>
+                    </cfif>
+                    <cfif structKeyExists(url, "redirected") AND url.redirected EQ "cart">
+                        <cfdump  var="#form#">
+                    </cfif>
+                </cfif>
+            </form>
         </div>
+        <cfdump var="#form#">
         <cfinclude  template="userFooter.cfm">
 
         <!-- Modal Change Address -->
@@ -285,9 +314,9 @@
                 <div class="modal-content">
                     <div class="modal-header px-5">
                         <i class="fa-solid fa-lock"></i>
-                        <span class="ms-2">This is a secure 128-bit SSL Encryoted payment.You're safe.</span>
+                        <span class="ms-2">This is a secure 128-bit SSL Encrypted payment.You're safe.</span>
                     </div>
-                    <form method="POST" id="formProfileEdit">
+                    <form method="POST" id="formCardModal">
                         <div class="modalCardBody modal-body">
                             <div class="subHeading d-flex w-100 justify-content-between px-2">
                                 <div class="cardImage">
@@ -299,33 +328,49 @@
                                 </div>
                             </div>
                             <hr class="mt-0 mb-2">
-                            <div class="cardDetailsConatainer border p-4">
-                                <div class="cardNumberContainer">
+                            <div class="cardDetailsConatainer p-4">
+                                <div class="cardNumberContainer mb-2">
                                     <span>Card number<sub class="ms-2">The 16 digits in front of your card</sub></span>
-                                    <input type="text" name="cardNumberInput" class="cardNumberInput w-100 my-2">
+                                    <input type="text" name="cardNumberInput" class="cardNumberInput w-100 mt-2" id="cardNumberInput">
+                                    <span class="warningCardNumber text-danger fw-bold"></span>
                                 </div>
                                 <div class="cardDateAndCvv d-flex">
                                     <div class="cardDateContainer w-50">
                                         <span>Expiration Date</span>
                                         <div class="d-flex">
-                                            <Input type="text" placeholder="MM" class="cardExpiryMonth me-2">
+                                            <div>
+                                                <Input type="text" placeholder="MM" class="cardExpiryMonth me-2" id="cardExpiryMonth"><br>
+                                                <span class="warningCardMonth text-danger fw-bold"></span>
+                                            </div>
                                             <span>/</span>
-                                            <Input type="text" placeholder="YY" class="cardExpiryYear ms-2">
+                                            <div>
+                                                <Input type="text" placeholder="YY" class="cardExpiryYear ms-2" id="cardExpiryYear"><br>
+                                                <span class="warningCardYear text-danger fw-bold"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="cardCvvContainer w-50 border">
+                                    <div class="cardCvvContainer w-50 ">
                                         <span>CVV2/CVC2</span>
-                                        <div class="d-flex"> 
-                                            <input type="text" class="cardCvvInput me-1" name="cardCvvInput">
+                                        <div class="d-flex">
+                                            <div>
+                                                <input type="text" class="cardCvvInput me-1" name="cardCvvInput" id="cardCvvInput">
+                                                <span class="warningCardCvv text-danger fw-bold"></span>
+                                            </div>
                                             <p>The last 3 digits displayed on the back of your card.</p>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="cardNameContainer">
+                                    <span>Full name on card</span>
+                                    <input type="text" name="cardNameInput" class="cardNameInput w-100 my-2" id="cardNameInput">
+                                    <span class="warningCardName text-danger fw-bold"></span>
+                                </div>
                             </div>
+                            <span  class="fw-bold warningCardCommon text-danger ms-3"></span>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="">Close</button>
-                            <button type="button" name="editProfileSubmitBtn" id="editProfileSubmitBtn" value=" " class="btn btn-primary" onclick="changeAddress()">Submit</button>
+                            <button type="button" class="modalCardCloseBtn p-2" data-bs-dismiss="modal" onclick="cardModalClose()">Close</button>
+                            <button type="button" name="editProfileSubmitBtn" id="editProfileSubmitBtn" value=" " class="modalCardSubmitBtn p-2" onclick="checkCardDetails()">Submit</button>
                         </div>
                     </form>
                 </div>
