@@ -794,9 +794,9 @@
                 (
                     <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
                     <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
-                    <cfqueryparam value="#arguments.formOrderItems.addressId#" cfsqltype="integer">,
-                    <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="varchar">,
-                    <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="varchar">,
+                    <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
+                    <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="decimal">,
+                    <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="decimal">,
                     <cfqueryparam value="3456" cfsqltype="varchar">
                 )
         </cfquery>
@@ -816,11 +816,24 @@
                     <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
                     <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
                     <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
-                    <cfqueryparam value="#local.productList.price#" cfsqltype="integer">,
-                    <cfqueryparam value="#local.productList.tax#" cfsqltype="integer">
+                    <cfqueryparam value="#local.productList.price#" cfsqltype="decimal">,
+                    <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
                 )
-
         </cfquery>
+        <cflocation  url="userOrderHistory.cfm" addToken="no">
+    </cffunction>
+
+    <cffunction  name="cartToOrder">
+        <cfargument  name="formOrderItems">
+        <cfset local.generatedUuid = createUUID()>
+        <cfquery>
+            EXEC
+                spCartToOrder 
+                @userId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                @addressId = <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
+                @generatedUuid = <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">
+        </cfquery>
+        <cflocation  url="userOrderHistory.cfm" addToken="no">
     </cffunction>
 
     <cffunction  name="dumpFunction">

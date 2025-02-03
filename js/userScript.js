@@ -1,3 +1,7 @@
+if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+}
+
 function fnsignupValidation(){
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
@@ -246,10 +250,10 @@ function checkQuantity(){
     var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
     console.log(cartItemQuantityHeader)
     if(cartItemQuantityHeader < 1 && document.getElementById("placeOrderCartBtn")){
-        document.getElementById("placeOrderCartBtn").disabled=true;
+        document.getElementById("placeOrderCartBtn").style.pointerEvents="none";
     }
     else if(document.getElementById("placeOrderCartBtn")){
-        document.getElementById("placeOrderCartBtn").disabled=false;
+        document.getElementById("placeOrderCartBtn").style.pointer="default"
     }
 }
 
@@ -567,7 +571,9 @@ function addQtyOrder(productId){
     totalTax = parseFloat(totalTax) * qty;
 
     document.getElementById("totalProductPrice").innerHTML=totalProductPrice;
+    document.getElementById("totalPriceHidden").value = totalProductPrice;
     document.getElementById("totalProductTax").innerHTML=totalTax;
+    document.getElementById("totalTaxHidden").value=totalTax;
     document.getElementById("totalPrice").innerHTML = totalProductPrice + totalTax;
     document.getElementById("totalPriceBtn").innerHTML = totalProductPrice + totalTax;
     document.getElementById(productId + "Input").value = qty;
@@ -619,7 +625,7 @@ function checkCardDetails(){
     }else if(re3digit.test(cardCvv) === false){
         $(".warningCardCvv").html("Invalid CVV");
         $("#cardCvvInput").focus();
-        flag=true;
+        flag=false;
     }
 
     if(cardMonth.trim().length == 0){
