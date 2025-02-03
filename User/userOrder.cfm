@@ -51,8 +51,8 @@
                                 </div>
                             </cfoutput>
                             <div class="btnPart d-flex flex-column justify-content-between">
-                                <button class="changeAddressBtn" data-bs-toggle="modal" data-bs-target="#modalChangeAddress">Change Address</button>
-                                <button class="addAddressBtn" data-bs-toggle="modal"  data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add Address</button>
+                                <button type="button" class="changeAddressBtn" data-bs-toggle="modal" data-bs-target="#modalChangeAddress">Change Address</button>
+                                <button type="button" class="addAddressBtn" data-bs-toggle="modal"  data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add Address</button>
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                                             <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
                                                 <cfset variables.totalProductPrice = variables.totalProductPrice + variables.productListing.price>
                                                 <cfset variables.totalProductTax = variables.totalProductTax + variables.productListing.tax>
-                                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyDeleteBtnOrder" id="#productListing.productId#deleteBtn" onclick="deleteQtyOrder(#productListing.productId#)">
+                                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyDeleteBtnOrder" id="#productListing.productId#deleteBtn" onclick="deleteQtyOrder(#productListing.productId#)">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
                                             <cfelse>
@@ -111,7 +111,7 @@
                                                 type="text" class="form-control form-control-sm px-2"readonly
                                              />
                                             <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
-                                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyAddBtnOrder" id="#productListing.productId#addBtn" onclick="addQtyOrder(#productListing.productId#)">
+                                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyAddBtnOrder" id="#productListing.productId#addBtn" onclick="addQtyOrder(#productListing.productId#)">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </cfif>
@@ -170,30 +170,31 @@
                 <div class="paymentBtnContainer d-flex justify-content-between p-3">
                     <cfoutput>
                         <div>
-                            <input type="hidden" name="totalPriceHidden" value="#variables.totalProductPrice#">
-                            <input type="hidden" name="totalTaxHidden" value="#variables.totalProductTax#">
-                            <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>    
+                            <input type="hidden" name="totalPriceHidden" id="totalPriceHidden" value="#variables.totalProductPrice#">
+                            <input type="hidden" name="totalTaxHidden" id="totalTaxHidden" value="#variables.totalProductTax    #">
+                            <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>
                             <span id="totalPriceBtn" name="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
                         </div>
                     </cfoutput>
                     <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" ><i class="fa-solid fa-wallet"></i> Continue to Payment</button>
                 </div>
             </div>
-                
-                <cfif structKeyExists(form, "continuePayBtn")>
-                    <cfif structKeyExists(url, "productId")>
-                        <cfoutput>
-                            <input type="hidden" name="productIdHidden" value="#url.productId#">
-                        </cfoutput>
-                        <cfset variables.result=variables.objUserShoppingCart.addOrderItems(form)>
-                    </cfif>
-                    <cfif structKeyExists(url, "redirected") AND url.redirected EQ "cart">
-                        <cfdump  var="#form#">
-                    </cfif>
+
+            <cfif structKeyExists(url, "productId")>
+                <cfoutput>
+                    <input type="hidden" name="productIdHidden" value="#url.productId#">
+                </cfoutput>
+            </cfif>
+
+            <cfif structKeyExists(form, "continuePayBtn")>
+                <cfif structKeyExists(url, "productId")>
+                    <cfset variables.result=variables.objUserShoppingCart.addOrderItems(form)>
+                <cfelseif structKeyExists(url, "redirected") AND url.redirected EQ "cart">
+                    <cfset variables.result=variables.objUserShoppingCart.cartToOrder(form)>
                 </cfif>
+            </cfif>
             </form>
         </div>
-        <cfdump var="#form#">
         <cfinclude  template="userFooter.cfm">
 
         <!-- Modal Change Address -->
