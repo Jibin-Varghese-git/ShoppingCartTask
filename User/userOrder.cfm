@@ -176,7 +176,11 @@
                             <span id="totalPriceBtn" name="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
                         </div>
                     </cfoutput>
-                    <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" ><i class="fa-solid fa-wallet"></i> Continue to Payment</button>
+                    <cfif queryRecordCount(variables.addressQuery)>
+                        <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" ><i class="fa-solid fa-wallet"></i> Continue to Payment</button>
+                    <cfelse>
+                        <span class="text-Danger fw-bold">ADD ADDRESS</span>
+                    </cfif>
                 </div>
             </div>
 
