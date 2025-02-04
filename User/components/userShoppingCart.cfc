@@ -820,6 +820,7 @@
                     <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
                 )
         </cfquery>
+        <cfset sentEmailUser(local.generatedUuid)>
         <cflocation  url="userOrderHistory.cfm" addToken="no">
     </cffunction>
 
@@ -833,7 +834,88 @@
                 @addressId = <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
                 @generatedUuid = <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">
         </cfquery>
+        <cfset sentEmailUser(local.generatedUuid)>
         <cflocation  url="userOrderHistory.cfm" addToken="no">
+    </cffunction>
+
+    <cffunction  name="sentEmailUser">
+        <cfargument  name="orderId">
+<!---             <cfdump  var="#arguments#"  abort> --->
+        <cfmail to = "#session.structUserDetails['email']#" from = "jibinvarghese05101999@gmail.com" subject = "Thank you for your order"> 
+            Your order has been confirmed.
+            You can check your order using the orderId : #arguments.orderId#
+        </cfmail> 
+    </cffunction>
+
+    <cffunction  name="selectOrderTable">
+        <cfquery name="local.qrySelectOrderTable">
+            SELECT
+                tblo.fldOrder_ID AS orderId,
+	            tblo.fldTotalPrice AS totalPrice,
+	            tblo.fldTotalTax AS totalTax,
+	            tblo.fldOrderDate AS orderDate,
+                ta.fldFirstName AS firstName,
+	            ta.fldLastName AS LastName,
+	            ta.fldAddressLine1 AS addressline1,
+	            ta.fldAddressLine2 AS addressLine2,
+	            ta.fldCity AS city,
+	            ta.fldState AS state,
+	            ta.fldPincode AS pincode
+            FROM
+                tblOrder AS tblo
+            INNER JOIN
+	            tblAddress AS ta
+            ON
+	            tblo.fldAddressId = ta.fldAddress_ID
+        </cfquery>
+        <cfreturn local.qrySelectOrderTable>
+    </cffunction>
+
+    <cffunction  name="selectOrderedItemsTable">
+        <cfquery name="local.qrySelectOrderedItemsTable">
+            SELECT
+            	toi.fldOrderItem_ID AS orderItemId,
+            	toi.fldOrderId AS orderId,
+            	toi.fldProductId AS productId,
+            	toi.fldQuantity AS quantity,
+            	toi.fldUnitPrice AS unitPrice,
+            	toi.fldUnitTax AS unitTax,
+            	tp.fldProductName AS productName,
+            	tp.fldDescription AS description,
+            	tpi.fldImageFileName AS imageName,
+                ta.fldFirstName AS firstName,
+            	ta.fldLastName AS LastName,
+            	ta.fldAddressLine1 AS addressline1,
+            	ta.fldAddressLine2 AS addressLine2,
+            	ta.fldCity AS city,
+            	ta.fldState AS state,
+            	ta.fldPincode AS pincode
+            FROM
+            	tblOrderedItems AS toi
+            INNER JOIN	
+            	tblOrder AS tblO
+            ON
+            	tblO.fldOrder_ID = toi.fldOrderId
+            INNER JOIN
+            	tblProduct AS tp
+            ON
+            	tp.fldProduct_ID = toi.fldProductId
+            INNER JOIN
+            	tblProductImages AS tpi
+            ON
+            	tp.fldProduct_ID = tpi.fldProductId
+            INNER JOIN
+	            tblAddress AS ta
+            ON
+            	tblO.fldAddressId = ta.fldAddress_ID 
+            WHERE
+            	tpi.fldActive = 1
+            AND
+            	tpi.fldDefaultImage = 1
+            AND 
+            	tp.fldActive =1
+        </cfquery>
+        <cfreturn local.qrySelectOrderedItemsTable>
     </cffunction>
 
     <cffunction  name="dumpFunction">

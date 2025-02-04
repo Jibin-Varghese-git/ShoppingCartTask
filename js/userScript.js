@@ -701,3 +701,20 @@ function cardModalClose(){
     $(".warningCardCommon").html(" ");
     $("#formCardModal")[0].reset();
 }
+
+function searchOrder(){
+    var value = $('#searchInputOrder').val().toLowerCase();
+    $(".singleOrderHistoryContainer").filter(function() {
+        $(this).toggle($(this).attr('id').toLowerCase().indexOf(value) > -1)
+        console.log($(this).attr('id'))
+      });
+}
+
+// function searchOrder(){
+//     var value = $('#searchInputOrder').val().toLowerCase();
+//     $(".subContainerHistory").filter(function() {
+//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//       });
+// }
+
+

@@ -56,7 +56,7 @@
                                 <span><i class="fa-solid fa-chevron-right"></i></span>
                                 <span class="ms-2">#productListing.productName#</span>
                             </div>
-                            <div class="productName w-100 d-flex  my-2">
+                            <div class="productName w-100 d-flex my-2">
                                 <h2>#productListing.productName#</h2>
                             </div>
                             <div class="productDesc">

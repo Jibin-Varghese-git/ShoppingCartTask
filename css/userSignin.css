@@ -348,7 +348,7 @@ header a{
  }
 
  .productDesc{
-    height:15vh;
+    height:13vh;
     max-width:100%;
     overflow:scroll;
  }
@@ -475,6 +475,7 @@ header a{
 
   .productDesc p{
     color: #5f5f5f;
+    font-size: 16px;
   }
 
   .cartQuantity{
@@ -947,15 +948,140 @@ header a{
     color: #40cc3d;
 }
 
+.headContainerHistory{
+    height:8vh;
+    background-color: #464444;
+    border-radius: 12px;
+}
 
+.headContainerHistory{
+    width:80%;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: auto;
+}
 
+.subContainerHistory{
+    height:auto;
+    background-color: #ffffff;
+    width:80%;
+    margin:auto;
+    border-radius: 12px;
+}
 
+.singleOrderHistory{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 12px;
+    background-color: #d2eaff;
+}
 
+.singleOrderHistory .productDetailsContainer{
+    width: 50%;
+    overflow:hidden;
+    height:15vh
+}
 
+.singleOrderHistory .productDetailsContainer .productHeading{
+    font-size: 20px;
+    font-weight: 700;
+}
+.singleOrderHistory .productDetailsContainer .productDesc{
+   width:5vw;
+}
 
+.singleOrderHistory .imageDiv{
+    width: 10vw;
+    height: 15vh;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 18px ;
+}
 
+.singleOrderHistory .imageDiv img{
+    width: 100%;
+    height: 100%;
+}
 
+.singleOrderHistory .singleOrderHeading{
+    height: 6vh;
+    background-color: #bd82d3;
+}
 
+.singleOrderHistory .singleOrderHeading .heading{
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+}
 
+.singleOrderHistory .singleOrderHeading span{
+    color: #ffffff;
+}
 
+.singleOrderFooter{
+    background-color: #7cb9c5;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    height:8vh;
+}
+
+.quantityContainer .qty{
+    font-size: 18px;
+    font-weight: 700;
+    color: #a7bea6;
+}
+
+.searchbarDivOrder{
+    height: 5vh;
+    width: 60%;
+}
+
+.searchbarDivOrder input{
+    height: 5vh;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.headingOrderHistory{
+    width:40%;
+}
+
+.headingOrderHistory span{
+    white-space: nowrap;
+}
+
+.singleOrderHeading button{
+    border: none;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
+
+.pdfBtnOrder {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .pdfBtnOrder .tooltiptext {
+    visibility: hidden;
+    width: 60px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 2px 0;
+    border-radius: 6px;
+    font-size:14px !important;
+    top: -5px;
+    right: 105%;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .pdfBtnOrder:hover .tooltiptext {
+    visibility: visible;
+  }
 
