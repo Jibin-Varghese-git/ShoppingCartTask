@@ -15,16 +15,16 @@
         <cfinclude  template="userHeader.cfm">
         <div class="mainContainer px-2">
             <div class="categoryListingHeader mt-2 p-2">
-                <cfset structCategoryListing = local.objUserShoppingCart.selectCategory()>
-                <cfset subCategoryListing = local.objUserShoppingCart.selectSubcategory()>
+                <cfset variables.structCategoryListing = local.objUserShoppingCart.selectCategory()>
+                <cfset variables.subCategoryListing = local.objUserShoppingCart.selectSubcategory()>
                 <cfoutput>
-                    <cfloop collection="#structCategoryListing#" item="categoryId">
+                    <cfloop collection="#variables.structCategoryListing#" item="categoryId">
                         <div class="subcategoryTooltip">
-                            <a href="userCategory.cfm?categoryId=#categoryId#"><button type="button" class="categoryBtn" value="#categoryId#">#structCategoryListing[categoryId]#</button></a>
+                            <a href="userCategory.cfm?categoryId=#categoryId#"><button type="button" class="categoryBtn" value="#categoryId#">#variables.structCategoryListing[categoryId]#</button></a>
                             <div class="tooltipContainer d-flex flex-column justify-content-between p-1">
-                                <cfloop query="subCategoryListing">
-                                    <cfif subCategoryListing.fldCategoryId EQ categoryId>
-                                        <a href="userSubcategory.cfm?subcategoryId=#subCategoryListing.fldSubCategory_ID#" class="text-decoration-none"><div class="tooltiptext p-1 mt-1">#subCategoryListing.fldSubCategoryName#</div></a>
+                                <cfloop query="variables.subCategoryListing">
+                                    <cfif variables.subCategoryListing.fldCategoryId EQ categoryId>
+                                        <a href="userSubcategory.cfm?subcategoryId=#variables.subCategoryListing.fldSubCategory_ID#" class="text-decoration-none"><div class="tooltiptext p-1 mt-1">#variables.subCategoryListing.fldSubCategoryName#</div></a>
                                     </cfif>
                                 </cfloop>
                             </div>
@@ -64,21 +64,21 @@
 <!-- Product Listing  -->
             <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">
                 <div class="productListingSubContainer">
-                    <cfset qryRandomProducts = local.objUserShoppingCart.selectRandomProducts()>
+                    <cfset variables.qryRandomProducts = local.objUserShoppingCart.selectRandomProducts()>
                     <cfoutput>
                          <div class="w-100">
                             <h3>Random Products</h3>
                         </div>
                         <cfloop query="qryRandomProducts">
                             <div class="card p-2 m-3">
-                                <a href="userProduct.cfm?productId=#qryRandomProducts.fldProduct_ID#" class="text-decoration-none h-100">
+                                <a href="userProduct.cfm?productId=#variables.qryRandomProducts.fldProduct_ID#" class="text-decoration-none h-100">
                                     <div class="productImageDiv">
-                                        <img src="../Assets/productImages/#qryRandomProducts.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                        <img src="../Assets/productImages/#variables.qryRandomProducts.fldImageFileName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                     </div>
                                     <div class="card-body d-flex flex-column align-items-center">
-                                        <h5 class="card-title text-truncate">#qryRandomProducts.fldProductName#</h5>
-                                        <span class="fw-bold text-wrap ">#qryRandomProducts.fldBrandName#</span>
-                                        <span class="productPrice fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#qryRandomProducts.fldPrice#</span>
+                                        <h5 class="card-title text-truncate">#variables.qryRandomProducts.fldProductName#</h5>
+                                        <span class="fw-bold text-wrap ">#variables.qryRandomProducts.fldBrandName#</span>
+                                        <span class="productPrice fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.qryRandomProducts.fldPrice#</span>
                                     </div>
                                 </a>
                             </div>

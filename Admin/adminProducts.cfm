@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
+        
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -28,8 +28,8 @@
                 </div>  
             </div>
         </header>
-        <cfset ProductListing=local.objShoppingCart.fnSelectProduct(subcategoryId=url.subcategoryId)>
-        <cfset subCategoryName=local.objShoppingCart.fnSelectSubcategoryDetails(subcategoryId=url.subcategoryId)>
+        <cfset ProductListing=application.objShoppingCart.fnSelectProduct(subcategoryId=url.subcategoryId)>
+        <cfset subCategoryName=application.objShoppingCart.fnSelectSubcategoryDetails(subcategoryId=url.subcategoryId)>
         <div class="mainContentDivProduct p-5">
             <div class="productDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
@@ -102,7 +102,7 @@
                                 <span id="modalAddProductsHeading">Add Product</span>
                             </div>
                             <div class="modalAddProductsBody">
-                                    <cfset categoryListingValues=local.objShoppingCart.fnSelectCategory()> 
+                                    <cfset categoryListingValues=local.objShoppingCart.fnSelectCategoryName()> 
                                     <span class="my-2">Category</span>
                                     <select  class="w-100 my-2" name="CategoryListing" id="CategoryListing" onchange="fnGetCategory()">
                                         <cfoutput>
@@ -111,7 +111,7 @@
                                             </cfloop> 
                                         </cfoutput>
                                     </select>
-                                    <cfset categoryListingValues=local.objShoppingCart.fnSelectCategory()> 
+                                    
                                     <span class="my-2">Subcategory</span>
                                     <cfset subcategoryListing=local.objShoppingCart.fnSelectSubCategory(categoryId=url.categoryId)>
                                     <select  class="w-100 my-2" name="subcategoryListing" id="subcategoryListing" >

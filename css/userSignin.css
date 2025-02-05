@@ -15,6 +15,7 @@ header{
     width:100%;
     background-color:#ffffff;
     z-index: 1000;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 header a{
@@ -1083,5 +1084,19 @@ header a{
   /* Show the tooltip text when you mouse over the tooltip container */
   .pdfBtnOrder:hover .tooltiptext {
     visibility: visible;
+  }
+
+  .profileBtn{
+    position: relative;
+  }
+
+.profileBtn .badge {
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    padding: 4px 4px;
+    border-radius: 50%;
+    background-color: #118d3a;
+    color: white;
   }
 

@@ -62,19 +62,6 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnSelectCategory">
-        <cfquery name="local.qrySelectCategory">
-            SELECT
-                fldCategory_ID,
-                fldCategoryName
-            FROM
-                tblCategory
-            WHERE
-                fldActive = 1
-        </cfquery>
-        <cfreturn local.qrySelectCategory>
-    </cffunction>
-
     <cffunction  name="fnAddCategory" access="remote" returnformat="plain">
         <cfargument  name="categoryName">
         <cfquery name="qrycategoryNameCount">
@@ -127,15 +114,22 @@
         <cfargument  name="categoryId">
         <cfquery name="local.qrySelectCategoryName">
             SELECT
+                fldCategory_ID,
                 fldCategoryName
             FROM
                 tblCategory
             WHERE
-                fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="varchar">
-            AND
+                <cfif structKeyExists(arguments, "categoryId")>
+                        fldCategory_ID = <cfqueryparam value="#arguments.categoryId#" cfsqltype="varchar">
+                    AND
+                </cfif>
                 fldActive = 1
         </cfquery>
-        <cfreturn local.qrySelectCategoryName.fldCategoryName>
+        <cfif structKeyExists(arguments, "categoryId")>
+            <cfreturn local.qrySelectCategoryName.fldCategoryName>
+        <cfelse>
+            <cfreturn local.qrySelectCategoryName>
+        </cfif>
     </cffunction>
 
     <cffunction  name="fnUpdateCategory" access="remote" returnformat="plain">

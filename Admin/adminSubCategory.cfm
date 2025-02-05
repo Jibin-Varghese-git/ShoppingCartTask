@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
                 <div class="headerCartName">
@@ -28,8 +27,8 @@
                 </div>  
             </div>
         </header>
-    <cfset result=local.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
-    <cfset CategoryName=local.objShoppingCart.fnSelectCategoryName(categoryId=url.catId)>
+    <cfset result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
+    <cfset CategoryName=application.objShoppingCart.fnSelectCategoryName(categoryId=url.catId)>
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
@@ -71,7 +70,7 @@
                 <form method="post">
                     <div class="modal-content modalSubcategory d-flex  flex-column justify-content-between px-3 pt-4">
                         <div class="modalInputCategory">
-                            <cfset categoryListingValues=local.objShoppingCart.fnSelectCategory()>
+                            <cfset categoryListingValues=application.objShoppingCart.fnSelectCategoryName()>
                             <span class="ms-5 my-2" id="categoryListingHeading">Category</span><br>
                             <select class="w-100 my-2" name="categoryListing" id="categoryListing">
                                 <cfoutput>

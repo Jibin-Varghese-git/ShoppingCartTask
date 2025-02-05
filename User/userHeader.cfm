@@ -26,9 +26,9 @@
                 <div class="cartTooltip">
                    <i class="fa-solid fa-cart-shopping"></i>
                     <cfif structKeyExists(session,"structUserDetails")> 
-                        <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
+                        <cfset variables.productListingCart = local.objUserShoppingCart.selectProductCart()>
                         <cfoutput>
-                            <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(productListingCart)#</span>
+                            <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(variables.productListingCart)#</span>
                         </cfoutput>
                    </cfif> 
                     <span class="tooltiptext">Cart</span>
@@ -36,7 +36,12 @@
             </a>
          
             <div class="profileTooltip">
-                <a href="userProfile.cfm" class="profileBtn mx-3"><i class="fa-solid fa-user" ></i></a>
+                <a href="userProfile.cfm" class="profileBtn mx-3">
+                    <i class="fa-solid fa-user" ></i>
+                    <cfif structKeyExists(session, "structUserDetails")>
+                        <span class="badge" id="cartItemQuantityHeader"> </span>
+                    </cfif>
+                </a>
                 <span class="tooltiptext">Profile</span>
             </div>
                 <cfif structKeyExists(session,"structUserDetails")>

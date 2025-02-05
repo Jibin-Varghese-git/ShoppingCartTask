@@ -13,31 +13,31 @@
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
-        <cfset subcategoryListing=local.objUserShoppingCart.selectDistinctSubCategory(url.categoryId)>
-        <cfset productListing = local.objUserShoppingCart.selectAllProducts()>
+        <cfset variables.subcategoryListing=local.objUserShoppingCart.selectDistinctSubCategory(url.categoryId)>
+        <cfset variables.productListing = local.objUserShoppingCart.selectAllProducts()>
         <div class="categoryMainContainer mt-2 px-2">
-            <cfif NOT queryRecordCount(subcategoryListing)>
+            <cfif NOT queryRecordCount(variables.subcategoryListing)>
                 <h1>No Products Found</h1>
             </cfif>
-            <cfloop query="subcategoryListing"> 
+            <cfloop query="variables.subcategoryListing"> 
                 <div class="categorySubcontainer  my-3 ps-5 pe-3 py-3">
                     <cfoutput>
                         <div class="w-100">
-                            <a href="userSubCategory.cfm?subcategoryId=#subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#subcategoryListing.fldSubCategoryName#</h3></a>
+                            <a href="userSubCategory.cfm?subcategoryId=#variables.subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#variables.subcategoryListing.fldSubCategoryName#</h3></a>
                         </div>
                         <cfset countVariable = 0>
-                        <cfloop query="productListing">
+                        <cfloop query="variables.productListing">
                             <cfif countVariable LT 5>
-                                <cfif subcategoryListing.fldSubCategory_ID EQ productListing.subcategoryId>
+                                <cfif variables.subcategoryListing.fldSubCategory_ID EQ variables.productListing.subcategoryId>
                                     <div class="card p-2 m-3">
-                                        <a href="userProduct.cfm?productId=#productListing.productId#" class="text-decoration-none">
+                                        <a href="userProduct.cfm?productId=#variables.productListing.productId#" class="text-decoration-none">
                                            <div class="productImageDiv">
-                                               <img src="../Assets/productImages/#productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                               <img src="../Assets/productImages/#variables.productListing.imageName#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                            </div>
                                            <div class="card-body d-flex flex-column align-items-center">
-                                               <h5 class="card-title text-truncate">#productListing.productName#</h5>
-                                               <span class="fw-bold text-wrap ">#productListing.brandName#</span>
-                                               <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#productListing.price#</span>
+                                               <h5 class="card-title text-truncate">#variables.productListing.productName#</h5>
+                                               <span class="fw-bold text-wrap ">#variables.productListing.brandName#</span>
+                                               <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.productListing.price#</span>
                                            </div>
                                         </a>
                                     </div>

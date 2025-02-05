@@ -710,11 +710,34 @@ function searchOrder(){
       });
 }
 
-// function searchOrder(){
-//     var value = $('#searchInputOrder').val().toLowerCase();
-//     $(".subContainerHistory").filter(function() {
-//     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//       });
-// }
+function invoiceDownload(orderId){
+    if(confirm("Do you want to download Invoice"))
+    {
+        $.ajax({
+            method : "GET",
+            url : "components/userShoppingCart.cfc?method=invoiceDownload",
+            data:{orderId : orderId.value},
+            success : function(result){
+                if(result)
+                {
+                    console.log(result)
+                    download(result);
+                }
+            }
+        });
+    }
+}
+
+function download(fileUrl) 
+{
+    var createTag = document.createElement("a");
+    createTag.setAttribute("href",fileUrl);
+    createTag.setAttribute("download","");
+    document.body.appendChild(createTag);
+    createTag.click();
+    createTag.remove();
+}
+
+
 
 

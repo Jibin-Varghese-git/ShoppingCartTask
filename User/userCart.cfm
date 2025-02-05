@@ -12,7 +12,7 @@
     </head>
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-        <cfset productListingCart = local.objUserShoppingCart.selectProductCart()>
+        <cfset variables.productListingCart = local.objUserShoppingCart.selectProductCart()>
         <cfset totalProductPrice = 0>
         <cfset totalTax = 0>
         <cfinclude  template="userHeader.cfm">
@@ -24,45 +24,48 @@
                         <h4>USER CART</h4>
                         <div class="d-flex">
                           <h5 class="me-2">Items : </h5>
-                          <h5 class="me-2" id="cartItemQuantity">#queryRecordCount(productListingCart)#</h5>
+                          <h5 class="me-2" id="cartItemQuantity">#queryRecordCount(variables.productListingCart)#</h5>
                         </div>
                     </div>
                     <div class="productListingContainerCart pt-3">
                         <hr class="my-4">
 <!---                  Product        --->
-                        <cfloop query="productListingCart">
-                            <div class="row mb-4 d-flex justify-content-between align-items-center" id="#productListingCart.cartId#">
+                        <cfloop query="variables.productListingCart">
+                            <div class="row mb-4 d-flex justify-content-between align-items-center" id="#variables.productListingCart.cartId#">
                                 <div class="col-md-2 col-lg-2 col-xl-2">
+                                  <a href="userProduct.cfm?productId=#variables.productListingCart.productId#">
                                   <img
-                                    src="../Assets/productImages/#productListingCart.imageName#"
+                                    src="../Assets/productImages/#variables.productListingCart.imageName#"
                                     class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                  </a>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-3">
-                                  <h6 class="text-muted">#productListingCart.productName#</h6>
-                                  <h6 class="mb-0">#productListingCart.brandName#</h6>
+                                  <h6 class="text-muted">#variables.productListingCart.productName#</h6>
+                                  <h6 class="mb-0">#variables.productListingCart.brandName#</h6>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" class="qtyDeleteBtn" id="#productListingCart.cartId#DeleteBtn" onclick="removeQuantity({cartId:#productListingCart.cartId#})">
+                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" class="qtyDeleteBtn" id="#variables.productListingCart.cartId#DeleteBtn" onclick="removeQuantity({cartId:#variables.productListingCart.cartId#})">
                                     <i class="fas fa-minus"></i>
                                   </button>
-                                  <input id="#productListingCart.cartId#Input" class="cartQuantity" min="0" name="quantity" value="#productListingCart.productQuantity#" type="text"
+                                  <input id="#variables.productListingCart.cartId#Input" class="cartQuantity" min="0" name="quantity" value="#variables.productListingCart.productQuantity#" type="text"
                                     class="form-control form-control-sm px-2"disabled/>
 
-                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="addQuantity({cartId:#productListingCart.cartId#})">
+                                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="addQuantity({cartId:#variables.productListingCart.cartId#})">
                                     <i class="fas fa-plus"></i>
                                   </button>
                                 </div>
-                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                  <h6 class="mb-0" id="#productListingCart.cartId#ProductPrice">#productListingCart.productQuantity * productListingCart.price#</h6>
-                                  <input type="hidden" value="#productListingCart.tax#" id="#productListingCart.cartId#ProductTax">
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex">
+                                  <h6><i class="fa-solid fa-indian-rupee-sign"></i></h6>
+                                  <h6 class="mb-0" id="#variables.productListingCart.cartId#ProductPrice">#variables.productListingCart.productQuantity * variables.productListingCart.price#</h6>
+                                  <input type="hidden" value="#variables.productListingCart.tax#" id="#variables.productListingCart.cartId#ProductTax">
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                  <button  class="border-0 bg-transparent" onclick="removeCartItem({cartId:#productListingCart.cartId#})"><i class="fas fa-times"></i></button>
+                                  <button  class="border-0 bg-transparent" onclick="removeCartItem({cartId:#variables.productListingCart.cartId#})"><i class="fas fa-times"></i></button>
                                 </div>
                                 <hr class="my-4">
                             </div>
-                            <cfset totalProductPrice += (productListingCart.price * productListingCart.productQuantity)>
-                            <cfset totaltax += (productListingCart.tax * productListingCart.productQuantity)>
+                            <cfset totalProductPrice += (variables.productListingCart.price * variables.productListingCart.productQuantity)>
+                            <cfset totaltax += (variables.productListingCart.tax * variables.productListingCart.productQuantity)>
                         </cfloop>
                     </div>
                 </div>
