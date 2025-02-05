@@ -42,7 +42,7 @@
 										<span>#variables.date#</span>
 									</div>
 									<div>
-										<button class="pdfBtnOrder">
+										<button class="pdfBtnOrder" value="#variables.orderListing.orderId#" onclick="invoiceDownload(this)">
 											<i class="fa-solid fa-file-pdf" style="color: ##ad0000;"></i>
 											<span class="tooltiptext">Invoice</span>
 										</button>	

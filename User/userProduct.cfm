@@ -13,10 +13,10 @@
     <body>
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
-        <cfset productListing=local.objUserShoppingCart.selectAllProducts(url.productId)>
-        <cfset productImageListing = local.objUserShoppingCart.selectProductImages(url.productId)>  
+        <cfset variables.productListing=local.objUserShoppingCart.selectAllProducts(url.productId)>
+        <cfset variables.productImageListing = local.objUserShoppingCart.selectProductImages(url.productId)>
         <div class="categoryMainContainer mt-2 px-2">
-            <cfif NOT queryRecordCount(productListing)>
+            <cfif NOT queryRecordCount(variables.productListing)>
                 <h1>No Products Found</h1>
             <cfelse>
                 <div class="productSubContainer mt-2 px-3 py-2" id="productSubContainer">
@@ -24,7 +24,7 @@
                     <div class="imageContainer p-2">
                         <div id="carouselExampleRide" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <cfloop query="productImageListing">
+                                <cfloop query="variables.productImageListing">
                                     <cfoutput>
                                         <cfif productImageListing.defaultImage EQ 1>
                                             <div class="carousel-item active">

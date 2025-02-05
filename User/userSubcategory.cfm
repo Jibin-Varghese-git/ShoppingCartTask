@@ -14,25 +14,25 @@
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
         <cfif structKeyExists(url, "search") && structKeyExists(url, "sort")>
-            <cfset subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(sort=url.sort,search=url.search)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(sort=url.sort,search=url.search)>
         <cfelseif  structKeyExists(url, "search")>
-            <cfset subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(search=url.search)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(search=url.search)>
         <cfelseif structKeyExists(url, "sort") && structKeyExists(url, "subCategoryId")>
-             <cfset subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId,sort=url.sort)>
+             <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId,sort=url.sort)>
         <cfelse>
-            <cfset subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId)>
         </cfif>
         <div class="categoryMainContainer mt-2 px-2">
             <div class="subcategorySubcontainer my-3 px-3 py-2" id="subcategorySubcontainer">
                 <cfoutput>
                     <div class="w-100 px-2">
-                       <cfif NOT queryRecordCount(subcategoryProductsListing)>
+                       <cfif NOT queryRecordCount(variables.subcategoryProductsListing)>
                             <h1>No Products Found</h1>
                         <cfelse>
                             <cfif structKeyExists(url, "search")>
                                 <h3>Search Results for #url.search# </h3>
                             <cfelse>
-                                <h3>#subcategoryProductsListing.subcategoryName#</h3>
+                                <h3>#variables.subcategoryProductsListing.subcategoryName#</h3>
                             </cfif>
                             <div class="d-flex justify-content-between px-2">
                                 <div class="d-flex">
@@ -63,23 +63,23 @@
                         </cfif>
                     </div>
                     <div class="productContainerSubcategory d-flex flex-wrap  my-3 ps-5 pe-3 py-3 w-100" id="productContainerSubcategory">
-                        <cfloop query="subcategoryProductsListing">
+                        <cfloop query="variables.subcategoryProductsListing">
                             <div class="card p-2 m-3">
-                                <a href="userProduct.cfm?productId=#subcategoryProductsListing.productId#" class="text-decoration-none">
+                                <a href="userProduct.cfm?productId=#variables.subcategoryProductsListing.productId#" class="text-decoration-none">
                                     <div class="productImageDiv">
-                                        <img src="../Assets/productImages/#subcategoryProductsListing.productImage#" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                        <img src="../Assets/productImages/#variables.subcategoryProductsListing.productImage#" class="card-img-top" alt="No Image Found" height="200" width="50">
                                     </div>
                                     <div class="card-body d-flex flex-column align-items-center">
-                                        <h5 class="card-title text-truncate">#subcategoryProductsListing.productName#</h5>
-                                        <span class="fw-bold text-wrap ">#subcategoryProductsListing.brandName#</span>
-                                        <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#subcategoryProductsListing.productPrice#</span>
+                                        <h5 class="card-title text-truncate">#variables.subcategoryProductsListing.productName#</h5>
+                                        <span class="fw-bold text-wrap ">#variables.subcategoryProductsListing.brandName#</span>
+                                        <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>#variables.subcategoryProductsListing.productPrice#</span>
                                     </div>
                                 </a>
                             </div>
                         </cfloop>
                     </div>
                 </cfoutput>
-                <cfif queryRecordCount(subcategoryProductsListing) GT 10>
+                <cfif queryRecordCount(variables.subcategoryProductsListing) GT 10>
                     <div class="viewmoreBtnDiv d-flex justify-content-center align-items-center w-100">
                         <button class="viewmoreBtn" id="viewmoreBtn" onclick="viewMore()" value="more">View More <i class="fa-solid fa-arrow-down" style="color: #bd8dc9;"></i></button>
                     </div>

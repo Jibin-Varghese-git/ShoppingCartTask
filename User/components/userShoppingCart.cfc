@@ -139,12 +139,15 @@
       <cffunction  name="selectCategory" description="Function for category listing" returntype="struct">
         <cfquery name="local.qrySelectCategory">
             SELECT
+                TOP 8
                 fldCategory_ID,
                 fldCategoryName
             FROM
                 tblCategory
             WHERE
                 fldActive = 1
+            ORDER BY
+                NEWID()
         </cfquery>
         <cfloop query="local.qrySelectCategory">
             <cfset local.structCategoryListing[local.qrySelectCategory.fldCategory_ID] = local.qrySelectCategory.fldCategoryName>
@@ -692,6 +695,7 @@
 
             <cfquery name="local.qryCheckUser">
                 SELECT
+                    TOP 1
                     fldEmail
                 FROM
                     tblUser
@@ -707,7 +711,6 @@
                     fldActive = 1
                 AND
                     fldUser_ID != <cfqueryparam value="#arguments.userId#" cfsqltype="integer">
-                LIMIT 1
             </cfquery>
             <cfif queryRecordCount(local.qryCheckUser)>
                 <cfset local.structAddUserReturn["error"] = true>
@@ -848,6 +851,7 @@
     </cffunction>
 
     <cffunction  name="selectOrderTable">
+        <cfargument  name="orderId">
         <cfquery name="local.qrySelectOrderTable">
             SELECT
                 tblo.fldOrder_ID AS orderId,
@@ -860,18 +864,28 @@
 	            ta.fldAddressLine2 AS addressLine2,
 	            ta.fldCity AS city,
 	            ta.fldState AS state,
-	            ta.fldPincode AS pincode
+	            ta.fldPincode AS pincode,
+                ta.fldPhoneNumber AS phoneNumber,
+                ta.fldFirstName AS firstName,
+                ta.fldLastName AS lastName
             FROM
                 tblOrder AS tblo
             INNER JOIN
 	            tblAddress AS ta
             ON
 	            tblo.fldAddressId = ta.fldAddress_ID
+                WHERE
+                tblO.fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+            <cfif structKeyExists(arguments, "orderId")>
+                AND
+                    tblo.fldOrder_ID = <cfqueryparam value="#arguments.orderId#" cfsqltype="varchar">
+            </cfif>
         </cfquery>
         <cfreturn local.qrySelectOrderTable>
     </cffunction>
 
     <cffunction  name="selectOrderedItemsTable">
+        <cfargument  name="orderId">
         <cfquery name="local.qrySelectOrderedItemsTable">
             SELECT
             	toi.fldOrderItem_ID AS orderItemId,
@@ -889,7 +903,10 @@
             	ta.fldAddressLine2 AS addressLine2,
             	ta.fldCity AS city,
             	ta.fldState AS state,
-            	ta.fldPincode AS pincode
+            	ta.fldPincode AS pincode,
+                ta.fldPhoneNumber AS phoneNumber,
+                ta.fldFirstName AS firstName,
+                ta.fldLastName AS lastName
             FROM
             	tblOrderedItems AS toi
             INNER JOIN	
@@ -914,8 +931,21 @@
             	tpi.fldDefaultImage = 1
             AND 
             	tp.fldActive =1
+            AND
+                tblO.fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
+            <cfif structKeyExists(arguments, "orderId")>
+                AND
+                    toi.fldOrderId = <cfqueryparam value="#arguments.orderId#" cfsqltype="varchar">
+            </cfif>
         </cfquery>
         <cfreturn local.qrySelectOrderedItemsTable>
+    </cffunction>
+
+    <cffunction  name="invoiceDownload" returnformat="plain" access="remote">
+        <cfargument  name="orderId">
+        <cfinclude template ="../userInvoice.cfm">
+        <cfset local.fileUrl = "../Assets/Invoices/#local.filename#.pdf">
+        <cfreturn local.fileUrl>
     </cffunction>
 
     <cffunction  name="dumpFunction">

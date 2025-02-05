@@ -68,7 +68,7 @@
                     
                 <div class="addressBtn mt-2 w-100 d-flex justify-content-end">
                     <button class="addAddressBtn p-2 mx-2" data-bs-toggle="modal" data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add New Address</button>
-                    <button class="orderBtn p-2 mx-2"><i class="fa-solid fa-circle-info"></i> Order Details</button>
+                    <a href="userOrderHistory.cfm" class="btn orderBtn p-2 mx-2"><i class="fa-solid fa-circle-info"></i> Order Details</a>
                 </div>
             </div>
             <cfif structKeyExists(form, "addAddressBtn")>
