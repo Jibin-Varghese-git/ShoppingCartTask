@@ -85,7 +85,11 @@
                 </cfif>
             </cfif>
             <cfif structKeyExists(form, "buyBtn")>
-                <cflocation  url="userOrder.cfm?productId=#productListing.productId#" addToken="no">
+                <cfif structKeyExists(session, "structUserDetails")>
+                    <cflocation  url="userOrder.cfm?productId=#productListing.productId#" addToken="no">
+                <cfelse>
+                    <cflocation  url="userLogin.cfm?redirect=order&productId=#form.buyBtn#" addToken="no">
+                </cfif>
             </cfif>
 <!---    Random product listing          --->
             <div class="productListingContainer bg-white  my-3 ps-5 pe-3 py-3">

@@ -183,43 +183,61 @@ function viewMore(){
 }
 
 function removeCartItem(cartDetails){
-    if(confirm("Do you want to Delete this item?"))
-    {
-        var cartItemQuantity=document.getElementById("cartItemQuantity").innerHTML;
-        var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
-        var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
-        var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
-        var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
-        var totalTax=document.getElementById("totalTax").innerHTML;
-    
-        totalProductPrice=parseFloat(totalProductPrice) - price;
-        totalTax=parseFloat(totalTax) - parseFloat(tax);
-        
-        $.ajax({
-            type : "POST",
-            url : "components/userShoppingCart.cfc?method=removeCartProduct",
-            data : {cartId:cartDetails.cartId},
-            success : function(result){
-                if(result)
-                {
-                    document.getElementById(cartDetails.cartId).remove();
-                    document.getElementById("cartItemQuantity").innerHTML=cartItemQuantity - 1;
-                    document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader - 1;
-                    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
-                    if(totalProductPrice < 1){
-                        document.getElementById("totalProductPrice").innerHTML = 0;
-                        document.getElementById("totalTax").innerHTML = 0;
-                        document.getElementById("totalPrice").innerHTML= 0;
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            var cartItemQuantity=document.getElementById("cartItemQuantity").innerHTML;
+            var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
+            var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
+            var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
+            var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
+            var totalTax=document.getElementById("totalTax").innerHTML;
+            
+            totalProductPrice=parseFloat(totalProductPrice) - price;
+            totalTax=parseFloat(totalTax) - parseFloat(tax);
+            
+            $.ajax({
+                type : "POST",
+                url : "components/userShoppingCart.cfc?method=removeCartProduct",
+                data : {cartId:cartDetails.cartId},
+                success : function(result){
+                    if(result)
+                    {
+                        document.getElementById(cartDetails.cartId).remove();
+                        document.getElementById("cartItemQuantity").innerHTML=cartItemQuantity - 1;
+                        document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader - 1;
+                        document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
+                        if(totalProductPrice < 1){
+                            document.getElementById("totalProductPrice").innerHTML = 0;
+                            document.getElementById("totalTax").innerHTML = 0;
+                            document.getElementById("totalPrice").innerHTML= 0;
+                        }
+                        else{
+                            document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
+                            document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
+                        }
+                        checkQuantity()
                     }
-                    else{
-                        document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
-                        document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
-                    }
-                    checkQuantity()
                 }
-            }
-        });
-    }
+            });
+        Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+            allowOutsideClick: false
+          });
+        }
+      });
+    
 }
 
 
@@ -250,7 +268,7 @@ function checkQuantity(){
     var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
     console.log(cartItemQuantityHeader)
     if(cartItemQuantityHeader < 1 && document.getElementById("placeOrderCartBtn")){
-        document.getElementById("placeOrderCartBtn").style.pointerEvents="none";
+        document.getElementById("placeOrderCartBtn").remove()
     }
     else if(document.getElementById("placeOrderCartBtn")){
         document.getElementById("placeOrderCartBtn").style.pointer="default"
@@ -684,6 +702,12 @@ function checkCardDetails(){
                         $("#modalCreditCard").modal("hide")
                         $("#verifyCardBtn").remove();
                         $("#continuePayBtn").attr("disabled", false);
+                        Swal.fire({
+                            title: "Card Verified!",
+                            icon: "success",
+                            draggable: true,
+                            allowOutsideClick: false
+                          });
                         $("#continuePayBtn").attr('style', 'background-color:#506bb3;');
                     }
                 }
@@ -737,6 +761,47 @@ function download(fileUrl)
     createTag.click();
     createTag.remove();
 }
+
+function confirmOrder() {
+    var flag = false;
+    event.preventDefault()
+    alert($(".selectedAddress").val());
+
+    // Check if the address is selected
+    if ($(".selectedAddress").val().length < 1) {
+        alert("Select an address");
+        flag = false;
+    } else {
+        // Show the SweetAlert confirmation dialog
+        Swal.fire({
+            title: "Order Confirmed",
+            text: "Your order has been confirmed!",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            // If the user confirms the action
+            if (result.isConfirmed) {
+                flag = true;
+                console.log(flag);
+
+                // Only submit the form or perform actions after confirmation
+                if (flag) {
+                    document.getElementById('theForm').submit();
+                    console.log("Form submitted or action performed here.");
+                }
+            }
+        });
+    }
+}
+
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      window.location.reload();
+    }
+});
 
 
 

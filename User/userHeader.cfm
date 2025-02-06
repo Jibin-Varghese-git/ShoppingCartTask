@@ -27,9 +27,11 @@
                    <i class="fa-solid fa-cart-shopping"></i>
                     <cfif structKeyExists(session,"structUserDetails")> 
                         <cfset variables.productListingCart = local.objUserShoppingCart.selectProductCart()>
-                        <cfoutput>
-                            <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(variables.productListingCart)#</span>
-                        </cfoutput>
+                        <cfif queryRecordCount(variables.productListingCart) GT 0>
+                            <cfoutput>
+                                <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(variables.productListingCart)#</span>
+                            </cfoutput>
+                        </cfif>
                    </cfif> 
                     <span class="tooltiptext">Cart</span>
                 </div>

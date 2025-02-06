@@ -11,7 +11,7 @@
     <cffunction  name="onrequestStart" returntype="any">
         <cfargument name="requestpage">
         
-        <cfset local.arrayExculdes = ["/ShoppingCartTask/Admin/adminLogin.cfm"]>
+        <cfset local.arrayExculdes = ["/Admin/adminLogin.cfm"]>
         <cfif NOT (arrayContains(local.arrayExculdes,arguments.requestpage) OR (structKeyExists(session, "structUserDetails") AND session.structUserDetails['roleId'] EQ 0))>
             <cflocation  url="adminLogin.cfm" addToken="no">
         </cfif>

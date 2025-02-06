@@ -20,7 +20,7 @@
                 <h5 class="logoHeading ms-1 mt-3">E-CART</h5>
             </a>
             <div class="loginBtnClass mt-1">
-                <cfif structKeyExists(url, "productId")>
+                <cfif structKeyExists(url, "productId") AND structKeyExists(url, "redirect")>
                     <cfoutput>
                         <a href="userSignup.cfm?redirect=#url.redirect#&productId=#url.productId#">
                     </cfoutput>
@@ -58,14 +58,16 @@
                         <cfset local.structUserLoginReturn = local.objUserShoppingCart.userLogin(structForm = form)>
                         <cfif NOT local.structUserLoginReturn["error"]>
                             <cfif structKeyExists(url, "productId")>
-                                <cfif url.redirect EQ "cart">
-                                    <cfset local.cartAddProduct = local.objUserShoppingCart.addProductCart(productId=url.productId)>
-                                    <cfif local.cartAddProduct>
-                                        <cflocation  url="userCart.cfm" addToken="no">
+                                <cfif structKeyExists(url, "redirect")>
+                                    <cfif url.redirect EQ "cart">
+                                        <cfset local.cartAddProduct = local.objUserShoppingCart.addProductCart(productId=url.productId)>
+                                        <cfif local.cartAddProduct>
+                                            <cflocation  url="userCart.cfm" addToken="no">
+                                        </cfif>
                                     </cfif>
-                                </cfif>
-                                <cfif url.redirect EQ "order">
-                                    <cflocation  url="userOrder.cfm" addToken="no">
+                                    <cfif url.redirect EQ "order">
+                                        <cflocation  url="userOrder.cfm?productId=#url.productId#" addToken="no">
+                                    </cfif> 
                                 </cfif>
                             <cfelseif structKeyExists(url, "redirect") AND url.redirect EQ "cart">
                                 <cflocation  url="userCart.cfm" addToken="no">

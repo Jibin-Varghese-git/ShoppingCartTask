@@ -1,22 +1,29 @@
 <cfcomponent>
     <cfset this.datasource="dataSource_shoppingCart">
     <cfset this.sessionmanagement = "true">
-    
- 
-    
+
     <cffunction  name="onrequestStart" returntype="any"> 
         <cfargument name="requestpage">
-        <cfset local.arrayExculdes = ["/ShoppingCartTask/User/userLogin.cfm","/ShoppingCartTask/User/userSignup.cfm","/ShoppingCartTask/User/userHome.cfm","/ShoppingCartTask/User/userProduct.cfm","/ShoppingCartTask/User/userCategory.cfm",
-        "/ShoppingCartTask/User/userSubcategory.cfm","/ShoppingCartTask/User/userHeader.cfm","/ShoppingCartTask/User/userFooter.cfm"]>
-        <cfif NOT (arrayContains(local.arrayExculdes,arguments.requestpage) OR structKeyExists(session, "structUserDetails"))>
+
+       <cfset local.arrayIncludes = ["/user/userOrder.cfm",
+            "/User/userOrderHistory.cfm",
+            "/User/userCart.cfm",
+            "/User/userProfile.cfm"
+        ]>
+
+        <cfif NOT(NOT (arrayContainsNocase(local.arrayIncludes,arguments.requestpage)) OR (structKeyExists(session, "structUserDetails") AND session.structUserDetails["roleId"] EQ 1))>
             <cflocation  url="userLogin.cfm" addToken="no">
-        </cfif>
+         </cfif> 
+
 <!---         <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
             <cfset onApplicationStart()>
         </cfif>--->
     </cffunction> 
-<!---     <cffunction  name="onRequestStart" returntype="any"> 
-        <cfif >
-        </cfif>
-    </cffunction>--->
+
+    <cffunction  name="onError" returntype="void">
+        <cfargument name="Exception" required=true/>
+        <cfargument name="EventName" type="String" required=true/>
+        <cflocation  url="errorPage.cfm?exception=#arguments.Exception#" addToken="no">
+    </cffunction>
+
 </cfcomponent>
