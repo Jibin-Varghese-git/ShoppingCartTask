@@ -27,7 +27,7 @@
                 </div>  
             </div>
         </header>
-        <cfset result=application.objShoppingCart.fnSelectCategoryName()>
+        <cfset variables.result=application.objShoppingCart.fnSelectCategoryName()>
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
@@ -36,20 +36,20 @@
                 </div>
                 <div class="categoryListingDiv">
                     <cfoutput>
-                        <cfloop query="result">
-                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#result.fldCategory_ID#">
-                                <span>#result.fldCategoryName#</span>
+                        <cfloop query="variables.result">
+                            <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#variables.result.fldCategory_ID#">
+                                <span>#variables.result.fldCategoryName#</span>
                                 <div class="categoryButtons">
                                     <div class="editBtndiv">
-                                        <button type="button" class="editCategory" value="#result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <button type="button" class="editCategory" value="#variables.result.fldCategory_ID#" data-bs-toggle="modal" data-bs-target="##modalAddCategory" onClick="fnModalEditCategory(this)"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>
                                         <span class="tooltiptext">Edit</span>
                                     </div>
                                     <div class="deleteBtndiv">
-                                        <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#result.fldCategory_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
+                                        <button type="button" class="deleteCategory" id="deleteCategory" onClick="fnDeleteCategory(this)" value="#variables.result.fldCategory_ID#"><img src="../Assets/Images/deleteIcon2.png" alt="No Image Found" height="25" width="25"></button>
                                         <span class="tooltiptext">Delete</span>
                                     </div>
                                     <div class="forwardBtndiv">
-                                        <a href="adminSubCategory.cfm?catId=#result.fldCategory_ID#"><img src="../Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
+                                        <a href="adminSubCategory.cfm?catId=#variables.result.fldCategory_ID#"><img src="../Assets/Images/sendIconGreen.png" alt="No Image Found" height="25" width="25"></a>
                                     <span class="tooltiptext">Subcategory</span>
                                     </div>
                                 </div>

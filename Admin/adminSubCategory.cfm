@@ -27,14 +27,14 @@
                 </div>  
             </div>
         </header>
-    <cfset result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
-    <cfset CategoryName=application.objShoppingCart.fnSelectCategoryName(categoryId=url.catId)>
+    <cfset variables.result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
+    <cfset variables.CategoryName=application.objShoppingCart.fnSelectCategoryName(categoryId=url.catId)>
         <div class="mainContentDivCategory p-5">
             <div class="categoryDiv my-3 py-2 px-3">
                 <div class="categoryHeading p-2 d-flex justify-content-between my-2">
                     <cfoutput>
                         <div class="backBtnProductdiv m-2">
-                            <a href="adminCategory.cfm"><span><i class="fa-solid fa-backward"></i> #CategoryName#</span></a>
+                            <a href="adminCategory.cfm"><span><i class="fa-solid fa-backward"></i> #variables.CategoryName#</span></a>
                             <span class="tooltiptext">Back</span>
                         </div>
                         <button type="button" value="#url.catId#" onClick="fnModalAddSubCategory(this)" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory">Add New <img src="../Assets/Images/sendIcon.png" alt="No Image Found" height="20" width="20"></button>
@@ -42,9 +42,9 @@
                 </div>
                 <div class="categoryListingDiv">
                     <cfoutput>
-                        <cfloop collection="#result#" item="item">
+                        <cfloop collection="#variables.result#" item="item">
                             <div class="singleItemCategory border borer-danger p-2 my-2 d-flex justify-content-between" id="#item#">
-                                <span>#result[item]#</span>
+                                <span>#variables.result[item]#</span>
                                 <div class="categoryButtons">
                                     <div class="editBtnSubCatdiv">
                                         <button type="button" class="editSubCategory" value="#item#" data-bs-toggle="modal" data-bs-target="##modalAddSubCategory" onClick="fnModalEditSubCategory(this)"><img src="../Assets/Images/editIcon2.png" alt="No Image Found" height="25" width="25"></button>

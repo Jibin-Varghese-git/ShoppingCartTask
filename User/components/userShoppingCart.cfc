@@ -781,50 +781,52 @@
 
     <cffunction  name="addOrderItems" description="Function to add order items">
         <cfargument  name="formOrderItems">
-        <cfset local.generatedUuid = createUUID()>
-        <cfquery name="local.qryOrder">
-            INSERT INTO
-                tblOrder
-                (
-                    fldOrder_ID,
-                    fldUserId,
-                    fldAddressId,
-                    fldTotalPrice,
-                    fldTotalTax,
-                    fldCardPart
-                )
-            VALUES
-                (
-                    <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
-                    <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
-                    <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
-                    <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="decimal">,
-                    <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="decimal">,
-                    <cfqueryparam value="3456" cfsqltype="varchar">
-                )
-        </cfquery>
-        <cfset local.productList = selectAllProducts(arguments.formOrderItems.productIdHidden)>
-        <cfquery name="local.qryOrderedItems">
-            INSERT INTO
-                tblOrderedItems
-                (
-                    fldOrderId,
-                    fldProductId,
-                    fldQuantity,
-                    fldUnitPrice,
-                    fldUnitTax
-                )
-            VALUES
-                (
-                    <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
-                    <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
-                    <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
-                    <cfqueryparam value="#local.productList.price#" cfsqltype="decimal">,
-                    <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
-                )
-        </cfquery>
-        <cfset sentEmailUser(local.generatedUuid)>
-        <cflocation  url="userOrderHistory.cfm" addToken="no">
+        <cfif Len(arguments.formOrderItems.productIdHidden) GT 0>
+            <cfset local.generatedUuid = createUUID()>
+            <cfquery name="local.qryOrder">
+                INSERT INTO
+                    tblOrder
+                    (
+                        fldOrder_ID,
+                        fldUserId,
+                        fldAddressId,
+                        fldTotalPrice,
+                        fldTotalTax,
+                        fldCardPart
+                    )
+                VALUES
+                    (
+                        <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                        <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
+                        <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="decimal">,
+                        <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="decimal">,
+                        <cfqueryparam value="3456" cfsqltype="varchar">
+                    )
+            </cfquery>
+            <cfset local.productList = selectAllProducts(arguments.formOrderItems.productIdHidden)>
+            <cfquery name="local.qryOrderedItems">
+                INSERT INTO
+                    tblOrderedItems
+                    (
+                        fldOrderId,
+                        fldProductId,
+                        fldQuantity,
+                        fldUnitPrice,
+                        fldUnitTax
+                    )
+                VALUES
+                    (
+                        <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
+                        <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
+                        <cfqueryparam value="#local.productList.price#" cfsqltype="decimal">,
+                        <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
+                    )
+            </cfquery>
+            <cfset sentEmailUser(local.generatedUuid)>
+            <cflocation  url="userOrderHistory.cfm" addToken="no">
+        </cfif>
     </cffunction>
 
     <cffunction  name="cartToOrder">
