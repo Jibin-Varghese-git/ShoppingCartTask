@@ -29,7 +29,11 @@
                         <cfset variables.productListingCart = local.objUserShoppingCart.selectProductCart()>
                         <cfif queryRecordCount(variables.productListingCart) GT 0>
                             <cfoutput>
-                                <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(variables.productListingCart)#</span>
+                                <cfif queryRecordCount(variables.productListingCart) GT 10>
+                                    <span class="badge" id="cartItemQuantityHeader">10+</span>
+                                <cfelse>
+                                    <span class="badge" id="cartItemQuantityHeader">#queryRecordCount(variables.productListingCart)#</span>
+                                </cfif>
                             </cfoutput>
                         </cfif>
                    </cfif> 

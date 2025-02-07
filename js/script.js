@@ -3,6 +3,7 @@ function fnValAdminLogin(){
     let password=document.getElementById("password").value;
     document.getElementById("errorUserName").innerHTML=" ";
     document.getElementById("errorPassword").innerHTML=" ";
+    document.getElementById("errorUserEntry").innerHTML=" ";
 
     if(userName.length < 1)
     {

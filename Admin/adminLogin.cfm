@@ -41,7 +41,7 @@
                                 <cflocation  url="adminCategory.cfm" addtoken="no">
                             <cfelse>
                                 <cfoutput>
-                                    <span id="errorPassword" class="text-danger fw-bold">#structAdminLoginReturn["errorMessage"]#</span>
+                                    <span id="errorUserEntry" class="text-danger fw-bold">#structAdminLoginReturn["errorMessage"]#</span>
                                 </cfoutput>
                             </cfif>
                         </cfif>

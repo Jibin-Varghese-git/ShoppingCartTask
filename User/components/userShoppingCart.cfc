@@ -1,7 +1,7 @@
 <cfcomponent>
 
     <cffunction  name="addUser" description="TO Add User" returnType="struct">
-        <cfargument  name="structForm">
+        <cfargument  name="structForm" required="true">
         <cfset local.structAddUserReturn["error"] = false>
         <cfif Len(trim(structForm.firstName)) EQ 0>
             <cfset local.structAddUserReturn["error"] = true>
@@ -81,7 +81,7 @@
     </cffunction>
 
     <cffunction  name="userLogin" description="Function for user login" returntype="struct">
-        <cfargument  name="structForm">
+        <cfargument  name="structForm" required="true">
         <cfset local.structUserLoginReturn["error"] = false>
         <cfif Len(trim(arguments.structForm.userNameLogin)) EQ 0>
             <cfset local.structUserLoginReturn["error"] = true>
@@ -168,22 +168,10 @@
 				tpi.fldImageFileName
             FROM
 				tblBrands as tb
-			INNER JOIN
-                tblProduct as tp
-			ON
-				tb.fldBrand_ID=tp.fldBrandId
-			LEFT JOIN
-				tblProductImages as tpi
-			ON
-				tp.fldProduct_ID=tpi.fldProductId
-            LEFT JOIN
-                tblSubCategory AS tsc
-            ON
-                tsc.fldSubCategory_ID = tp.fldSubCategoryId
-            LEFT JOIN
-                tblCategory AS tc
-            ON
-                tc.fldCategory_ID = tsc.fldCategoryId
+			INNER JOIN tblProduct as tp ON tb.fldBrand_ID=tp.fldBrandId
+			LEFT JOIN tblProductImages as tpi ON tp.fldProduct_ID=tpi.fldProductId
+            LEFT JOIN tblSubCategory AS tsc ON tsc.fldSubCategory_ID = tp.fldSubCategoryId
+            LEFT JOIN tblCategory AS tc ON tc.fldCategory_ID = tsc.fldCategoryId
             WHERE
                 tp.fldActive = 1
 			AND
@@ -199,17 +187,14 @@
     </cffunction>
 
     <cffunction  name="selectDistinctSubCategory" access="remote" returnformat="JSON" description="Function to select subcategories with products">
-        <cfargument  name="categoryId">
+        <cfargument  name="categoryId" required="false">
         <cfquery name="local.qryDistinctSelectSubCategory">
             SELECT
                 DISTINCT(ts.fldSubCategory_ID),
                 ts.fldSubCategoryName
             FROM
                 tblSubCategory AS ts
-            INNER JOIN
-                tblproduct AS tp 
-            ON
-                ts.fldsubcategory_ID = tp.fldsubcategoryId 
+            INNER JOIN tblproduct AS tp ON ts.fldsubcategory_ID = tp.fldsubcategoryId 
                 AND
                     tp.fldActive = 1
             WHERE
@@ -238,14 +223,14 @@
 
 
 
-    <cffunction  name="logoutUser" access="remote" dsecription="Function for user logout">
+    <cffunction  name="logoutUser" access="remote" dsecription="Function for user logout" returnFormat="plain">
         <cfset structClear(session)>
-        <cflocation  url="../userHome.cfm" addToken="no">
+        <cfreturn true>
     </cffunction>
 
 
     <cffunction  name="selectAllProducts" description="Function to select all products" returntype="query">
-        <cfargument  name="productId">
+        <cfargument  name="productId" required="false">
         <cfquery name="local.qrySelectAllProducts">
         	SELECT 
                 tp.fldProduct_ID AS productId,
@@ -261,22 +246,10 @@
                 tc.fldCategoryName AS categoryName
             FROM
 				tblBrands as tb
-			INNER JOIN
-                tblProduct as tp
-			ON
-				tb.fldBrand_ID=tp.fldBrandId
-			INNER JOIN 
-                tblSubCategory as tsc
-            ON
-                tsc.fldSubCategory_ID=tp.fldSubCategoryId
-            INNER JOIN
-                tblCategory as tc
-            ON
-                tc.fldCategory_ID=tsc.fldCategoryId
-            INNER JOIN
-				tblProductImages as tpi
-			ON
-				tp.fldProduct_ID=tpi.fldProductId
+			INNER JOIN tblProduct as tp ON tb.fldBrand_ID=tp.fldBrandId
+			INNER JOIN tblSubCategory as tsc ON tsc.fldSubCategory_ID=tp.fldSubCategoryId
+            INNER JOIN tblCategory as tc ON tc.fldCategory_ID=tsc.fldCategoryId
+            INNER JOIN tblProductImages as tpi ON tp.fldProduct_ID=tpi.fldProductId
             WHERE
                 tp.fldActive = 1
 			AND
@@ -296,9 +269,9 @@
     </cffunction>
 
     <cffunction  name="selectSubcategoryProducts" description="Select products according to subcategory" returntype="query">
-        <cfargument  name="subcategoryId">
-        <cfargument  name="sort">
-        <cfargument  name="search">
+        <cfargument  name="subcategoryId" required="false">
+        <cfargument  name="sort" required="false">
+        <cfargument  name="search" required="false">
         <cfquery name="local.qryselectSubcategoryProducts">
             SELECT
                 tp.fldProduct_Id AS productId,
@@ -312,22 +285,10 @@
                 ts.fldSubCategoryName AS subcategoryName
             FROM
 				tblBrands as tb
-			INNER JOIN
-                tblProduct as tp
-			ON
-				tb.fldBrand_ID=tp.fldBrandId
-            INNER JOIN
-                tblSubCategory as ts
-			ON
-                tp.fldSubCategoryId= ts.fldSubCategory_ID
-            INNER JOIN
-                tblCategory as tc
-            ON
-                tc.fldCategory_ID=ts.fldCategoryId
-			INNER JOIN 
-				tblProductImages as tpi
-			ON
-				tp.fldProduct_ID=tpi.fldProductId
+			INNER JOIN tblProduct as tp ON tb.fldBrand_ID=tp.fldBrandId
+            INNER JOIN tblSubCategory as ts	ON tp.fldSubCategoryId= ts.fldSubCategory_ID
+            INNER JOIN tblCategory as tc ON tc.fldCategory_ID=ts.fldCategoryId
+			INNER JOIN tblProductImages as tpi ON tp.fldProduct_ID=tpi.fldProductId
             WHERE 
                 tp.fldActive = 1
 			AND
@@ -358,10 +319,10 @@
     </cffunction>
 
     <cffunction  name="filterProducts" description="Function to filter producs" access="remote" returnformat="JSON">
-        <cfargument  name="subcategoryId">
-        <cfargument  name="minValue">
-        <cfargument  name="maxValue">
-        <cfargument  name="search">
+        <cfargument  name="subcategoryId" required="false">
+        <cfargument  name="minValue" required="false">
+        <cfargument  name="maxValue" required="false">
+        <cfargument  name="search" required="false">
         <cfquery name="local.qryFilterProducts">
             SELECT
                 tp.fldProduct_Id AS productId,
@@ -375,22 +336,10 @@
                 ts.fldSubCategoryName AS subcategoryName
             FROM
 				tblBrands as tb
-			INNER JOIN
-                tblProduct as tp
-			ON
-				tb.fldBrand_ID=tp.fldBrandId
-            INNER JOIN
-                tblSubCategory as ts
-			ON
-                tp.fldSubCategoryId= ts.fldSubCategory_ID
-            INNER JOIN
-                tblCategory as tc
-            ON
-                tc.fldCategory_ID=ts.fldCategoryId
-			INNER JOIN 
-				tblProductImages as tpi
-			ON
-				tp.fldProduct_ID=tpi.fldProductId
+			INNER JOIN tblProduct as tp ON tb.fldBrand_ID=tp.fldBrandId
+            INNER JOIN tblSubCategory as ts ON tp.fldSubCategoryId= ts.fldSubCategory_ID
+            INNER JOIN tblCategory as tc ON tc.fldCategory_ID=ts.fldCategoryId
+			INNER JOIN tblProductImages as tpi ON tp.fldProduct_ID=tpi.fldProductId
             WHERE 
                 tp.fldActive = 1
 			AND
@@ -438,7 +387,7 @@
     </cffunction>
 
     <cffunction  name="selectProductImages" description="Function to select images of product" returntype="query">
-        <cfargument  name="productId">
+        <cfargument  name="productId" required="true">
         <cfquery name="local.qrySelectProductImages">
             SELECT
                 fldProductImage_ID AS imageId,
@@ -455,7 +404,7 @@
     </cffunction>
 
     <cffunction  name="addProductCart" description="Function to add and update product in cart" returntype="boolean">
-        <cfargument  name="productId">
+        <cfargument  name="productId" required="true">
         <cfquery name="local.qryCheckCart">
                 SELECT
                     fldCart_ID,
@@ -517,18 +466,9 @@
                 	tpi.fldImageFileName AS imageName
                 FROM
                 	tblCart AS tc
-                INNER JOIN 
-                	tblProduct AS tp
-                ON
-                	tc.fldProductId = tp.fldProduct_ID
-                INNER JOIN 
-                	tblBrands AS tb
-                ON
-                	tb.fldBrand_ID = tp.fldBrandId
-                INNER JOIN 
-                	tblProductImages AS tpi
-                ON
-                	tpi.fldProductId = tp.fldProduct_ID
+                INNER JOIN tblProduct AS tp ON tc.fldProductId = tp.fldProduct_ID
+                INNER JOIN tblBrands AS tb ON tb.fldBrand_ID = tp.fldBrandId
+                INNER JOIN tblProductImages AS tpi ON tpi.fldProductId = tp.fldProduct_ID
                 WHERE
                 	tp.fldActive = 1
                 AND
@@ -540,7 +480,7 @@
     </cffunction>
 
     <cffunction  name="removeCartProduct" access="remote" description="Function to remove product from cart">
-        <cfargument  name="cartId">
+        <cfargument  name="cartId" required="true">
             <cfquery>
                 DELETE
                 FROM
@@ -552,8 +492,8 @@
     </cffunction>
 
     <cffunction  name="cartUpdate" access="remote" description="Function to update cart">
-        <cfargument  name="cartId">
-        <cfargument  name="quantity">
+        <cfargument  name="cartId" required="true">
+        <cfargument  name="quantity" required="true">
         <cfquery>
             UPDATE
                 tblCart
@@ -566,7 +506,7 @@
     </cffunction>
 
     <cffunction  name="addAddress" description="Function to add Address">
-        <cfargument  name="formAddress">
+        <cfargument  name="formAddress" required="true">
         <cfset local.structResult["error"] = false>
         <cfset local.structResult["errorMessage"] = "No Error">
         <cfif len(arguments.formAddress.FIRSTNAME.trim()) EQ 0>
@@ -658,7 +598,7 @@
     </cffunction>
 
     <cffunction  name="removeAddress" description="Function to remove user address" access="remote">
-        <cfargument  name="addressId">
+        <cfargument  name="addressId" required="true">
         <cfquery>
             UPDATE
                 tblAddress
@@ -671,11 +611,11 @@
     </cffunction>
 
     <cffunction  name="editUserProfile" description="Function to edit user" returnFormat="JSON" access="remote">
-        <cfargument  name="userId">
-        <cfargument  name="userFirstName">
-        <cfargument  name="userLastName">
-        <cfargument  name="userEmail">
-        <cfargument  name="userPhoneNumber">
+        <cfargument  name="userId" required="true">
+        <cfargument  name="userFirstName" required="true">
+        <cfargument  name="userLastName" required="true">
+        <cfargument  name="userEmail" required="true">
+        <cfargument  name="userPhoneNumber" required="true">
 
         <cfset local.structAddUserReturn["error"] = false>
         <cfif Len(trim(arguments.userFirstName)) EQ 0>
@@ -746,11 +686,11 @@
     </cffunction>
 
     <cffunction  name="checkCardDetails" access="remote" description="Function to check card details" returnFormat="JSON">
-        <cfargument  name="cardNumber">
-        <cfargument  name="cardMonth">
-        <cfargument  name="cardYear">
-        <cfargument  name="cardCvv">
-        <cfargument  name="cardName">
+        <cfargument  name="cardNumber" required="true">
+        <cfargument  name="cardMonth" required="true">
+        <cfargument  name="cardYear" required="true">
+        <cfargument  name="cardCvv" required="true">
+        <cfargument  name="cardName" required="true">
         <cfset local.checkCardReturn["error"] = false>
 
         <cfif NOT arguments.cardNumber EQ "1234567890123456">
@@ -780,71 +720,101 @@
     </cffunction>
 
     <cffunction  name="addOrderItems" description="Function to add order items">
-        <cfargument  name="formOrderItems">
-        <cfif Len(arguments.formOrderItems.productIdHidden) GT 0>
-            <cfset local.generatedUuid = createUUID()>
-            <cfquery name="local.qryOrder">
-                INSERT INTO
-                    tblOrder
-                    (
-                        fldOrder_ID,
-                        fldUserId,
-                        fldAddressId,
-                        fldTotalPrice,
-                        fldTotalTax,
-                        fldCardPart
-                    )
-                VALUES
-                    (
-                        <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
-                        <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
-                        <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
-                        <cfqueryparam value="#arguments.formOrderItems.TOTALPRICEHIDDEN#" cfsqltype="decimal">,
-                        <cfqueryparam value="#arguments.formOrderItems.TOTALTAXHIDDEN#" cfsqltype="decimal">,
-                        <cfqueryparam value="3456" cfsqltype="varchar">
-                    )
-            </cfquery>
+        <cfargument  name="formOrderItems" required="true">
+        <cfset local.cardVerification = checkCardDetails(
+            cardNumber = arguments.formOrderItems.CARDNUMBERINPUT,
+            cardMonth = arguments.formOrderItems.cardExpiryMonth,
+            cardYear = arguments.formOrderItems.cardExpiryYear,
+            cardCvv = arguments.formOrderItems.cardCvvInput,
+            cardName = arguments.formOrderItems.cardNameInput
+        )>
+
+        <cfif NOT local.cardVerification["error"]>
             <cfset local.productList = selectAllProducts(arguments.formOrderItems.productIdHidden)>
-            <cfquery name="local.qryOrderedItems">
-                INSERT INTO
-                    tblOrderedItems
-                    (
-                        fldOrderId,
-                        fldProductId,
-                        fldQuantity,
-                        fldUnitPrice,
-                        fldUnitTax
-                    )
-                VALUES
-                    (
-                        <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
-                        <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
-                        <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
-                        <cfqueryparam value="#local.productList.price#" cfsqltype="decimal">,
-                        <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
-                    )
+            <cfset local.totalProductPrice = arguments.formOrderItems.orderQuantity * local.productList.price>
+            <cfset local.totalTax = arguments.formOrderItems.orderQuantity * local.productList.tax>
+            <cfif Len(arguments.formOrderItems.productIdHidden) GT 0>
+                <cfset local.generatedUuid = createUUID()>
+                <cfquery name="local.qryOrder">
+                    INSERT INTO
+                        tblOrder
+                        (
+                            fldOrder_ID,
+                            fldUserId,
+                            fldAddressId,
+                            fldTotalPrice,
+                            fldTotalTax,
+                            fldCardPart
+                        )
+                    VALUES
+                        (
+                            <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                            <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                            <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
+                            <cfqueryparam value="#local.totalProductPrice#" cfsqltype="decimal">,
+                            <cfqueryparam value="#local.totalTax#" cfsqltype="decimal">,
+                            <cfqueryparam value="3456" cfsqltype="varchar">
+                        )
+                </cfquery>
+                <cfquery name="local.qryOrderedItems">
+                    INSERT INTO
+                        tblOrderedItems
+                        (
+                            fldOrderId,
+                            fldProductId,
+                            fldQuantity,
+                            fldUnitPrice,
+                            fldUnitTax
+                        )
+                    VALUES
+                        (
+                            <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">,
+                            <cfqueryparam value="#arguments.formOrderItems.productIdHidden#" cfsqltype="varchar">,
+                            <cfqueryparam value="#arguments.formOrderItems.orderQuantity#" cfsqltype="integer">,
+                            <cfqueryparam value="#local.productList.price#" cfsqltype="decimal">,
+                            <cfqueryparam value="#local.productList.tax#" cfsqltype="decimal">
+                        )
+                </cfquery>
+                <cfset sentEmailUser(local.generatedUuid)>
+                <cfset local.returnOrder["success"] = true>
+            <cfelse>
+                <cfset local.returnOrder["success"] = false>
+            </cfif>
+        <cfelse>
+            <cfset local.returnOrder["success"] = false>
+        </cfif>
+        <cfreturn local.returnOrder>
+    </cffunction>
+
+    <cffunction  name="cartToOrder" description="Function to store cart items to order table">
+        <cfargument  name="formOrderItems" required="true">
+         <cfset local.cardVerification = checkCardDetails(
+            cardNumber = arguments.formOrderItems.CARDNUMBERINPUT,
+            cardMonth = arguments.formOrderItems.cardExpiryMonth,
+            cardYear = arguments.formOrderItems.cardExpiryYear,
+            cardCvv = arguments.formOrderItems.cardCvvInput,
+            cardName = arguments.formOrderItems.cardNameInput
+        )>
+
+        <cfif NOT local.cardVerification["error"]>
+            <cfset local.generatedUuid = createUUID()>
+            <cfquery>
+                EXEC
+                    spCartToOrder 
+                    @userId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
+                    @addressId = <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
+                    @generatedUuid = <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">
             </cfquery>
             <cfset sentEmailUser(local.generatedUuid)>
-            <cflocation  url="userOrderHistory.cfm" addToken="no">
+            <cfset local.returnOrder["success"] = true>
+        <cfelse>
+            <cfset local.returnOrder["success"] = false>
         </cfif>
+            <cfreturn local.returnOrder>
     </cffunction>
 
-    <cffunction  name="cartToOrder">
-        <cfargument  name="formOrderItems">
-        <cfset local.generatedUuid = createUUID()>
-        <cfquery>
-            EXEC
-                spCartToOrder 
-                @userId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">,
-                @addressId = <cfqueryparam value="#arguments.formOrderItems.selectedAddressId#" cfsqltype="integer">,
-                @generatedUuid = <cfqueryparam value="#local.generatedUuid#" cfsqltype="varchar">
-        </cfquery>
-        <cfset sentEmailUser(local.generatedUuid)>
-        <cflocation  url="userOrderHistory.cfm" addToken="no">
-    </cffunction>
-
-    <cffunction  name="sentEmailUser">
-        <cfargument  name="orderId">
+    <cffunction  name="sentEmailUser" description="Function to Sent email to user">
+        <cfargument  name="orderId" required="true">
 <!---             <cfdump  var="#arguments#"  abort> --->
         <cfmail to = "#session.structUserDetails['email']#" from = "jibinvarghese05101999@gmail.com" subject = "Thank you for your order"> 
             Your order has been confirmed.
@@ -852,8 +822,8 @@
         </cfmail> 
     </cffunction>
 
-    <cffunction  name="selectOrderTable">
-        <cfargument  name="orderId">
+    <cffunction  name="selectOrderTable" description="Function to select order table" returntype="query">
+        <cfargument  name="orderId" required="false">
         <cfquery name="local.qrySelectOrderTable">
             SELECT
                 tblo.fldOrder_ID AS orderId,
@@ -872,22 +842,22 @@
                 ta.fldLastName AS lastName
             FROM
                 tblOrder AS tblo
-            INNER JOIN
-	            tblAddress AS ta
-            ON
-	            tblo.fldAddressId = ta.fldAddress_ID
-                WHERE
+            INNER JOIN tblAddress AS ta ON tblo.fldAddressId = ta.fldAddress_ID
+            WHERE
                 tblO.fldUserId = <cfqueryparam value="#session.structUserDetails["userId"]#" cfsqltype="integer">
             <cfif structKeyExists(arguments, "orderId")>
                 AND
                     tblo.fldOrder_ID = <cfqueryparam value="#arguments.orderId#" cfsqltype="varchar">
             </cfif>
+            ORDER BY
+                tblo.fldOrderDate
+                    DESC
         </cfquery>
         <cfreturn local.qrySelectOrderTable>
     </cffunction>
 
-    <cffunction  name="selectOrderedItemsTable">
-        <cfargument  name="orderId">
+    <cffunction  name="selectOrderedItemsTable" description="Function to select ordereditems table" returntype="query">
+        <cfargument  name="orderId" required="false">
         <cfquery name="local.qrySelectOrderedItemsTable">
             SELECT
             	toi.fldOrderItem_ID AS orderItemId,
@@ -911,22 +881,10 @@
                 ta.fldLastName AS lastName
             FROM
             	tblOrderedItems AS toi
-            INNER JOIN	
-            	tblOrder AS tblO
-            ON
-            	tblO.fldOrder_ID = toi.fldOrderId
-            INNER JOIN
-            	tblProduct AS tp
-            ON
-            	tp.fldProduct_ID = toi.fldProductId
-            INNER JOIN
-            	tblProductImages AS tpi
-            ON
-            	tp.fldProduct_ID = tpi.fldProductId
-            INNER JOIN
-	            tblAddress AS ta
-            ON
-            	tblO.fldAddressId = ta.fldAddress_ID 
+            INNER JOIN tblOrder AS tblO ON tblO.fldOrder_ID = toi.fldOrderId
+            INNER JOIN tblProduct AS tp ON tp.fldProduct_ID = toi.fldProductId
+            INNER JOIN tblProductImages AS tpi ON tp.fldProduct_ID = tpi.fldProductId
+            INNER JOIN tblAddress AS ta ON tblO.fldAddressId = ta.fldAddress_ID 
             WHERE
             	tpi.fldActive = 1
             AND
@@ -943,8 +901,8 @@
         <cfreturn local.qrySelectOrderedItemsTable>
     </cffunction>
 
-    <cffunction  name="invoiceDownload" returnformat="plain" access="remote">
-        <cfargument  name="orderId">
+    <cffunction  name="invoiceDownload" returnformat="plain" access="remote" description="Function to print invoice">
+        <cfargument  name="orderId" required="false">
         <cfinclude template ="../userInvoice.cfm">
         <cfset local.fileUrl = "../Assets/Invoices/#local.filename#.pdf">
         <cfreturn local.fileUrl>

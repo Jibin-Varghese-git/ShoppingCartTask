@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -10,18 +7,34 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>   -->
-        <link rel="stylesheet" href="css/modal.css">
+        <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/userSignin.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        <button type="button" onclick="sweetAlert()">
-            Click Me
-        </button>
+        <div class="orderPlacedMainDiv border border-danger mt-5">
+            <div class="confirmImageDiv border border-info">
+                    <img src="Assets/Images/checkmark.gif" alt="No Image Found">
+            </div>
+            <div class="orderConfrimMessage">
+                <span>Your Order has been Placed!</span><br>
+                <span>Your Order Id is sent to the given mail id.</span>
+            </div>
+            <div class="orderConfirmBtnDiv d-flex p-2">
+                <a href="userHome.cfm" class="homeBtn p-3 me-1 btn">
+                    Go Back To Home
+                </a>
+                <a href="userOrderHistory.cfm" class="orderHistoryBtn p-3 ms-1 btn">
+                    Order History
+                </a>
+            </div>
+        </div>
+      
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="sweetalert2.all.min.js"></script>
-        <script src="js/modal.js" async defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../js/userScript.js" async defer></script>
     </body>
 </html>

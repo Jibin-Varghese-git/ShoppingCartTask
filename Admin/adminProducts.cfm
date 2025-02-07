@@ -24,6 +24,7 @@
                     </cfoutput>
                 </div>
                 <div class="logoutBtnClass">
+                <a href="../User/userHome.cfm" class="userHomePageAdminBtn btn">User Home Page</a>
                     <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="../Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
                 </div>  
             </div>
