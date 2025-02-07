@@ -19,177 +19,16 @@
         <cfset variables.productListing = variables.objUserShoppingCart.selectAllProducts(url.productId)>
     <cfelseif structKeyExists(url, "redirected") AND url.redirected EQ "cart">
         <cfset variables.productListing = variables.objUserShoppingCart.selectProductCart()>
+        <cfif queryRecordCount(variables.productListing) LT 1>  
+            <cflocation  url="userHome.cfm" addToken="No">
+        </cfif>
     <cfelse>
-        <cflocation  url="userHome.cfm">
+        <cflocation  url="userHome.cfm" addToken="No">
     </cfif>
     <body>
         <cfinclude  template="userHeader.cfm">
-        <div class="mainContainerOrder p-3">
-            <form method="POST">
-            <div class="subcontainerOrder p-2">
-
-                <div class="innerSubcontainerOrder">
-                    <div class="container1 p-2 my-2">
-                        <div class="container1Heading px-5 py-3">
-                            <h4>1.Delivery Address</h4>
-                        </div>
-                        <div class="container1Content p-3 d-flex justify-content-between">
-                            <cfoutput>
-                                <div class="addressPart">
-                                    <div class="w-50 d-flex justify-content-between">
-                                        <span class="fw-bold mx-2 text-nowrap" id="addressUserName">#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
-                                        <span class="fw-bold mx-2" id="addressUserPhoneNumber">#variables.addressQuery.phoneNumber#</span>
-                                    </div>
-                                    <div class="p-3">
-                                        <span id="addressUserAddressline1">#variables.addressQuery.addressline1#,</span>
-                                        <span id="addressUserAddressline2">#variables.addressQuery.addressline2#,</span>
-                                        <span id="addressUserCity">#variables.addressQuery.city#,</span>
-                                        <span id="addressUserState">#variables.addressQuery.state#</span>
-                                    </div>
-                                    <span class="ms-3" id="addressUserPincode">#variables.addressQuery.pincode#</span>
-                                    <input type="hidden" id="addressIdHidden" name="selectedAddressId" value="#variables.addressQuery.addressId#">
-                                </div>
-                            </cfoutput>
-                            <div class="btnPart d-flex flex-column justify-content-between">
-                                <button type="button" class="changeAddressBtn" data-bs-toggle="modal" data-bs-target="#modalChangeAddress">Change Address</button>
-                                <button type="button" class="addAddressBtn" data-bs-toggle="modal"  data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add Address</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="container2 p-2 my-2">
-                        <div class="container2Heading px-5 py-3">
-                            <h4>2.Product Information</h4>
-                        </div>
-                        <cfset variables.totalProductPrice = 0>
-                        <cfset variables.totalProductTax = 0>
-                        <cfoutput>
-                            <cfloop query="variables.productListing">
-                                <hr>
-                                <div class="container2Content p-3 d-flex justify-content-between overflow-hidden">
-                                    <div class="productImage">
-                                        <img src="../Assets/productImages/#variables.productListing.imageName#" class="img-fluid rounded-3" alt="No image found">
-                                    </div>
-                                    <div class="productNameDesc d-flex flex-column justify-content-between">
-                                        <div class="productName text-truncate">
-                                            <span>#variables.productListing.productName#</span>
-                                        </div>
-                                        <div class="productDesc">
-                                            <p class="w-100 ">#variables.productListing.productDesc#</p>
-                                        </div>
-                                    </div>
-                                    <div class="productPrice">
-                                        <div>
-                                            <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                            <span class="fw-bold fs-5">#variables.productListing.price#</span><br>
-                                        </div>
-                                        <div>
-                                            <span>Tax : <i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                            <span>#variables.productListing.tax#</span>
-                                        </div>
-                                    </div>
-                                    <div class="productQty">
-                                        <div class="d-flex">
-                                            <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
-                                                <cfset variables.totalProductPrice = variables.totalProductPrice + variables.productListing.price>
-                                                <cfset variables.totalProductTax = variables.totalProductTax + variables.productListing.tax>
-                                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyDeleteBtnOrder" id="#productListing.productId#deleteBtn" onclick="deleteQtyOrder(#productListing.productId#)">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
-                                            <cfelse>
-                                                <cfset variables.totalProductPrice = variables.totalProductPrice + (variables.productListing.price * variables.productListing.productQuantity)>
-                                                <cfset variables.totalProductTax = variables.totalProductTax + (variables.productListing.tax * variables.productListing.productQuantity)>
-                                                <span class="me-2">Quantity : </span>
-                                            </cfif>
-                                            <input id="#productListing.productId#Input" class="orderQuantity"  min="0" name="orderQuantity" 
-                                                value=
-                                                    <cfif structKeyExists(variables.productListing, "productQuantity")>
-                                                        #variables.productListing.productQuantity#
-                                                    <cfelse>
-                                                        1
-                                                    </cfif>
-                                                type="text" class="form-control form-control-sm px-2"readonly
-                                             />
-                                            <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
-                                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyAddBtnOrder" id="#productListing.productId#addBtn" onclick="addQtyOrder(#productListing.productId#)">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </cfif>
-                                        </div>
-                                    </div>
-                                </div>
-                            </cfloop>
-                        </cfoutput>
-                        <hr>
-                    </div>
-                    <div class="container2 p-2 my-2">
-                        <div class="container2Heading px-5 py-3">
-                            <h4>3.Order Summary</h4>
-                        </div>
-                        <cfoutput>
-                            <div class="container2Content p-3 d-flex flex-column justify-content-between " id="summaryContainer">
-                                <div class=" w-50 d-flex justify-content-between">
-                                    <span>Product Price  : </span>
-                                    <div>
-                                        <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                        <span class="totalProductPrice" id="totalProductPrice">#variables.totalProductPrice#</span>
-                                    </div>
-                                </div>
-                                <div class=" w-50 d-flex justify-content-between">
-                                    <span>Product Tax: </span>
-                                    <div>
-                                        <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                        <span class="totalProductTax" id="totalProductTax">#variables.totalProductTax#</span>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class=" w-50 d-flex justify-content-between">
-                                    <span>Total Price: </span>
-                                    <div>
-                                        <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                        <span class="totalPrice" id="totalPrice">#variables.totalProductPrice + variables.totalProductTax#</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </cfoutput>
-                    </div>
-                    <div class="container2 p-2 my-2">
-                        <div class="container2Heading px-5 py-3">
-                            <h4>4.Verify Card</h4>
-                        </div>
-                        <div class="d-flex justify-content-center p-4">
-                            <button id="verifyCardBtn" type="button" data-bs-toggle="modal"  data-bs-target="#modalCreditCard">
-                                <div class="cardImage">
-                                    <img src="../Assets/Images/icons8-credit-card.gif" alt="No image Found">
-                                </div>
-                                <span>Verify Card</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="paymentBtnContainer d-flex justify-content-between p-3">
-                    <cfoutput>
-                        <div>
-                            <input type="hidden" name="totalPriceHidden" id="totalPriceHidden" value="#variables.totalProductPrice#">
-                            <input type="hidden" name="totalTaxHidden" id="totalTaxHidden" value="#variables.totalProductTax    #">
-                            <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>
-                            <span id="totalPriceBtn" name="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
-                        </div>
-                    </cfoutput>
-                    <cfif queryRecordCount(variables.addressQuery)>
-                        <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" onclick="return confirmOrder()"><i class="fa-solid fa-wallet"></i> Confirm Order</button>
-                    <cfelse>
-                        <span class="text-Danger fw-bold">ADD ADDRESS</span>
-                    </cfif>
-                </div>
-            </div>
-
-            <cfif structKeyExists(url, "productId")>
-                <cfoutput>
-                    <input type="hidden" name="productIdHidden" value="#url.productId#">
-                </cfoutput>
-            </cfif>
-
+        <cfset variables.result = structNew()>
+        <form method="POST" id="OrderPageForm">
             <cfif structKeyExists(form, "continuePayBtn")>
                 <cfif structKeyExists(url, "productId")>
                     <cfset variables.result=variables.objUserShoppingCart.addOrderItems(form)>
@@ -197,9 +36,204 @@
                     <cfset variables.result=variables.objUserShoppingCart.cartToOrder(form)>
                 </cfif>
             </cfif>
-            </form>
+        <cfif structKeyExists(variables.result,"success") AND variables.result["success"]>
+            <div class="orderPlacedMainDiv mt-5">
+            <div class="confirmImageDiv">
+                    <img src="../Assets/Images/checkmark.gif" alt="No Image Found">
+            </div>
+            <div class="orderConfrimMessage">
+                <span>Your Order has been Placed!</span><br>
+                <span>Your Order Id is sent to the given mail id.</span>
+            </div>
+            <div class="orderConfirmBtnDiv d-flex p-2">
+                <a href="userHome.cfm" class="homeBtn p-3 me-1 btn">
+                    Go Back To Home
+                </a>
+                <a href="userOrderHistory.cfm" class="orderHistoryBtn p-3 ms-1 btn">
+                    Order History
+                </a>
+            </div>
         </div>
-        <cfinclude  template="userFooter.cfm">
+        <cfelse>
+            <div class="mainContainerOrder p-3">
+                <div class="subcontainerOrder p-2">
+
+                    <div class="innerSubcontainerOrder">
+                        <div class="container1 p-2 my-2">
+                            <div class="container1Heading px-5 py-3">
+                                <h4>1.Delivery Address</h4>
+                            </div>
+                            <div class="container1Content p-3 d-flex justify-content-between">
+                                <cfoutput>
+                                    <div class="addressPart">
+                                        <div class="w-50 d-flex justify-content-between">
+                                            <span class="fw-bold mx-2 text-nowrap" id="addressUserName">#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
+                                            <span class="fw-bold mx-2" id="addressUserPhoneNumber">#variables.addressQuery.phoneNumber#</span>
+                                        </div>
+                                        <div class="p-3">
+                                            <span id="addressUserAddressline1">#variables.addressQuery.addressline1#,</span>
+                                            <span id="addressUserAddressline2">#variables.addressQuery.addressline2#,</span>
+                                            <span id="addressUserCity">#variables.addressQuery.city#,</span>
+                                            <span id="addressUserState">#variables.addressQuery.state#</span>
+                                        </div>
+                                        <span class="ms-3" id="addressUserPincode">#variables.addressQuery.pincode#</span>
+                                        <input type="hidden" id="addressIdHidden" name="selectedAddressId" value="#variables.addressQuery.addressId#">
+                                    </div>
+                                </cfoutput>
+                                <div class="btnPart d-flex flex-column justify-content-between">
+                                    <button type="button" class="changeAddressBtn" data-bs-toggle="modal" data-bs-target="#modalChangeAddress">Change Address</button>
+                                    <button type="button" class="addAddressBtn" data-bs-toggle="modal"  data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add Address</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container2 p-2 my-2">
+                            <div class="container2Heading px-5 py-3">
+                                <h4>2.Product Information</h4>
+                            </div>
+                            <cfset variables.totalProductPrice = 0>
+                            <cfset variables.totalProductTax = 0>
+                            <cfoutput>
+                                <cfloop query="variables.productListing">
+                                    <hr>
+                                    <div class="container2Content p-3 d-flex justify-content-between overflow-hidden">
+                                        <div class="productImage">
+                                            <img src="../Assets/productImages/#variables.productListing.imageName#" class="img-fluid rounded-3" alt="No image found">
+                                        </div>
+                                        <div class="productNameDesc d-flex flex-column justify-content-between">
+                                            <div class="productName text-truncate">
+                                                <span>#variables.productListing.productName#</span>
+                                            </div>
+                                            <div class="productDesc">
+                                                <p class="w-100 ">#variables.productListing.productDesc#</p>
+                                            </div>
+                                        </div>
+                                        <div class="productPrice">
+                                            <div>
+                                                <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                                <span class="fw-bold fs-5">#variables.productListing.price#</span><br>
+                                            </div>
+                                            <div>
+                                                <span>Tax : <i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                                <span>#variables.productListing.tax#</span>
+                                            </div>
+                                        </div>
+                                        <div class="productQty">
+                                            <div class="d-flex">
+                                                <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
+                                                    <cfset variables.totalProductPrice = variables.totalProductPrice + variables.productListing.price>
+                                                    <cfset variables.totalProductTax = variables.totalProductTax + variables.productListing.tax>
+                                                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyDeleteBtnOrder" id="#productListing.productId#deleteBtn" onclick="deleteQtyOrder(#productListing.productId#)">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                <cfelse>
+                                                    <cfset variables.totalProductPrice = variables.totalProductPrice + (variables.productListing.price * variables.productListing.productQuantity)>
+                                                    <cfset variables.totalProductTax = variables.totalProductTax + (variables.productListing.tax * variables.productListing.productQuantity)>
+                                                    <span class="me-2">Quantity : </span>
+                                                </cfif>
+                                                <input id="#productListing.productId#Input" class="orderQuantity"  min="0" name="orderQuantity" 
+                                                    value=
+                                                        <cfif structKeyExists(variables.productListing, "productQuantity")>
+                                                            #variables.productListing.productQuantity#
+                                                        <cfelse>
+                                                            1
+                                                        </cfif>
+                                                    type="text" class="form-control form-control-sm px-2"readonly
+                                                 />
+                                                <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
+                                                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyAddBtnOrder" id="#productListing.productId#addBtn" onclick="addQtyOrder(#productListing.productId#)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </cfif>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </cfloop>
+                            </cfoutput>
+                            <hr>
+                        </div>
+                        <div class="container2 p-2 my-2">
+                            <div class="container2Heading px-5 py-3">
+                                <h4>3.Order Summary</h4>
+                            </div>
+                            <cfoutput>
+                                <div class="container2Content p-3 d-flex flex-column justify-content-between " id="summaryContainer">
+                                    <div class=" w-50 d-flex justify-content-between">
+                                        <span>Product Price  : </span>
+                                        <div>
+                                            <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                            <span class="totalProductPrice" id="totalProductPrice">#variables.totalProductPrice#</span>
+                                        </div>
+                                    </div>
+                                    <div class=" w-50 d-flex justify-content-between">
+                                        <span>Product Tax: </span>
+                                        <div>
+                                            <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                            <span class="totalProductTax" id="totalProductTax">#variables.totalProductTax#</span>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class=" w-50 d-flex justify-content-between">
+                                        <span>Total Price: </span>
+                                        <div>
+                                            <span><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                            <span class="totalPrice" id="totalPrice">#variables.totalProductPrice + variables.totalProductTax#</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </cfoutput>
+                        </div>
+                        <div class="container2 p-2 my-2">
+                            <div class="container2Heading px-5 py-3">
+                                <h4>4.Verify Card</h4>
+                            </div>
+                            <div class="d-flex justify-content-center p-4">
+                                <button id="verifyCardBtn" type="button" data-bs-toggle="modal"  data-bs-target="#modalCreditCard">
+                                    <div class="cardImage">
+                                        <img src="../Assets/Images/icons8-credit-card.gif" alt="No image Found">
+                                    </div>
+                                    <span>Verify Card</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paymentBtnContainer d-flex justify-content-between p-3">
+                        <cfoutput>
+                            <div>
+                                <input type="hidden" name="totalPriceHidden" id="totalPriceHidden" value="#variables.totalProductPrice#">
+                                <input type="hidden" name="totalTaxHidden" id="totalTaxHidden" value="#variables.totalProductTax    #">
+                                <span>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <span id="totalPriceBtn" name="totalPriceBtn">#variables.totalProductTax + variables.totalProductPrice#</span>
+                                <div>
+                                    <a href=
+                                        <cfif structKeyExists(url, "productId")>
+                                            "userProduct.cfm?productId=#url.productId#"
+                                        <cfelseif structKeyExists(url, "redirected") AND url.redirected EQ "cart">
+                                            "userCart.cfm"
+                                        </cfif>
+                                        class="cancelOrderBtn btn">
+                                        Cancel Order
+                                    </a>
+                                </div>
+                            </div>
+                        </cfoutput>
+                        <cfif queryRecordCount(variables.addressQuery)>
+                            <button type="submit" name="continuePayBtn" id="continuePayBtn" value="111" onclick="return confirmOrder()"><i class="fa-solid fa-wallet"></i> Confirm Order</button>
+                        <cfelse>
+                            <span class="text-Danger fw-bold">ADD ADDRESS</span>
+                        </cfif>
+                    </div>
+                </div>
+
+                <cfif structKeyExists(url, "productId")>
+                    <cfoutput>
+                        <input type="hidden" name="productIdHidden" value="#url.productId#">
+                    </cfoutput>
+                </cfif>
+            </div>
+            <cfinclude  template="userFooter.cfm">
+        </cfif>
+
 
         <!-- Modal Change Address -->
         <div class="modalChangeAddress modal fade" id="modalChangeAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -209,7 +243,6 @@
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Select Address</h1>
                         <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" id="formProfileEdit">
                         <div class="selectAddressModal modal-body px-5">
                             <cfset variables.flag = 0>
                             <cfoutput>
@@ -247,7 +280,6 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="">Close</button>
                             <button type="button" name="editProfileSubmitBtn" id="editProfileSubmitBtn" value=" " class="btn btn-primary" onclick="changeAddress()">Submit</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -260,7 +292,6 @@
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Address</h1>
                         <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" id="formAddressModal">
                         <div class="addressModalContent modal-body px-5">
                             <div class="subDiv w-100 p-2">
                                 <div class="my-2">
@@ -308,7 +339,6 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeAddressModal()">Close</button>
                             <button type="submit" name="addAddressBtn" class="btn btn-primary" onclick="checkAddress()">Submit</button>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -321,7 +351,6 @@
                         <i class="fa-solid fa-lock"></i>
                         <span class="ms-2">This is a secure 128-bit SSL Encrypted payment.You're safe.</span>
                     </div>
-                    <form method="POST" id="formCardModal">
                         <div class="modalCardBody modal-body">
                             <div class="subHeading d-flex w-100 justify-content-between px-2">
                                 <div class="cardImage">
@@ -344,12 +373,12 @@
                                         <span>Expiration Date</span>
                                         <div class="d-flex">
                                             <div>
-                                                <Input type="text" placeholder="MM" class="cardExpiryMonth me-2" id="cardExpiryMonth"><br>
+                                                <Input type="text" placeholder="MM" class="cardExpiryMonth me-2" id="cardExpiryMonth" name="cardExpiryMonth"><br>
                                                 <span class="warningCardMonth text-danger fw-bold"></span>
                                             </div>
                                             <span>/</span>
                                             <div>
-                                                <Input type="text" placeholder="YY" class="cardExpiryYear ms-2" id="cardExpiryYear"><br>
+                                                <Input type="text" placeholder="YY" class="cardExpiryYear ms-2" id="cardExpiryYear" name="cardExpiryYear"><br>
                                                 <span class="warningCardYear text-danger fw-bold"></span>
                                             </div>
                                         </div>

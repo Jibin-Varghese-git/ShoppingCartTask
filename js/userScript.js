@@ -65,9 +65,12 @@ function fnsignupValidation(){
 function fnLoginValidation(){
     let userName = document.getElementById("userNameLogin").value;
     let password = document.getElementById("passwordLogin").value;
-    let flag = true
 
-    if(userName.trim().length <1)
+    let flag = true
+    document.getElementById("errorUserName").innerHTML="";
+    document.getElementById("errorPasswordLogin").innerHTML="";
+    document.getElementById("loginErrorMessage").innerHTML="";
+    if(userName.trim().length < 1)
     {
         document.getElementById("errorUserName").innerHTML="Enter the Username";
         flag = false;
@@ -196,7 +199,7 @@ function removeCartItem(cartDetails){
         if (result.isConfirmed) {
 
             var cartItemQuantity=document.getElementById("cartItemQuantity").innerHTML;
-            var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
+            var cartItemQuantityHeader=document.getElementById("cartItemQuantity").innerHTML;
             var price=document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML;
             var tax=document.getElementById(cartDetails.cartId+"ProductTax").value;
             var totalProductPrice=document.getElementById("totalProductPrice").innerHTML;
@@ -214,7 +217,14 @@ function removeCartItem(cartDetails){
                     {
                         document.getElementById(cartDetails.cartId).remove();
                         document.getElementById("cartItemQuantity").innerHTML=cartItemQuantity - 1;
-                        document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader - 1;
+                        cartItemQuantityHeader -= 1
+                        if(cartItemQuantityHeader == 0){
+                            document.getElementById("cartItemQuantityHeader").style.display="none"
+                        }else if(cartItemQuantityHeader > 10){
+                            document.getElementById("cartItemQuantityHeader").innerHTML="10+"
+                        }else{
+                            document.getElementById("cartItemQuantityHeader").innerHTML=cartItemQuantityHeader;
+                        }
                         document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
                         if(totalProductPrice < 1){
                             document.getElementById("totalProductPrice").innerHTML = 0;
@@ -414,23 +424,45 @@ function closeAddressModal(){
     document.getElementById("errorState").innerHTML=" ";
     document.getElementById("errorPincode").innerHTML=" ";
     document.getElementById("errorPhoneNumber").innerHTML=" ";
-    document.getElementById("formAddressModal").reset();
+    if(document.getElementById("formAddressModal"))
+    {
+        document.getElementById("formAddressModal").reset();
+    }else{
+        document.getElementById("OrderPageForm").reset()
+    }
+
 }
 
 function removeAddress(addressId){
-    if(confirm("Do you want to remove this address?"))
-    {
-        $.ajax({
-            type : "POST",
-            url : "components/userShoppingCart.cfc?method=removeAddress",
-            data : {addressId : addressId.value},
-            success: function(result){
-                if(result){
-                    document.getElementById(addressId.value).remove();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type : "POST",
+                url : "components/userShoppingCart.cfc?method=removeAddress",
+                data : {addressId : addressId.value},
+                success: function(result){
+                    if(result){
+                        document.getElementById(addressId.value).remove();
+                    }
                 }
-            }
-        });
-    }
+            });
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+                allowOutsideClick: false
+            });
+        }
+    });
 }
 
 function profileModalOpen(userDetails){
@@ -723,7 +755,7 @@ function cardModalClose(){
     $(".warningCardYear").html(" ");
     $(".warningCardNumber").html(" ");
     $(".warningCardCommon").html(" ");
-    $("#formCardModal")[0].reset();
+    $("#OrderPageForm")[0].reset();
 }
 
 function searchOrder(){
@@ -735,21 +767,31 @@ function searchOrder(){
 }
 
 function invoiceDownload(orderId){
-    if(confirm("Do you want to download Invoice"))
-    {
-        $.ajax({
-            method : "GET",
-            url : "components/userShoppingCart.cfc?method=invoiceDownload",
-            data:{orderId : orderId.value},
-            success : function(result){
-                if(result)
-                {
-                    console.log(result)
-                    download(result);
+    Swal.fire({
+        title: "Invoice Download",
+        text: "Do you want to download invoce!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!",
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                method : "GET",
+                url : "components/userShoppingCart.cfc?method=invoiceDownload",
+                data:{orderId : orderId.value},
+                success : function(result){
+                    if(result)
+                    {
+                        console.log(result)
+                        download(result);
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
+      });
 }
 
 function download(fileUrl) 
@@ -764,36 +806,13 @@ function download(fileUrl)
 
 function confirmOrder() {
     var flag = false;
-    event.preventDefault()
-    alert($(".selectedAddress").val());
-
-    // Check if the address is selected
     if ($(".selectedAddress").val().length < 1) {
         alert("Select an address");
         flag = false;
-    } else {
-        // Show the SweetAlert confirmation dialog
-        Swal.fire({
-            title: "Order Confirmed",
-            text: "Your order has been confirmed!",
-            icon: "success",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK"
-        }).then((result) => {
-            // If the user confirms the action
-            if (result.isConfirmed) {
-                flag = true;
-                console.log(flag);
-
-                // Only submit the form or perform actions after confirmation
-                if (flag) {
-                    document.getElementById('theForm').submit();
-                    console.log("Form submitted or action performed here.");
-                }
-            }
-        });
+    }else{
+        flag=true;
     }
+    return flag
 }
 
 

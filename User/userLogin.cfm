@@ -76,7 +76,7 @@
                             </cfif>
                         <cfelse>
                             <cfoutput>
-                                <span class="text-danger fw-bold ms-5">#local.structUserLoginReturn["errorMessage"]#</span>
+                                <span class="text-danger fw-bold ms-5" id="loginErrorMessage">#local.structUserLoginReturn["errorMessage"]#</span>
                             </cfoutput>
                         </cfif>
                     </cfif>

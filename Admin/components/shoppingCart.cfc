@@ -1,7 +1,7 @@
 <cfcomponent>
 
-    <cffunction  name="fnAdminLogin">
-        <cfargument  name="structAdminDetails">
+    <cffunction  name="fnAdminLogin" description="Function to check the admin login">
+        <cfargument  name="structAdminDetails" required="true">
         <cfset local.structAdminLoginReturn = structNew()>
         <cfset local.structAdminLoginReturn["error"] = false>
         <cfif Len(trim(arguments.structAdminDetails.userName)) EQ 0>
@@ -25,7 +25,7 @@
                     fldRoleId
                 FROM 
                     tblUser
-                WHERE  
+                WHERE
                     (fldEmail = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="varchar">
                 OR 
                     fldPhone = <cfqueryparam value="#arguments.structAdminDetails.userName#" cfsqltype="varchar">)
@@ -62,8 +62,8 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnAddCategory" access="remote" returnformat="plain">
-        <cfargument  name="categoryName">
+    <cffunction  name="fnAddCategory" access="remote" returnformat="plain" description="Function to add category">
+        <cfargument  name="categoryName" required="true">
         <cfquery name="qrycategoryNameCount">
             SELECT
                 count(fldCategoryName)
@@ -97,9 +97,9 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnDeleteCategory" access="remote" >
-        <cfargument  name="categoryId">
-        <cfquery name="deleteCategory">  
+    <cffunction  name="fnDeleteCategory" access="remote" description="Function to delete category">
+        <cfargument  name="categoryId" required="true">
+        <cfquery name="deleteCategory">
             UPDATE 
                 tblCategory
             SET
@@ -110,8 +110,8 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnSelectCategoryName" access="remote" returnformat="plain">
-        <cfargument  name="categoryId">
+    <cffunction  name="fnSelectCategoryName" access="remote" returnformat="plain" description="Function to select Category">
+        <cfargument  name="categoryId" required="false">
         <cfquery name="local.qrySelectCategoryName">
             SELECT
                 fldCategory_ID,
@@ -132,9 +132,9 @@
         </cfif>
     </cffunction>
 
-    <cffunction  name="fnUpdateCategory" access="remote" returnformat="plain">
-        <cfargument  name="categoryName">
-        <cfargument  name="categoryId">
+    <cffunction  name="fnUpdateCategory" access="remote" returnformat="plain" description="Function to Update Category">
+        <cfargument  name="categoryName" required="true">
+        <cfargument  name="categoryId" required="true">
         <cfquery name="local.qrycategoryNameCount">
             SELECT
                 count(fldCategoryName)
@@ -168,8 +168,8 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnSelectSubCategory" access="remote" returnformat="JSON">
-        <cfargument  name="categoryId">
+    <cffunction  name="fnSelectSubCategory" access="remote" returnformat="JSON" description="Function to select subcategory">
+        <cfargument  name="categoryId" required="true">
         <cfquery name="local.qrySelectSubCategory">
             SELECT
                 fldSubCategory_ID,
@@ -188,9 +188,9 @@
         <cfreturn local.structSubCategoryDetails>
     </cffunction>
 
-    <cffunction  name="fnAddSubcategory" access="remote" returnformat="plain">
-        <cfargument  name="subcategoryName">
-        <cfargument  name="categoryId">
+    <cffunction  name="fnAddSubcategory" access="remote" returnformat="plain" description="Function to add subcategory">
+        <cfargument  name="subcategoryName" required="true">
+        <cfargument  name="categoryId" required="true">
         <cfquery name="qrycategoryNameCount">
             SELECT
                 count(fldSubCategoryName)
@@ -229,8 +229,8 @@
     </cffunction>
 
 
-    <cffunction  name="fnSelectSubcategoryDetails" access="remote" returnformat="JSON">
-        <cfargument  name="subcategoryId">
+    <cffunction  name="fnSelectSubcategoryDetails" access="remote" returnformat="JSON" description="Function to select subcategory and return structure">
+        <cfargument  name="subcategoryId" required="true">
         <cfquery name="qrySelectSubcategoryDetails">
             SELECT
                 fldSubCategory_ID,
@@ -248,9 +248,9 @@
     </cffunction>
 
     <cffunction  name="fnUpdateSubcategory" access="remote" returnformat="plain">
-        <cfargument  name="subcategoryName">
-        <cfargument  name="categoryId">
-        <cfargument  name="subcategoryId">
+        <cfargument  name="subcategoryName" required="true">
+        <cfargument  name="categoryId" required="true">
+        <cfargument  name="subcategoryId" required="true">
         <cfquery name="local.qrySubcategoryNameCount">
             SELECT
                 count(fldSubCategoryName)
@@ -287,8 +287,8 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnDeleteSubcategory" access="remote" >
-        <cfargument  name="subcategoryId">
+    <cffunction  name="fnDeleteSubcategory" access="remote" description="Function to delete subcategory">
+        <cfargument  name="subcategoryId" required="true">
         <cfquery name="deleteSubcategory">  
             UPDATE 
                 tblSubCategory
@@ -300,7 +300,7 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnSelectBrand">
+    <cffunction  name="fnSelectBrand" description="Function to select brands">
         <cfquery name="local.qrySelectBrand">
             SELECT 
                 fldBrand_ID,
@@ -313,14 +313,14 @@
         <cfreturn local.qrySelectBrand>
     </cffunction>
 
-    <cffunction  name="fnAddProduct" access="remote" returnFormat="plain">
-        <cfargument  name="subcategoryListing">
-        <cfargument  name="productName">
-        <cfargument  name="brandListing">
-        <cfargument  name="productImages">
-        <cfargument  name="productDescription">
-        <cfargument  name="productPrice">
-        <cfargument  name="productTax">
+    <cffunction  name="fnAddProduct" access="remote" returnFormat="plain" description="Function to add products">
+        <cfargument  name="subcategoryListing" required="true">
+        <cfargument  name="productName" required="true">
+        <cfargument  name="brandListing" required="true">
+        <cfargument  name="productImages" required="true">
+        <cfargument  name="productDescription" required="true">
+        <cfargument  name="productPrice" required="true">
+        <cfargument  name="productTax" required="true">
 
         <cfquery name="local.qryProductNameCheck">
             SELECT
@@ -342,7 +342,7 @@
             <cffile action="uploadall"
                     destination="#expandPath(local.imageLocation)#"
                     nameConflict="MakeUnique"
-                    result="local.fileNames"        
+                    result="local.fileNames"
             >
 
             <cfquery result="local.qryAddProducts">
@@ -378,7 +378,7 @@
                             fldImageFileName,
                             fldDefaultImage,
                             fldCreatedBy
-                        )   
+                        )
                     VALUES
                         (
                             <cfqueryparam value="#local.qryAddProducts.GENERATEDKEY#" cfsqltype="integer">,
@@ -396,8 +396,8 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnSelectProduct" access="remote">
-        <cfargument  name="subCategoryId">
+    <cffunction  name="fnSelectProduct" access="remote" description="Function to select product">
+        <cfargument  name="subCategoryId" required="true">
         
         <cfquery name="local.qrySelectProductDetails">
             SELECT
@@ -411,14 +411,8 @@
                 tb.fldBrandName
             FROM
                 tblBrands as tb
-            INNER JOIN 
-                tblProduct AS tp
-            ON
-                tb.fldBrand_Id=tp.fldBrandId
-            INNER JOIN
-                tblProductImages AS tpi
-            ON
-                tp.fldProduct_ID=tpi.fldProductId
+            INNER JOIN tblProduct AS tp ON tb.fldBrand_Id=tp.fldBrandId
+            INNER JOIN tblProductImages AS tpi ON tp.fldProduct_ID=tpi.fldProductId
             WHERE
                 fldSUbCategoryId=<cfqueryparam value="#arguments.subCategoryId#" cfsqltype="integer">
             AND
@@ -431,8 +425,8 @@
         <cfreturn local.qrySelectProductDetails>
     </cffunction>
 
-    <cffunction  name="fnSelectSingleProduct"  access="remote" returnFormat="JSON">
-        <cfargument  name="productId">
+    <cffunction  name="fnSelectSingleProduct"  access="remote" returnFormat="JSON" description="Function to select produt and return structure">
+        <cfargument  name="productId" required="true">
         <cfquery name="local.qrySingleSelectProduct">
             SELECT
                 tp.fldProduct_ID,
@@ -446,14 +440,8 @@
                 tp.fldBrandId
             FROM
                 tblBrands as tb
-            INNER JOIN 
-                tblProduct AS tp
-            ON
-                tb.fldBrand_Id=tp.fldBrandId
-            INNER JOIN
-                tblProductImages AS tpi
-            ON
-                tp.fldProduct_ID=tpi.fldProductId
+            INNER JOIN tblProduct AS tp ON tb.fldBrand_Id=tp.fldBrandId
+            INNER JOIN tblProductImages AS tpi ON tp.fldProduct_ID=tpi.fldProductId
             WHERE
                 tp.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="integer">
             AND
@@ -469,15 +457,15 @@
         <cfreturn structProductDetails>
     </cffunction>
 
-    <cffunction  name="fnUpdateProduct" access="remote" returnFormat="plain">
-        <cfargument  name="subcategoryListing">
-        <cfargument  name="productName">
-        <cfargument  name="brandListing">
-        <cfargument  name="productImages">
-        <cfargument  name="productDescription">
-        <cfargument  name="productPrice">
-        <cfargument  name="productTax">
-        <cfargument  name="hiddenProductId">
+    <cffunction  name="fnUpdateProduct" access="remote" returnFormat="plain" description="Function to update product">
+        <cfargument  name="subcategoryListing" required="true">
+        <cfargument  name="productName" required="true">
+        <cfargument  name="brandListing" required="true">
+        <cfargument  name="productImages" required="true">
+        <cfargument  name="productDescription" required="true">
+        <cfargument  name="productPrice" required="true">
+        <cfargument  name="productTax" required="true">
+        <cfargument  name="hiddenProductId" required="true">
         <cfquery name="local.qryProductNameCheck">
             SELECT
                 count(fldProductName) AS productNameCount
@@ -549,8 +537,8 @@
         <cfreturn local.result>
     </cffunction>
 
-    <cffunction  name="fnDeleteProduct" access="remote">
-        <cfargument  name="productId">
+    <cffunction  name="fnDeleteProduct" access="remote" description="Function to delete product">
+        <cfargument  name="productId" required="true">
         <cfquery name="local.deleteProduct">
             UPDATE
                 tblProduct
@@ -562,8 +550,8 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnSelectImage" access="remote" returnFormat="JSON">
-        <cfargument  name="productId">
+    <cffunction  name="fnSelectImage" access="remote" returnFormat="JSON" description="Function to select product images">
+        <cfargument  name="productId" required="true">
         <cfquery name="local.qrySelectImage">
             SELECT
                 fldProductImage_ID, 
@@ -593,7 +581,7 @@
     </cffunction>
 
     <cffunction  name="fnDeleteProductImage" access="remote">
-        <cfargument  name="productImageId">
+        <cfargument  name="productImageId" required="true">
         <cfquery>
             UPDATE
                 tblProductImages
@@ -605,9 +593,9 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="fnSetThumbnail" access="remote">
-        <cfargument  name="productImageId">
-        <cfargument  name="productId">
+    <cffunction  name="fnSetThumbnail" access="remote" description="Function to set thumbnail">
+        <cfargument  name="productImageId" required="true">
+        <cfargument  name="productId" required="true">
         <cfquery>
             UPDATE
                 tblProductImages

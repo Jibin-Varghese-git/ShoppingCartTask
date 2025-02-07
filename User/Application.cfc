@@ -11,7 +11,7 @@
             "/User/userProfile.cfm"
         ]>
 
-        <cfif NOT(NOT (arrayContainsNocase(local.arrayIncludes,arguments.requestpage)) OR (structKeyExists(session, "structUserDetails") AND session.structUserDetails["roleId"] EQ 1))>
+        <cfif NOT((NOT arrayContainsNocase(local.arrayIncludes,arguments.requestpage)) OR structKeyExists(session, "structUserDetails"))>
             <cflocation  url="userLogin.cfm" addToken="no">
          </cfif> 
 
