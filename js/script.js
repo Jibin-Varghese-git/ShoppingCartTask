@@ -269,9 +269,10 @@ function fnProductModalValidation(){
     let productDescription = document.getElementById("productDescription").value.trim();
     let productPrice = document.getElementById("productPrice").value.trim();
     let productTax = document.getElementById("productTax").value.trim();
-    let productImage = document.getElementById("productImage").value.trim();
+    let productImage = document.getElementById("productImages").value.trim();
     let productId = document.getElementById("btnAddProducts").value.trim();
 
+    document.getElementById("errorProductName").innerHTML=" "
     document.getElementById("errorProductDescription").innerHTML=" ";
     document.getElementById("errorProductPrice").innerHTML=" ";
     document.getElementById("errorProductTax").innerHTML=" ";

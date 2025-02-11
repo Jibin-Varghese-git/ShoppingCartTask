@@ -95,8 +95,10 @@ function logoutUser(){
                 type:"GET",
                 url:"components/userShoppingCart.cfc?method=logoutUser",
                 success:function(result){
+                    alert("dkdg")
                     if(result)
                     {
+                        alert()
                         location.reload();
                     }
                 }
@@ -105,6 +107,31 @@ function logoutUser(){
         else{
             alert("error")
         } 
+}
+
+function customFilter(){
+
+    if($('#filter1').is(':checked')) 
+    {
+        $("#filterMin").prop('disabled', true);
+        $("#filterMax").prop('disabled', true);
+    }
+    else if($('#filter2').is(':checked'))
+    {
+        $("#filterMin").prop('disabled', true);
+        $("#filterMax").prop('disabled', true);
+      
+    }
+    else if($('#filter3').is(':checked'))
+    {
+        $("#filterMin").prop('disabled', true);
+        $("#filterMax").prop('disabled', true);
+    }
+    else if($('#customFilter').is(':checked'))
+    {
+        $("#filterMin").prop('disabled', false);
+        $("#filterMax").prop('disabled', false);
+    }
 }
 
 function filterPrice(filterArguments)
@@ -118,13 +145,14 @@ function filterPrice(filterArguments)
     {
         var minValue=1000;
         var maxValue=10000;
+      
     }
     else if($('#filter3').is(':checked'))
     {
         var minValue=10000;
         var maxValue=20000;
     }
-    else
+    else if($('#customFilter').is(':checked'))
     {
         var minValue = $('#filterMin').val()
         var maxValue = $('#filterMax').val()
@@ -146,9 +174,7 @@ function filterPrice(filterArguments)
                 {
                     $('#viewmoreBtn').remove()
                 }
-                $('[name=filter]').prop('checked', false);
-                $('#filterMin').val(' ')
-                $('#filterMax').val(' ')
+                $('#dropdownMenuClickableInside').dropdown('toggle');
                 arrayFilterProducts.forEach(element => {
                     var singleProduct = `
                         <a href="userProduct.cfm?productId=${element.PRODUCTID}" class="text-decoration-none">
@@ -296,17 +322,28 @@ function addQuantity(cartDetails){
     totalProductPrice=parseFloat(totalProductPrice) + price;
     totalTax=parseFloat(totalTax)  + parseFloat(tax);
 
-    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)+1;
-    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)+1)*price;
-    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
-    document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
-    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
-
     $.ajax({
        type : "POST",
         url : "components/userShoppingCart.cfc?method=cartUpdate",
         data : {cartId : cartDetails.cartId,quantity : parseInt(quantity)+1},
-        success : function(){}
+        success : function(result){
+            if(result)
+            {
+                returnValue=JSON.parse(result)
+                if(returnValue.success){
+                    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)+1;
+                    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)+1)*price;
+                    document.getElementById("totalProductPrice").innerHTML = totalProductPrice
+                    document.getElementById("totalTax").innerHTML = totalTax;
+                    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax);
+                }
+                else{
+                    alert("Value Cannot be less than 1");
+                    location.reload()
+                }
+                
+            }
+        }
     });
     checkQuantity();
 }
@@ -323,11 +360,7 @@ function removeQuantity(cartDetails){
     totalProductPrice=parseFloat(totalProductPrice) - price;
     totalTax=parseFloat(totalTax) - parseFloat(tax);
 
-    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)-1;
-    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)-1)*price;
-    document.getElementById("totalProductPrice").innerHTML = totalProductPrice.toFixed(2);
-    document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
-    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax).toFixed(2);
+    
 
     $.ajax({
         type : "POST",
@@ -335,8 +368,21 @@ function removeQuantity(cartDetails){
         data : {cartId : cartDetails.cartId,quantity : parseInt(quantity)-1},
          success : function(result){
             if(result){
+                returnValue=JSON.parse(result)
+                if(returnValue.success){
+                    document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)-1;
+                    document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)-1)*price;
+                    document.getElementById("totalProductPrice").innerHTML = totalProductPrice;
+                    document.getElementById("totalTax").innerHTML = totalTax;
+                    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax);
+                }
+                else{
+                    alert("Quantity Cannot be less than 1");
+                    location.reload()
+                }
                 checkQuantity()
             }
+           
         }
     });
 }

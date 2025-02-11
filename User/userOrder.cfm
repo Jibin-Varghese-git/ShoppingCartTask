@@ -64,24 +64,34 @@
                                 <h4>1.Delivery Address</h4>
                             </div>
                             <div class="container1Content p-3 d-flex justify-content-between">
-                                <cfoutput>
-                                    <div class="addressPart">
-                                        <div class="w-50 d-flex justify-content-between">
-                                            <span class="fw-bold mx-2 text-nowrap" id="addressUserName">#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
-                                            <span class="fw-bold mx-2" id="addressUserPhoneNumber">#variables.addressQuery.phoneNumber#</span>
+                                <cfif queryRecordCount(variables.addressQuery) GT 0>
+                                    <cfoutput>
+                                        <div class="addressPart">
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <span class="fw-bold mx-2 text-nowrap" id="addressUserName">#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
+                                                <span class="fw-bold mx-2" id="addressUserPhoneNumber">#variables.addressQuery.phoneNumber#</span>
+                                            </div>
+                                            <div class="p-3">
+                                                <span id="addressUserAddressline1">#variables.addressQuery.addressline1#,</span>
+                                                <span id="addressUserAddressline2">#variables.addressQuery.addressline2#,</span>
+                                                <span id="addressUserCity">#variables.addressQuery.city#,</span>
+                                                <span id="addressUserState">#variables.addressQuery.state#</span>
+                                            </div>
+                                            <span class="ms-3" id="addressUserPincode">#variables.addressQuery.pincode#</span>
+                                            <input type="hidden" id="addressIdHidden" name="selectedAddressId" value="#variables.addressQuery.addressId#">
                                         </div>
-                                        <div class="p-3">
-                                            <span id="addressUserAddressline1">#variables.addressQuery.addressline1#,</span>
-                                            <span id="addressUserAddressline2">#variables.addressQuery.addressline2#,</span>
-                                            <span id="addressUserCity">#variables.addressQuery.city#,</span>
-                                            <span id="addressUserState">#variables.addressQuery.state#</span>
-                                        </div>
-                                        <span class="ms-3" id="addressUserPincode">#variables.addressQuery.pincode#</span>
-                                        <input type="hidden" id="addressIdHidden" name="selectedAddressId" value="#variables.addressQuery.addressId#">
-                                    </div>
-                                </cfoutput>
+                                    </cfoutput>
+                                <cfelse>
+                                    <span class="fw-bold text-danger">Add Address</span>
+                                </cfif>
                                 <div class="btnPart d-flex flex-column justify-content-between">
-                                    <button type="button" class="changeAddressBtn" data-bs-toggle="modal" data-bs-target="#modalChangeAddress">Change Address</button>
+                                    <button 
+                                        type="button" class="changeAddressBtn" data-bs-toggle="modal" data-bs-target=
+                                        <cfif queryRecordCount(variables.addressQuery) GT 0>
+                                            "#modalChangeAddress">
+                                        </cfif>
+                                            Change Address
+                                    </button>
                                     <button type="button" class="addAddressBtn" data-bs-toggle="modal"  data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add Address</button>
                                 </div>
                             </div>

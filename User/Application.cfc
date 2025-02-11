@@ -10,20 +10,15 @@
             "/User/userCart.cfm",
             "/User/userProfile.cfm"
         ]>
-
         <cfif NOT((NOT arrayContainsNocase(local.arrayIncludes,arguments.requestpage)) OR structKeyExists(session, "structUserDetails"))>
             <cflocation  url="userLogin.cfm" addToken="no">
          </cfif> 
-
-<!---         <cfif structKeyExists(url, "reload") AND url.reload EQ 1>
-            <cfset onApplicationStart()>
-        </cfif>--->
     </cffunction> 
 
-    <cffunction  name="onError" returntype="void">
+<!---     <cffunction  name="onError" returntype="void"> 
         <cfargument name="Exception" required=true/>
         <cfargument name="EventName" type="String" required=true/>
         <cflocation  url="errorPage.cfm?exception=#arguments.Exception#" addToken="no">
-    </cffunction>
+    </cffunction>--->
 
 </cfcomponent>

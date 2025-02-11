@@ -44,12 +44,13 @@
                                         <i class="fa-solid fa-arrow-down-short-wide"></i> Filter
                                     </button>
                                     <ul class="dropdown-menu p-2">
-                                     <li><input type="radio" class="me-2" name="filter" id="filter1"><label>0-1000</label></li>
-                                     <li><input type="radio" class="me-2" name="filter" id="filter2"><label>1000-10000</label></li>
-                                     <li><input type="radio" class="me-2" name="filter" id="filter3"><label>10000-20000</label></li>
+                                     <li><input type="radio" class="me-2" name="filter" id="filter1" onChange="customFilter()"><label>0-1000</label></li>
+                                     <li><input type="radio" class="me-2" name="filter" id="filter2" onChange="customFilter()"><label>1000-10000</label></li>
+                                     <li><input type="radio" class="me-2" name="filter" id="filter3" onChange="customFilter()"><label>10000-20000</label></li>
+                                     <li><input type="radio" class="me-2" name="filter" id="customFilter" onChange="customFilter()"><label>Custom</label></li>
                                      <li><hr class="dropdown-divider"></li>
-                                     <li><label>Min</label><input type="number" class="me-2" name="filter" id="filterMin"></li>
-                                     <li><label>Max</label><input type="number" class="me-2" name="filter" id="filterMax"></li>
+                                     <li><label>Min</label><input type="number" class="me-2" name="filter" id="filterMin" disabled></li>
+                                     <li><label>Max</label><input type="number" class="me-2" name="filter" id="filterMax" disabled></li>
                                      <li><hr class="dropdown-divider"></li>
                                     <li><button class="dropdown-item" onclick="filterPrice({<cfif structKeyExists(url, "subCategoryId")>
                                                                                                 subcategoryId:#url.subcategoryId#
