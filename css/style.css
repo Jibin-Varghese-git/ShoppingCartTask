@@ -145,6 +145,11 @@ header{
     font-size: 22px;
 }
 
+.singleItemCategory .productNameDiv{
+    width:15vw;
+    overflow: hidden;
+}
+
 .categoryButtons button{
     background: none;
     border:none;
@@ -157,7 +162,7 @@ header{
 }
 
 .categoryListingDiv{
-    height:58vh;
+    height:55vh;
     overflow: auto;
 }
 .categoryListingDiv::-webkit-scrollbar {
@@ -216,7 +221,7 @@ header{
 
 
 .productListingDiv{
-    height:68vh;
+    height:65vh;
     overflow: auto;
 }
 

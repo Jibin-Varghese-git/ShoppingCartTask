@@ -48,7 +48,7 @@
                             <div class="singleItemCategory  p-2 my-2 d-flex justify-content-between " id="#variables.ProductListing.fldProduct_ID#">
                                 <cfset imagePath = "../Assets/productImages/">
                                 <button type="button" class="productThumbNail" onclick="fnImageModal({productId:#variables.ProductListing.fldProduct_ID#})" data-bs-toggle="modal" data-bs-target="##modalImageShow"><img src="#imagePath##variables.ProductListing.fldImageFileName#" alt="Image Not Found"></button>
-                                <div class="">
+                                <div class="productNameDiv text-truncate">
                                     <span class="text-nowrap">#variables.ProductListing.fldProductName#</span><br>
                                     <span class="fs-6">#variables.ProductListing.fldBrandName#</span><br>
                                     <span class="fw-bold fs-5">Price : <i class="fa-solid fa-indian-rupee-sign"></i> #variables.ProductListing.fldPrice#</span>
@@ -144,7 +144,7 @@
                                     <input type="number" step="0.01" class="productTax mt-2 w-100" name="productTax" id="productTax"><br>
                                     <span id="errorProductTax" class="text-danger fw-bold fs-6"></span><br>
                                     <span class="my-2">Product Image</span>
-                                    <input type="file" class="productImage mt-2 w-100" name="productImage" id="productImage" multiple><br>
+                                    <input type="file" class="productImage mt-2 w-100" name="productImages" id="productImages" multiple><br>
                                     <span id="errorProductImage" class="text-danger fw-bold fs-6"></span><br>
                                     <input type="hidden" name="hiddenProductId"  value=" " id="hiddenProductId">
                             </div>
