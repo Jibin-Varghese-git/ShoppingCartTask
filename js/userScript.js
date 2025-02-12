@@ -185,7 +185,7 @@ function filterPrice(filterArguments)
                                 <div class="card-body d-flex flex-column align-items-center">
                                     <h5 class="card-title">${element.PRODUCTNAME}</h5>
                                     <span class="fw-bold text-wrap ">${element.BRANDNAME}</span>
-                                    <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
+                                    <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
                                 </div>
                             </div>
                         </a>`
@@ -219,7 +219,7 @@ function removeCartItem(cartDetails){
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes!",
         allowOutsideClick: false
       }).then((result) => {
         if (result.isConfirmed) {
@@ -266,8 +266,8 @@ function removeCartItem(cartDetails){
                 }
             });
         Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
+            title: "Removed!",
+            text: "Item has been removed from the cart.",
             icon: "success",
             allowOutsideClick: false
           });

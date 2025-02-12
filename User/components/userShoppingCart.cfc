@@ -230,7 +230,7 @@
 
 
 
-    <cffunction  name="logoutUser" access="remote" dsecription="Function for user logout" returnFormat="plain">
+    <cffunction  name="logoutUser" access="remote" dsecription="Function for user logout" returnFormat="JSON">
         <cfset structClear(session)>
         <cfset local.result["success"] = true>
         <cfreturn local.result>

@@ -57,9 +57,10 @@
         <cfreturn local.structAdminLoginReturn>
     </cffunction>
 
-    <cffunction  name="fnLogout" access="remote">
+    <cffunction  name="fnLogout" access="remote" returnFormat="JSON">
         <cfset structClear(session)>
-        <cfreturn true>
+        <cfset local.logout["sucess"] = true>
+        <cfreturn local.logout>
     </cffunction>
 
     <cffunction  name="fnAddCategory" access="remote" returnformat="plain" description="Function to add category">
@@ -428,26 +429,26 @@
         <cftry>
             <cfquery name="local.qrySelectProductDetails">
                 SELECT
-                    tp.fldProduct_ID,
-                    tp.fldProductName,
-                    tp.fldDescription,
-                    tp.fldPrice,
-                    tp.fldTax,
-                    tpi.fldProductImage_ID,
-                    tpi.fldImageFileName,
-                    tb.fldBrandName
+                    TP.fldProduct_ID,
+                    TP.fldProductName,
+                    TP.fldDescription,
+                    TP.fldPrice,
+                    TP.fldTax,
+                    TPI.fldProductImage_ID,
+                    TPI.fldImageFileName,
+                    TB.fldBrandName
                 FROM
-                    tblBrands as tb
-                INNER JOIN tblProduct AS tp ON tb.fldBrand_Id=tp.fldBrandId
-                INNER JOIN tblProductImages AS tpi ON tp.fldProduct_ID=tpi.fldProductId
+                    tblBrands as TB
+                INNER JOIN tblProduct AS TP ON TB.fldBrand_Id=TP.fldBrandId
+                INNER JOIN tblProductImages AS TPI ON TP.fldProduct_ID=TPI.fldProductId
                 WHERE
                     fldSUbCategoryId=<cfqueryparam value="#arguments.subCategoryId#" cfsqltype="integer">
                 AND
-                    tp.fldActive=1
+                    TP.fldActive=1
                 AND
-                    tpi.fldActive=1
+                    TPI.fldActive=1
                 AND
-                    tpi.fldDefaultImage=1
+                    TPI.fldDefaultImage=1
             </cfquery>
             <cfcatch>
                 <cfset errorMail(cfcatch.type,cfcatch.message)>
@@ -461,25 +462,25 @@
         <cftry>
             <cfquery name="local.qrySingleSelectProduct">
                 SELECT
-                    tp.fldProduct_ID,
-                    tp.fldProductName,
-                    tp.fldDescription,
-                    tp.fldPrice,
-                    tp.fldTax,
-                    tpi.fldProductImage_ID,
-                    tpi.fldImageFileName,
-                    tb.fldBrandName,
-                    tp.fldBrandId
+                    TP.fldProduct_ID,
+                    TP.fldProductName,
+                    TP.fldDescription,
+                    TP.fldPrice,
+                    TP.fldTax,
+                    TPI.fldProductImage_ID,
+                    TPI.fldImageFileName,
+                    TB.fldBrandName,
+                    TP.fldBrandId
                 FROM
-                    tblBrands as tb
-                INNER JOIN tblProduct AS tp ON tb.fldBrand_Id=tp.fldBrandId
-                INNER JOIN tblProductImages AS tpi ON tp.fldProduct_ID=tpi.fldProductId
+                    tblBrands as TB
+                INNER JOIN tblProduct AS TP ON TB.fldBrand_Id=TP.fldBrandId
+                INNER JOIN tblProductImages AS TPI ON TP.fldProduct_ID=TPI.fldProductId
                 WHERE
-                    tp.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="integer">
+                    TP.fldProduct_ID=<cfqueryparam value="#arguments.productId#" cfsqltype="integer">
                 AND
-                    tp.fldActive=1
+                    TP.fldActive=1
                 AND
-                    tpi.fldActive=1
+                    TPI.fldActive=1
             </cfquery>
             <cfcatch>
                 <cfset errorMail(cfcatch.type,cfcatch.message)>
