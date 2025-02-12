@@ -1160,4 +1160,29 @@ header a{
     background-color: #286b17;
   }
 
+  .productListingContainer .productListingSubContainer .card:hover {
+    transform: scale(1.1);
+  }
+
+  .productListingContainer .productListingSubContainer .card {
+    transition: transform 0.2s ease;
+  }
+
+  .categoryMainContainer .categorySubcontainer .card:hover {
+    transform: scale(1.1);
+  }
+
+  .categoryMainContainer .categorySubcontainer .card {
+    transition: transform 0.2s ease;
+  }
+
+  .subcategorySubcontainer .productContainerSubcategory .card:hover {
+    transform: scale(1.1);
+  }
+
+  .subcategorySubcontainer .productContainerSubcategory .card {
+    transition: transform 0.2s ease;
+  }
+ 
+ 
  

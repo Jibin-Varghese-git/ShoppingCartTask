@@ -16,14 +16,14 @@
         <cfinclude  template="userHeader.cfm">
         <div class="mainContainerProfile">
             <div class="subcontainerProfileTop my-2 p-3 d-flex">
-                <div class="profileImage p-2 ms-3 me-5">
+                <div class="profileImage p-2 ms-3 me-2">
                     <img src="../Assets/Images/user (2).png" alt="No Image Found">
                 </div>
-                <div class="profileName w-100 px-3 d-flex">
+                <div class="profileName w-100 px-3 d-flex justify-content-between">
                     <cfoutput>
-                    <div class="mx-3">
+                    <div class="">
                         <h4>HELLO , </h4>
-                        <h5 class="ms-5 profilUserName" id="profilUserName">#session.structUserDetails["firstName"]# #session.structUserDetails["lastName"]#</h5>
+                        <h5 class="profilUserName" id="profilUserName">#session.structUserDetails["firstName"]# #session.structUserDetails["lastName"]#</h5>
                         <span class="profileEmail" id="profileEmail">email : #session.structUserDetails["email"]#</span>
                     </div>
                     <div class="d-flex flex-column justify-content-center mx-3">
