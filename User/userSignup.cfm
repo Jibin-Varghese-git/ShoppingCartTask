@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Signup</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -20,7 +20,7 @@
             </a>
             <div class="loginBtnClass mt-1">
                 <a href="userLogin.cfm"> <button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Login</button></a>
-            </div>  
+            </div>
         </header>
         <div class="mainContainerSignup p-2 mt-3">
             <div class="containerSignup mt-3 py-2 px-4 ">
@@ -107,5 +107,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="../js/userScript.js" async defer></script>
+        <script src="../js/validation.js" async defer></script>
     </body>
 </html>

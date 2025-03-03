@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" 
-          content="width=device-width, 
+          content="width=device-width,
                    initial-scale=1.0">
     <title>
-        404 Page Not Found
+        Error Page
     </title>
     <link rel="stylesheet" 
           href="../css/errorStyle.css">
@@ -16,11 +16,8 @@
 <body>
     <div class="error-container">
         <div>
-            <h1> 404 </h1>
+            <h1> ERROR </h1>
             <cfoutput>
-                <p>
-                    #url.exception#
-                </p>
             </cfoutput>
             <a href="userHome.cfm">
                 Go Back to Home

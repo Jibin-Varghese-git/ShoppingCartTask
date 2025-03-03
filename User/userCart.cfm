@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Cart</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="productListingContainerCart pt-3">
                         <hr class="my-4">
-<!---                  Product        --->
+<!---         Product        --->
                         <cfloop query="variables.productListingCart">
                             <div class="row mb-4 d-flex justify-content-between align-items-center" id="#variables.productListingCart.cartId#">
                                 <div class="col-md-2 col-lg-2 col-xl-2">
@@ -40,7 +40,7 @@
                                   </a>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-3">
-                                  <h6 class="text-muted">#variables.productListingCart.productName#</h6>
+                                  <h6 class="text-truncate">#variables.productListingCart.productName#</h6>
                                   <h6 class="mb-0">#variables.productListingCart.brandName#</h6>
                                 </div>
                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
@@ -57,7 +57,7 @@
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex">
                                   <h6><i class="fa-solid fa-indian-rupee-sign"></i></h6>
                                   <h6 class="mb-0" id="#variables.productListingCart.cartId#ProductPrice">#variables.productListingCart.productQuantity * variables.productListingCart.price#</h6>
-                                  <input type="hidden" value="#variables.productListingCart.tax#" id="#variables.productListingCart.cartId#ProductTax">
+                                  <input type="hidden" value="#variables.productListingCart.price * (variables.productListingCart.tax/100)#" id="#variables.productListingCart.cartId#ProductTax">
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                   <button  class="border-0 bg-transparent" onclick="removeCartItem({cartId:#variables.productListingCart.cartId#})"><i class="fas fa-times"></i></button>
@@ -65,7 +65,7 @@
                                 <hr class="my-4">
                             </div>
                             <cfset totalProductPrice += (variables.productListingCart.price * variables.productListingCart.productQuantity)>
-                            <cfset totaltax += (variables.productListingCart.tax * variables.productListingCart.productQuantity)>
+                            <cfset totaltax += ((variables.productListingCart.price * (variables.productListingCart.tax/100)) * variables.productListingCart.productQuantity)>
                         </cfloop>
                     </div>
                 </div>
@@ -83,7 +83,6 @@
                                 <h5 id="totalProductPrice">#totalProductPrice#</h5>
                               </div>
                             </div>
-
 
                             <div class="d-flex justify-content-between mb-4 pb-2">
                               <h5 class="text-uppercase">Total Tax</h5>
@@ -105,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-              
+
             </div>
         </cfoutput>
         <cfinclude  template="userFooter.cfm"></cfinclude>

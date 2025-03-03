@@ -405,7 +405,7 @@ header a{
  }
 
  .productContainerSubcategory{
-    max-height: 110vh;
+    height: auto;
     overflow: hidden;
  }
 
@@ -1182,6 +1182,13 @@ header a{
 
   .subcategorySubcontainer .productContainerSubcategory .card {
     transition: transform 0.2s ease;
+  }
+
+  .orderSearchDiv button{
+        background-color: #ffffff;
+        border:none;
+        border-radius: 12px;
+        height: 32px;
   }
  
  

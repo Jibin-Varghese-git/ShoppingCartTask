@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>User Profile</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -50,7 +50,7 @@
                                         <span>#variables.addressQuery.firstName# #variables.addressQuery.lastName#</span>
                                         <span>#variables.addressQuery.phoneNumber#</span>
                                     </div>
-                                    <div class="d-flex w-50">
+                                    <div class="d-flex w-50 text-nowrap">
                                         <span>#variables.addressQuery.addressline1#,</span>
                                         <span>#variables.addressQuery.addressline2#,</span>
                                         <span>#variables.addressQuery.city#,</span>
@@ -65,10 +65,10 @@
                         </cfloop>
                     </cfoutput>
                 </div>
-                    
+
                 <div class="addressBtn mt-2 w-100 d-flex justify-content-end">
                     <button class="addAddressBtn p-2 mx-2" data-bs-toggle="modal" data-bs-target="#modalAddAddress"><i class="fa-solid fa-plus"></i> Add New Address</button>
-                    <a href="userOrderHistory.cfm" class="btn orderBtn p-2 mx-2"><i class="fa-solid fa-circle-info"></i> Order Details</a>
+                    <a href="userOrderHistory.cfm?page=1" class="btn orderBtn p-2 mx-2"><i class="fa-solid fa-circle-info"></i> Order Details</a>
                 </div>
             </div>
             <cfif structKeyExists(form, "addAddressBtn")>
@@ -188,5 +188,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="../js/userScript.js" async defer></script>
+        <script src="../js/validation.js" async defer></script>
     </body>
 </html>

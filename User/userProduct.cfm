@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Product</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -14,7 +14,6 @@
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
         <cfset variables.productListing=local.objUserShoppingCart.selectAllProducts(url.productId)>
-        <cfset variables.productImageListing = local.objUserShoppingCart.selectProductImages(url.productId)>
         <div class="categoryMainContainer mt-2 px-2">
             <cfif NOT queryRecordCount(variables.productListing)>
                 <h1>No Products Found</h1>
@@ -24,14 +23,14 @@
                     <div class="imageContainer p-2">
                         <div id="carouselExampleRide" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <cfloop query="variables.productImageListing">
+                                <cfloop query="variables.productListing">
                                     <cfoutput>
-                                        <cfif productImageListing.defaultImage EQ 1>
+                                        <cfif variables.productListing.defaultImage EQ 1>
                                             <div class="carousel-item active">
                                         <cfelse>
                                             <div class="carousel-item">
                                         </cfif>
-                                            <img src="../Assets/productImages/#productImageListing.productImage#" class="d-block w-100" alt="...">
+                                            <img src="../Assets/productImages/#variables.productListing.imageName#" class="d-block w-100" alt="...">
                                         </div>
                                     </cfoutput>
                                 </cfloop>
@@ -57,14 +56,14 @@
                                 <span class="ms-2">#productListing.productName#</span>
                             </div>
                             <div class="productName w-100 d-flex my-2">
-                                <h2>#productListing.productName#</h2>
+                                <h2 class="text-truncate">#productListing.productName#</h2>
                             </div>
                             <div class="productDesc">
                                 <p class="w-100">#productListing.productDesc#</p>
                             </div>
                             <div class="productPrice w-100 overflow-hidden ">
-                                <div class="d-flex w-100 m-2"><h5><i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price# <sub>+#productListing.tax#(tax)</sub></h5></div>
-                                <div class="ms-2 mt-4"><h4>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price + productListing.tax#</h4></div>
+                                <div class="d-flex w-100 m-2"><h5><i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price# <sub>+#productListing.tax#<i class="fa-solid fa-percent"></i>(tax)</sub></h5></div>
+                                <div class="ms-2 mt-4"><h4>Total Price : <i class="fa-solid fa-indian-rupee-sign"></i> #productListing.price + (productListing.price * (productListing.tax/100))#</h4></div>
                             </div>
                             <div class="productListingBtns w-100 d-flex flex-column align-items-center">
                                 <form method="POST" class="w-100">

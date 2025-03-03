@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Category</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -26,12 +26,17 @@
                 <div class="categorySubcontainer  my-3 ps-5 pe-3 py-3">
                     <cfoutput>
                         <div class="w-100">
-                            <a href="userSubCategory.cfm?subcategoryId=#variables.subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black"><h3>#variables.subcategoryListing.fldSubCategoryName#</h3></a>
+                            <h3 class="w-25">
+                                <a href="userSubCategory.cfm?subcategoryId=#variables.subcategoryListing.fldSubCategory_ID#" class="text-decoration-none text-black">
+                                    #variables.subcategoryListing.fldSubCategoryName#
+                                </a>
+                            </h3>
                         </div>
                         <cfset countVariable = 0>
-                        <cfloop query="variables.productListing">
+                        <cfloop query="variables.productListing" group="productId">
                             <cfif countVariable LT 5>
-                                <cfif variables.subcategoryListing.fldSubCategory_ID EQ variables.productListing.subcategoryId>
+<!---               ANY Other Methods               --->
+                                <cfif variables.subcategoryListing.fldSubCategory_ID EQ variables.productListing.subcategoryId AND variables.productListing.defaultImage EQ 1>
                                     <div class="card p-2 m-3">
                                         <a href="userProduct.cfm?productId=#variables.productListing.productId#" class="text-decoration-none">
                                            <div class="productImageDiv">

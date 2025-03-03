@@ -1,7 +1,7 @@
 <cfset local.today = dateTimeFormat(now(),"dd-mm-yy-HH.nn.SS")>
 <cfset local.filename = "#session.structUserDetails["firstName"]#" & "#local.today#">
     <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
-		<cfset variables.orderListing=local.objUserShoppingCart.selectOrderTable(arguments.orderId)>
+<!--- 		<cfset variables.orderedItemListing=local.objUserShoppingCart.selectOrderTable(arguments.orderId)> --->
 		<cfset variables.orderedItemListing=local.objUserShoppingCart.selectOrderedItemsTable(arguments.orderId)>
 <cfdocument  format="PDF" filename="../Assets/Invoices/#local.filename#.pdf" overwrite="true">
     <cfoutput>
@@ -12,27 +12,27 @@
             <div class="userDetails">
                 <div class="userDetailsContainer1">
                     <span>User Name :</span>
-                    <span>#variables.orderListing.firstName# #variables.orderListing.lastName#</span>
+                    <span>#variables.orderedItemListing.firstName# #variables.orderedItemListing.lastName#</span>
                 </div>
                 <div class="userDetailsContainer1">
                     <span>Contact No :</span>
-                    <span>#variables.orderListing.phoneNumber#</span>
+                    <span>#variables.orderedItemListing.phoneNumber#</span>
                 </div>
-                <cfset variables.orderDate=dateFormat(#variables.orderListing.orderDate#,"dd-mm-yyyy")>
+                <cfset variables.orderDate=dateFormat(#variables.orderedItemListing.orderDate#,"dd-mm-yyyy")>
                 <div class="userDetailsContainer1">
                     <span>Ordered Date : #variables.orderDate#</span>
                 </div>
                 <div class="userDetailsContainer1">
                         <span>Delivery Address :</span>
-                        <span>#variables.orderListing.addressline1#,
-                            #variables.orderListing.addressline2#,
+                        <span>#variables.orderedItemListing.addressline1#,
+                            #variables.orderedItemListing.addressline2#,
                         </span>
                         <span>
-                            #variables.orderListing.city#,
-                            #variables.orderListing.state#,
-                            #variables.orderListing.pincode#
+                            #variables.orderedItemListing.city#,
+                            #variables.orderedItemListing.state#,
+                            #variables.orderedItemListing.pincode#
                         </span>
-            
+
                 </div>
             </div>
             <div class="orderDetailDiv">
@@ -79,7 +79,7 @@
                 </cfloop>
             </table>
             <div class="totalPriceDiv">
-                    <span>Total Price : #variables.orderListing.totalPrice + variables.orderListing.totalTax#/-</span>
+                    <span>Total Price : #variables.orderedItemListing.totalPrice + variables.orderedItemListing.totalTax#/-</span>
             </div>
         </div>
 

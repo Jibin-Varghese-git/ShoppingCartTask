@@ -1,0 +1,69 @@
+Hi Jibin ,
+The following are the things i noticed when i reviewed your code quickly. Please read the following
+
+1)Session Management Issues(Done)
+    No explicit session timeout set(Yes)
+    No session expiration handling(Yes)
+    Admin and user sessions share the same session structure (structUserDetails), which could lead to session pollution(Yes)
+
+2)Query Optimization Issues:(Done)
+    Multiple separate queries where single JOINs would be more efficient(Yes)
+    For example:
+        In userProduct.cfm you’re making one call for the product details (using selectAllProducts) on (roughly) line 16 and then a second call for the product images (using selectProductImages) on line 17.
+        This can be optimized by using a single query with a JOIN between the product and product images tables.
+
+3)Missing Pagination in all places needed:
+    Hard-coded limits without proper pagination.
+    Use LIMIT and OFFSET to paginate the results.(Changed)
+
+4)Error Handling Issues:(Done)	
+    No error handling in the application.cfc
+    End user should not see technical details of the error.
+
+5)Issues with the Image Upload Handling(Done)
+    No File Type Validation(Changed)
+    There is no check to verify that the uploaded files are valid image types (such as .jpg, .png, or .gif).
+    Without this validation, users might upload non-image files or even malicious scripts, which can create security risks.
+
+    No File Size Restrictions(Changed)
+    This could allow extremely large files to be uploaded, which may lead to longer load times or even performance bottlenecks on the server.
+
+6)Application.cfc issues:
+    No proper application name set in Application.cfc   
+        Not setting an application name risks collisions with other applications running on the same server and can lead to maintenance difficulties later on.(Changed)
+
+    Looks like your login check only protects 4 specific pages, so hackers can access other pages by slightly changing the URL. Protect all pages by default and only allow a small list of public pages (like login and signup) to be accessed without logging in.(Changed)
+
+    Beyond onrequestStart, the Application.cfc file does not include other recommended lifecycle functions such as onApplicationStart or onSessionEnd. 
+
+7)Code Redundancy Issues:
+    Both admin and user login functions have nearly identical parameters and logic.(Admin and  user login does that need to change?)
+    fnSelectProduct and fnSelectSingleProduct are nearly identical.(Changed)
+        These can be refactored to a single function that handles both admin and user login, with a parameter to differentiate between the two.
+    
+    There could be similar issues with other functions that are nearly identical.
+
+8)The search functionality in orderDetails page only searches by order ID. Consider expanding search to include product names, dates, etc.(changed)
+
+9)Cart updates should be wrapped in transactions to maintain data integrity.(?)(In buy now uses transaction and in cart to order uses stored procedure)
+
+10)Check for duplicate code between admin and user components.
+
+11)Missing proper component documentation(?)
+
+12)No encryption done on the parameters passed in url or form fields or in the payload of ajax requests.(?)
+
+13)Issues with Folder Structure:
+    Consolidate the Application.cfc file into a single file with with role-based logic.(Changed)
+
+    Check if Product images are mixed with UI assets. Product images should be in a separate uploads or media directory, not mixed with UI assets.(Already Like that)
+
+    No rule in web.config to restrict direct access to certain directories(?)
+        Currently, the application has no protection against direct access to sensitive directories and files. eg:Block direct access to .cfc files in the component directory.
+
+14)Create a new js file for all vaidations.
+
+15)Cross-size scripting 
+    Sanitize all user input in the application.
+
+

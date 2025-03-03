@@ -44,7 +44,7 @@ DECLARE cursor1 cursor for
 		),
 		@totalTax = SUM
 		(
-			 tc.fldQuantity * tp.fldTax
+			 tc.fldQuantity * (tp.fldPrice * (tp.fldTax/100))
 		) 
 	from 
 		tblCart as tc
@@ -96,7 +96,7 @@ Fetch next from cursor1 into @productId,@quantity,@price,@tax
 		(
 			@generatedUuid,
 			@productId,
-			@qty,
+			@quantity 	
 			@price,
 			@tax
 		)

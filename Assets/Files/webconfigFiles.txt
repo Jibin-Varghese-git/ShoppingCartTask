@@ -1,0 +1,39 @@
+  <!-- Security Configuration to Block .cfc for Direct Access -->
+        <security>
+            <requestFiltering>
+                <fileExtensions>
+                    <add fileExtension=".cfc" allowed="false" />
+                </fileExtensions>
+            </requestFiltering>
+        </security>
+
+        <!-- URL Rewrite Rules for .cfc -->
+        <rewrite>
+            <rules>
+                <!-- Allow .cfc files for POST method -->
+                <rule name="Allow .cfc for POST" stopProcessing="true">
+                    <match url=".*\.cfc$" />
+                    <conditions>
+                        <add input="{REQUEST_METHOD}" pattern="^POST$" />
+                    </conditions>
+                    <action type="Rewrite" url="{REQUEST_URI}" />
+                </rule>
+        
+                <!-- Allow .cfc files for AJAX calls with X-Requested-With header -->
+                <rule name="Allow .cfc for AJAX (X-Requested-With header)" stopProcessing="true">
+                    <match url=".*\.cfc$" />
+                    <conditions>
+                        <add input="{HTTP_X_REQUESTED_WITH}" pattern="^XMLHttpRequest$" />
+                    </conditions>
+                    <action type="Rewrite" url="{REQUEST_URI}" />
+                </rule>
+            </rules>
+        </rewrite>
+
+
+
+
+beforeSend: function(xhr) {
+            // This is where you add the X-Requested-With header
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        },
