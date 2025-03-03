@@ -2,111 +2,30 @@ if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
 }
 
-function fnsignupValidation(){
-    let firstName = document.getElementById("firstName").value;
-    let lastName = document.getElementById("lastName").value;
-    let userEmail = document.getElementById("userEmail").value;
-    let userPhone = document.getElementById("userPhone").value;
-    let password = document.getElementById("password").value;
-    let confirmPassword = document.getElementById("confirmPassword").value;
-    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    var flag = true;
-    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/;
-
-    document.getElementById("errorFirstName").innerHTML=" ";
-    document.getElementById("errorEmailId").innerHTML=" ";
-    document.getElementById("errorPhone").innerHTML=" ";
-    document.getElementById("errorPassword").innerHTML=" ";
-    document.getElementById("errorConfirmPassword").innerHTML=" ";
-
-    if(firstName.trim().length <1)
-    {
-        document.getElementById("errorFirstName").innerHTML="Enter first name";
-        flag = false;
-    }
-
-    if(userEmail.trim().length <1)
-    {
-        document.getElementById("errorEmailId").innerHTML="Enter  email";
-        flag = false;
-    }else if(emailPattern.test(userEmail) == false){
-        document.getElementById("errorEmailId").innerHTML="Invalid Format";
-        flag = false;
-    }
-
-    if(userPhone.trim().length <1)
-    {
-        document.getElementById("errorPhone").innerHTML="Enter Phone number";
-        flag = false;
-    }else if(phonePattern.test(userPhone) === false){
-        document.getElementById("errorPhone").innerHTML="Invalid Input";
-        flag = false;
-    }
-
-    if(password.trim().length <1)
-    {
-        document.getElementById("errorPassword").innerHTML="Enter  password";
-        flag = false;    
-    }else if(password.length < 6){
-        document.getElementById("errorPassword").innerHTML="Must Contain 6 characters";
-        flag = false;
-    }
-    else if(password.trim() != confirmPassword.trim()){
-        document.getElementById("errorConfirmPassword").innerHTML="Password Missmatch";
-        flag = false;
-    }
-
-    if(flag == false)
-    {
-        event.preventDefault()
-    }
-}
-
-function fnLoginValidation(){
-    let userName = document.getElementById("userNameLogin").value;
-    let password = document.getElementById("passwordLogin").value;
-
-    let flag = true
-    document.getElementById("errorUserName").innerHTML="";
-    document.getElementById("errorPasswordLogin").innerHTML="";
-    document.getElementById("loginErrorMessage").innerHTML="";
-    if(userName.trim().length < 1)
-    {
-        document.getElementById("errorUserName").innerHTML="Enter the Username";
-        flag = false;
-    }
-
-    if(password.trim().length <1)
-    {
-        document.getElementById("errorPasswordLogin").innerHTML="Enter the Password";
-        flag = false;
-    }
-
-    if(flag == false)
-    {
-        event.preventDefault()
-    }
-}
-
 function logoutUser(){
-    if(confirm("Do you want to logout?"))
-        {
+    Swal.fire({
+        title: "Do you want to logout!",
+        text: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+
             $.ajax({
-                type:"GET",
+                type:"POST",
                 url:"components/userShoppingCart.cfc?method=logoutUser",
                 success:function(result){
-                    alert("dkdg")
                     if(result)
                     {
-                        alert()
                         location.reload();
                     }
                 }
             });
-        } 
-        else{
-            alert("error")
-        } 
+        }
+      });
 }
 
 function customFilter(){
@@ -157,25 +76,70 @@ function filterPrice(filterArguments)
         var minValue = $('#filterMin').val()
         var maxValue = $('#filterMax').val()
     }
-    $.ajax({
-        type:"Post",
-        url:"components/userShoppingCart.cfc?method=filterProducts",
-        data:{  subcategoryId : filterArguments.subcategoryId,
-                minValue : minValue,
-                maxValue : maxValue,
-                search : filterArguments.search
-            },
-        success:function(result){
-            $("#productContainerSubcategory").empty()
-            if(result)
-            {
-                arrayFilterProducts = JSON.parse(result)
-                if(arrayFilterProducts.length < 10)
+    if(minValue < 0 || maxValue< 0){
+        alert("Value should be greater than 0")
+    }
+    else{
+        $.ajax({
+            type:"POST",
+            url:"components/userShoppingCart.cfc",
+            data:{  subcategoryId : filterArguments.subcategoryId,
+                    minValue : minValue,
+                    maxValue : maxValue,
+                    search : filterArguments.search,
+                    method:"filterProducts"
+                },
+            success:function(result){
+
+                $("#productContainerSubcategory").empty()
+                if(result)
                 {
-                    $('#viewmoreBtn').remove()
+                    arrayFilterProducts = JSON.parse(result);
+                    $('#viewmoreBtn').remove();
+                    $('#dropdownMenuClickableInside').dropdown('toggle');
+                    arrayFilterProducts.forEach(element => {
+                        var singleProduct = `
+                            <a href="userProduct.cfm?productId=${element.PRODUCTID}" class="text-decoration-none">
+                                <div class="card p-2 m-3">
+                                    <div class="productImageDiv">
+                                        <img src="../Assets/productImages/${element.PRODUCTIMAGE}" class="card-img-top" alt="No Image Found" height="200" width="50">
+                                    </div>
+                                    <div class="card-body d-flex flex-column align-items-center">
+                                        <h5 class="card-title text-truncate">${element.PRODUCTNAME}</h5>
+                                        <span class="fw-bold text-wrap ">${element.BRANDNAME}</span>
+                                        <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
+                                    </div>
+                                </div>
+                            </a>`
+                        $('#productContainerSubcategory').append(singleProduct)
+                    });
                 }
-                $('#dropdownMenuClickableInside').dropdown('toggle');
-                arrayFilterProducts.forEach(element => {
+            }
+        });
+    }
+}
+
+function viewMore(listExcludedProductId,arguments){
+    var structArguments = new Object();
+    if(arguments.search){
+        structArguments.search = arguments.search;
+    }
+    if(arguments.sort){
+        structArguments.sort = arguments.sort;
+    }
+    if(arguments.subCategoryId){
+        structArguments.subCategoryId = arguments.subCategoryId;
+    }
+    structArguments.limit = 5;
+    structArguments.listExcludedProductId = listExcludedProductId.value;
+    $.ajax({
+        type : "POST",
+        url : "components/userShoppingCart.cfc?method=selectSubcategoryProducts",
+        data : structArguments,
+        success : function(result){
+            if(result){
+                var structProductsDetails = JSON.parse(result);
+                structProductsDetails.forEach(element => {
                     var singleProduct = `
                         <a href="userProduct.cfm?productId=${element.PRODUCTID}" class="text-decoration-none">
                             <div class="card p-2 m-3">
@@ -183,32 +147,21 @@ function filterPrice(filterArguments)
                                     <img src="../Assets/productImages/${element.PRODUCTIMAGE}" class="card-img-top" alt="No Image Found" height="200" width="50">
                                 </div>
                                 <div class="card-body d-flex flex-column align-items-center">
-                                    <h5 class="card-title">${element.PRODUCTNAME}</h5>
+                                    <h5 class="card-title text-truncate">${element.PRODUCTNAME}</h5>
                                     <span class="fw-bold text-wrap ">${element.BRANDNAME}</span>
-                                    <span class="text-success fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
+                                    <span class="price fw-bold"><i class="fa-solid fa-indian-rupee-sign"></i>${element.PRODUCTPRICE}</span>
                                 </div>
                             </div>
-                        </a>`
-                    $('#productContainerSubcategory').append(singleProduct)
+                         </a>`
+                    $('#productContainerSubcategory').append(singleProduct);
+                    listExcludedProductId.value = listExcludedProductId.value + ',' + element.PRODUCTID
                 });
+                if(listExcludedProductId.value.split(",").length == document.getElementById("productCountHidden").value){
+                    document.getElementById("viewmoreBtnDiv").remove()
+                }
             }
         }
     });
-}
-
-function viewMore(){
-    var btnValue=$('#viewmoreBtn').val()
-    if(btnValue == "more")
-    {
-        $("#productContainerSubcategory").removeClass("productContainerSubcategory")
-        $('#viewmoreBtn').html("View Less <i class='fa-solid fa-arrow-up-long' style='color: #bd8dc9;'></i>")
-        $('#viewmoreBtn').prop("value","less")
-    }
-    else{
-        $("#productContainerSubcategory").addClass("productContainerSubcategory")
-        $('#viewmoreBtn').html("View More <i class='fa-solid fa-arrow-down' style='color: #bd8dc9;'></i>")
-        $('#viewmoreBtn').prop("value","more")
-    }
 }
 
 function removeCartItem(cartDetails){
@@ -219,7 +172,7 @@ function removeCartItem(cartDetails){
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes!",
         allowOutsideClick: false
       }).then((result) => {
         if (result.isConfirmed) {
@@ -256,6 +209,7 @@ function removeCartItem(cartDetails){
                             document.getElementById("totalProductPrice").innerHTML = 0;
                             document.getElementById("totalTax").innerHTML = 0;
                             document.getElementById("totalPrice").innerHTML= 0;
+                            document.getElementById("placeOrderCartBtn").remove()
                         }
                         else{
                             document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
@@ -266,8 +220,8 @@ function removeCartItem(cartDetails){
                 }
             });
         Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
+            title: "Removed!",
+            text: "Item has been removed from the cart.",
             icon: "success",
             allowOutsideClick: false
           });
@@ -276,8 +230,8 @@ function removeCartItem(cartDetails){
     
 }
 
-
 $(document).ready(function() {
+    
     checkQuantityOrder();
     checkQuantity();
     if($("#verifyCardBtn"))
@@ -292,7 +246,7 @@ $(document).ready(function() {
 function checkQuantity(){
     var quantity=$('.cartQuantity');
     for (let index = 0; index < quantity.length; index++) {
-        if(quantity[index].value ==1)
+        if(quantity[index].value == 1)
         {
             quantity[index].previousElementSibling.disabled = true;
         }
@@ -302,7 +256,6 @@ function checkQuantity(){
     }
 
     var cartItemQuantityHeader=document.getElementById("cartItemQuantityHeader").innerHTML;
-    console.log(cartItemQuantityHeader)
     if(cartItemQuantityHeader < 1 && document.getElementById("placeOrderCartBtn")){
         document.getElementById("placeOrderCartBtn").remove()
     }
@@ -320,7 +273,7 @@ function addQuantity(cartDetails){
 
     price=price/quantity;
     totalProductPrice=parseFloat(totalProductPrice) + price;
-    totalTax=parseFloat(totalTax)  + parseFloat(tax);
+    totalTax=parseFloat(totalTax) + parseFloat(tax);
 
     $.ajax({
        type : "POST",
@@ -334,8 +287,9 @@ function addQuantity(cartDetails){
                     document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)+1;
                     document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)+1)*price;
                     document.getElementById("totalProductPrice").innerHTML = totalProductPrice
-                    document.getElementById("totalTax").innerHTML = totalTax;
-                    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax);
+                    document.getElementById("totalTax").innerHTML =  totalTax.toFixed(2);
+                    document.getElementById("totalPrice").innerHTML= Math.round((totalProductPrice + totalTax).toFixed(2));
+                    checkQuantity();
                 }
                 else{
                     alert("Value Cannot be less than 1");
@@ -345,7 +299,6 @@ function addQuantity(cartDetails){
             }
         }
     });
-    checkQuantity();
 }
 
 
@@ -360,8 +313,6 @@ function removeQuantity(cartDetails){
     totalProductPrice=parseFloat(totalProductPrice) - price;
     totalTax=parseFloat(totalTax) - parseFloat(tax);
 
-    
-
     $.ajax({
         type : "POST",
         url : "components/userShoppingCart.cfc?method=cartUpdate",
@@ -373,95 +324,20 @@ function removeQuantity(cartDetails){
                     document.getElementById(cartDetails.cartId+"Input").value=parseInt(quantity)-1;
                     document.getElementById(cartDetails.cartId+"ProductPrice").innerHTML=(parseInt(quantity)-1)*price;
                     document.getElementById("totalProductPrice").innerHTML = totalProductPrice;
-                    document.getElementById("totalTax").innerHTML = totalTax;
-                    document.getElementById("totalPrice").innerHTML=(totalProductPrice + totalTax);
+                    document.getElementById("totalTax").innerHTML = totalTax.toFixed(2);
+                    document.getElementById("totalPrice").innerHTML=Math.round((totalProductPrice + totalTax).toFixed(2));
+                    checkQuantity()
                 }
                 else{
                     alert("Quantity Cannot be less than 1");
                     location.reload()
                 }
-                checkQuantity()
             }
            
         }
     });
 }
 
-function checkAddress(){
-    var firstName = document.getElementById("firstName").value;
-    var addressline1 = document.getElementById("addressline1").value;
-    var city = document.getElementById("city").value;
-    var state = document.getElementById("state").value;
-    var pincode = document.getElementById("pincode").value;
-    var phoneNumber = document.getElementById("phoneNumber").value;
-    var pincodeRegex = /^[0-9]{6}$/;
-    var flag = true;
-    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-
-    document.getElementById("errorFirstName").innerHTML=" ";
-    document.getElementById("errorAddressline1").innerHTML=" ";
-    document.getElementById("errorCity").innerHTML=" ";
-    document.getElementById("errorState").innerHTML=" ";
-    document.getElementById("errorPincode").innerHTML=" ";
-    document.getElementById("errorPhoneNumber").innerHTML=" ";
-
-    
-    if(phoneNumber.trim().length == 0)
-    {
-        document.getElementById("errorPhoneNumber").innerHTML="Enter the phone Number"
-        document.getElementById("phoneNumber").focus();
-        flag = false;
-    }else if(phonePattern.test(phoneNumber) === false)
-    {
-        document.getElementById("errorPhoneNumber").innerHTML="Invalid Phone Number";
-        document.getElementById("phoneNumber").focus();
-        flag = false;
-    }
-    
-    if(pincode.trim().length == 0)
-    {
-        document.getElementById("errorPincode").innerHTML="Enter the Pincode";
-        document.getElementById("pincode").focus();
-        flag = false;
-    }else if(pincodeRegex.test(pincode) === false){
-        document.getElementById("errorPincode").innerHTML="Invalid Pincode";
-        document.getElementById("pincode").focus();
-        flag = false;
-    }
-
-    if(state.trim().length == 0)
-    {
-        document.getElementById("errorState").innerHTML="Enter the State";
-        document.getElementById("state").focus();
-        flag = false;
-    }
-    
-    if(city.trim().length == 0)
-    {
-        document.getElementById("errorCity").innerHTML="Enter the City";
-        document.getElementById("city").focus();
-        flag = false;
-    }
-    
-    if(addressline1.trim().length == 0)
-    {
-        document.getElementById("errorAddressline1").innerHTML="Enter the address";
-        document.getElementById("addressline1").focus();
-        flag = false;
-    }
-
-    if(firstName.trim().length == 0)
-    {
-        document.getElementById("errorFirstName").innerHTML="Enter the first name";
-        document.getElementById("firstName").focus();
-        flag = false;
-    }
-
-    if(flag == false)
-    {
-        event.preventDefault()
-    }
-}
 
 function closeAddressModal(){
     document.getElementById("errorFirstName").innerHTML=" ";
@@ -584,7 +460,6 @@ function editUserProfle(){
                 if(result)
                 {
                     userEdit=JSON.parse(result)
-                    console.log(userEdit)
                     if(userEdit.error == false){
                         document.getElementById("profilUserName").innerHTML=userFirstName + " " + userLastName;
                         document.getElementById("profileEmail").innerHTML="email : " + userEmail
@@ -598,6 +473,14 @@ function editUserProfle(){
                                 userEmail: `${userEmail}`
                             });
                         });
+                        Swal.fire({
+                            position: "center-end",
+                            icon: "success",
+                            title: "Profile edited successfully!",
+                            toast:true,
+                            showConfirmButton: false,
+                            timer: 2000
+                          });
                     }
                     else{
                         document.getElementById("userProfileEditError").innerHTML=userEdit.errorMessage;
@@ -733,7 +616,6 @@ function checkCardDetails(){
         $("#cardExpiryMonth").focus();
         flag=false;
     }else if(cardMonth.trim() < 1 || cardMonth.trim() > 12){
-        alert()
         $(".warningCardMonth").html("Invalid Month");
         $("#cardExpiryMonth").focus();
         flag=false;
@@ -746,7 +628,7 @@ function checkCardDetails(){
         $("#cardExpiryYear").focus();
         flag=false;
     }
-    
+
     if(cardNumber.trim().length == 0){
         $(".warningCardNumber").html("Enter Card Number");
         $("#cardNumberInput").focus();
@@ -804,13 +686,6 @@ function cardModalClose(){
     $("#OrderPageForm")[0].reset();
 }
 
-function searchOrder(){
-    var value = $('#searchInputOrder').val().toLowerCase();
-    $(".singleOrderHistoryContainer").filter(function() {
-        $(this).toggle($(this).attr('id').toLowerCase().indexOf(value) > -1)
-        console.log($(this).attr('id'))
-      });
-}
 
 function invoiceDownload(orderId){
     Swal.fire({
@@ -825,7 +700,7 @@ function invoiceDownload(orderId){
       }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                method : "GET",
+                method : "POST",
                 url : "components/userShoppingCart.cfc?method=invoiceDownload",
                 data:{orderId : orderId.value},
                 success : function(result){
@@ -852,7 +727,7 @@ function download(fileUrl)
 
 function confirmOrder() {
     var flag = false;
-    if ($(".selectedAddress").val().length < 1) {
+    if ($(".selectedAddress").val().length < 1){
         alert("Select an address");
         flag = false;
     }else{

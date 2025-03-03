@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-<!---         <cfset onApplicationStart()> --->
         <cfset local.objShoppingCart = createObject("component", "components.shoppingCart")>
         <header class="p-2">
             <div class="headerDiv p-1 d-flex  justify-content-between">
@@ -30,7 +29,7 @@
                     <div class="d-flex flex-column justify-content-center mt-5 pt-2"> 
                         <div class="loginDivHeading px-5 py-2">
                             <span class="ms-4">ADMIN LOGIN</span>
-                        </div>               
+                        </div>
                         <input type="text" name="Username" placeholder="Username" id="userName" class="my-3">
                         <div id="errorUserName"  class="text-danger fw-bold"></div>
                         <input type="password" name="password" placeholder="Password" id="password" class="my-3">
@@ -45,12 +44,13 @@
                                 </cfoutput>
                             </cfif>
                         </cfif>
-                        <button type="submit" name="loginBtn" class="mt-3" onClick="fnValAdminLogin()">LOGIN</button>
+                        <button type="submit" name="loginBtn" class="mt-3" onClick="fnLoginValidation()">LOGIN</button>
                     </div>
                 </form>
             </div>
         </div>
-     
+
         <script src="../js/script.js"></script>
+        <script src="../js/validation.js"></script>
     </body>
 </html>

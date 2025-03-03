@@ -14,8 +14,7 @@
             </form>
         </div>
         <div class="headerBtnClass mt-1">
-            
-            
+
             <a  class="cartBtnHeader mx-3" 
                 <cfif structKeyExists(session,"structUserDetails")> 
                     href="userCart.cfm"
@@ -25,7 +24,7 @@
             >
                 <div class="cartTooltip">
                    <i class="fa-solid fa-cart-shopping"></i>
-                    <cfif structKeyExists(session,"structUserDetails")> 
+                    <cfif structKeyExists(session,"structUserDetails")>
                         <cfset variables.productListingCart = local.objUserShoppingCart.selectProductCart()>
                         <cfif queryRecordCount(variables.productListingCart) GT 0>
                             <cfoutput>
@@ -40,7 +39,7 @@
                     <span class="tooltiptext">Cart</span>
                 </div>
             </a>
-         
+
             <div class="profileTooltip">
                 <a href="userProfile.cfm" class="profileBtn mx-3">
                     <i class="fa-solid fa-user" ></i>
@@ -56,11 +55,12 @@
                     <a href="userLogin.cfm"><button name="loginBtn" onClick="" type="button"><i class="fa-solid fa-arrow-right-to-bracket" ></i>Login</button></a>
                 </cfif>
 
-        </div>  
+        </div>
         <cfif structKeyExists(form, "searchBtn")>
             <cfif len(trim(form.searchInput)) GT 0>
                 <cflocation  url="userSubcategory.cfm?search=#trim(form.searchInput)#" addToken="no">
             </cfif>
         </cfif>
     </header>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </cfoutput>

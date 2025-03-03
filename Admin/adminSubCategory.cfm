@@ -19,13 +19,13 @@
                 </div>
                 <div class="headerHeadingDiv">
                     <cfoutput>
-                    <span>Welcome #session.structUserDetails["firstName"]# #session.structUserDetails["lastName"]#</span>
+                    <span>Welcome #session.structAdminDetails["firstName"]# #session.structAdminDetails["lastName"]#</span>
                     </cfoutput>
                 </div>
                 <div class="logoutBtnClass">
                     <a href="../User/userHome.cfm" class="userHomePageAdminBtn btn">User Home Page</a>
                     <button name="logoutBtn" onClick="fnLogout()" type="submit"><img src="../Assets/Images/logoutIcon.png" alt="No Image Found">Logout</button>
-                </div>  
+                </div>
             </div>
         </header>
     <cfset variables.result=application.objShoppingCart.fnSelectSubCategory(categoryId=url.catId)> 
@@ -94,6 +94,7 @@
                 </form>
             </div>
           </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

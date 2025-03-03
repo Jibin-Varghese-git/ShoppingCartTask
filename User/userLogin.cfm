@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>User Login</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #ccc2ff;"></i> Sign Up
                     </button>
                 </a>
-            </div>  
+            </div>
         </header>
         <div class="mainContainerLogin p-4 mt-3">
             <div class="containerLogin mt-5 py-2 px-4 ">
@@ -43,15 +43,15 @@
                     <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
                         <span>Username</span>
                         <div class="ms-3">
-                            <input type="text" class="userNameLogin" name="userNameLogin" id="userNameLogin"><br>
+                            <input type="text" class="userNameLogin" name="userNameLogin" id="userName"><br>
                             <span class="errorUserName text-danger" id="errorUserName"></span>
                         </div>
                     </div>
                     <div class="userInputFields ms-4 mt-3 d-flex justify-content-around">
                         <span>Password</span>
                         <div class=" ms-3">
-                            <input type="password"  class="passwordLogin" name="passwordLogin" id="passwordLogin"><br>
-                            <span class="errorPasswordLogin text-danger" id="errorPasswordLogin"></span>
+                            <input type="password"  class="passwordLogin" name="passwordLogin" id="password"><br>
+                            <span class="errorPasswordLogin text-danger" id="errorPassword"></span>
                         </div>
                     </div>
                     <cfif structKeyExists(form,"btnLogin")>
@@ -67,7 +67,7 @@
                                     </cfif>
                                     <cfif url.redirect EQ "order">
                                         <cflocation  url="userOrder.cfm?productId=#url.productId#" addToken="no">
-                                    </cfif> 
+                                    </cfif>
                                 </cfif>
                             <cfelseif structKeyExists(url, "redirect") AND url.redirect EQ "cart">
                                 <cflocation  url="userCart.cfm" addToken="no">
@@ -76,7 +76,7 @@
                             </cfif>
                         <cfelse>
                             <cfoutput>
-                                <span class="text-danger fw-bold ms-5" id="loginErrorMessage">#local.structUserLoginReturn["errorMessage"]#</span>
+                                <span class="text-danger fw-bold ms-5" id="errorUserEntry">#local.structUserLoginReturn["errorMessage"]#</span>
                             </cfoutput>
                         </cfif>
                     </cfif>
@@ -87,11 +87,12 @@
                 </form>
             </div>
         </div>
-       
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="../js/userScript.js" async defer></script>
+        <script src="../js/validation.js" async defer></script>
     </body>
 </html>

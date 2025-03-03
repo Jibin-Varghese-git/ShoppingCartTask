@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Order Page</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -104,7 +104,7 @@
                             <cfset variables.totalProductPrice = 0>
                             <cfset variables.totalProductTax = 0>
                             <cfoutput>
-                                <cfloop query="variables.productListing">
+                                <cfloop query="variables.productListing" group="productId">
                                     <hr>
                                     <div class="container2Content p-3 d-flex justify-content-between overflow-hidden">
                                         <div class="productImage">
@@ -125,20 +125,20 @@
                                             </div>
                                             <div>
                                                 <span>Tax : <i class="fa-solid fa-indian-rupee-sign"></i></span>
-                                                <span>#variables.productListing.tax#</span>
+                                                <span>#variables.productListing.price * (variables.productListing.tax/100)#</span>
                                             </div>
                                         </div>
                                         <div class="productQty">
                                             <div class="d-flex">
                                                 <cfif NOT structKeyExists(variables.productListing, "productQuantity")>
                                                     <cfset variables.totalProductPrice = variables.totalProductPrice + variables.productListing.price>
-                                                    <cfset variables.totalProductTax = variables.totalProductTax + variables.productListing.tax>
+                                                    <cfset variables.totalProductTax = variables.totalProductTax + (variables.productListing.price * (variables.productListing.tax/100))>
                                                     <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2 qtyDeleteBtnOrder" id="#productListing.productId#deleteBtn" onclick="deleteQtyOrder(#productListing.productId#)">
                                                         <i class="fas fa-minus"></i>
                                                     </button>
                                                 <cfelse>
                                                     <cfset variables.totalProductPrice = variables.totalProductPrice + (variables.productListing.price * variables.productListing.productQuantity)>
-                                                    <cfset variables.totalProductTax = variables.totalProductTax + (variables.productListing.tax * variables.productListing.productQuantity)>
+                                                    <cfset variables.totalProductTax = variables.totalProductTax + ((variables.productListing.price * (variables.productListing.tax/100)) * variables.productListing.productQuantity)>
                                                     <span class="me-2">Quantity : </span>
                                                 </cfif>
                                                 <input id="#productListing.productId#Input" class="orderQuantity"  min="0" name="orderQuantity" 

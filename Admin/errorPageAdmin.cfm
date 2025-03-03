@@ -19,8 +19,8 @@
             <h1> ERROR </h1>
             <cfoutput>
             </cfoutput>
-            <a href="userHome.cfm">
-                Go Back to Home
+            <a href="adminLogin.cfm">
+                Go Back to Login
             </a>
         </div>
     </div>

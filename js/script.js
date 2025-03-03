@@ -1,26 +1,16 @@
-function fnValAdminLogin(){
-    let userName=document.getElementById("userName").value;
-    let password=document.getElementById("password").value;
-    document.getElementById("errorUserName").innerHTML=" ";
-    document.getElementById("errorPassword").innerHTML=" ";
-    document.getElementById("errorUserEntry").innerHTML=" ";
-
-    if(userName.length < 1)
-    {
-        document.getElementById("errorUserName").innerHTML="Enter Username";
-        event.preventDefault();
-    }
-
-    if(password.length < 1)
-    {
-        document.getElementById("errorPassword").innerHTML="Enter Password";
-        event.preventDefault();
-    }
-}
 
 function fnLogout(){
-    if(confirm("Do you want to logout?"))
-        {
+    Swal.fire({
+        title: "Do you want to logout!",
+        text: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+
             $.ajax({
                 type:"GET",
                 url:"components/shoppingCart.cfc?method=fnLogout",
@@ -31,28 +21,37 @@ function fnLogout(){
                     }
                 }
             });
-        } 
-        else{
-            alert("error")
-        } 
+        }
+    });
+ 
 }
 
 function fnDeleteCategory(categoryId)
 {
-    if(confirm("Do you want to Delete this item?"))
-    {
-        $.ajax({
-            type:"GET",
-            url:"components/shoppingCart.cfc?method=fnDeleteCategory",
-            data:{categoryId : categoryId.value},
-            success:function(result){
-                if(result)
-                {
-                    document.getElementById(categoryId.value).remove();
+    Swal.fire({
+        title: "Delete the category!",
+        text: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                type:"GET",
+                url:"components/shoppingCart.cfc?method=fnDeleteCategory",
+                data:{categoryId : categoryId.value},
+                success:function(result){
+                    if(result)
+                    {
+                        document.getElementById(categoryId.value).remove();
+                    }
                 }
-            }
-        });
-    } 
+            });
+        }
+    });
 }
 
 function fnAddCategory(){
@@ -101,7 +100,7 @@ function fnAddCategory(){
             });
         }
     }
-}   
+}
 
 function fnCloseModalCategory(){
     document.getElementById("errorNewCategory").innerHTML=" ";
@@ -130,7 +129,6 @@ function fnAddSubcategory(){
     let subcategoryName=document.getElementById("newSubcategoryName").value.trim();
     let categoryId=document.getElementById("categoryListing").value.trim();
     let subcategoryId=document.getElementById("btnAddSubcategory").value.trim();
-    alert(subcategoryId)
     if(subcategoryName.length < 1)
     {
         document.getElementById("errorNewSubcategory").innerHTML="Enter the category name."
@@ -212,20 +210,29 @@ function fnModalEditSubCategory(subcategoryId){
 
 function fnDeleteSubCategory(subcategoryId)
 {
-    if(confirm("Do you want to Delete this item?"))
-    {
-        $.ajax({
-            type:"GET",
-            url:"components/shoppingCart.cfc?method=fnDeleteSubcategory",
-            data:{subcategoryId : subcategoryId.value},
-            success:function(result){
-                if(result)
-                {
-                    document.getElementById(subcategoryId.value).remove();
+    Swal.fire({
+        title: "Delete subcategory!",
+        text: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type:"GET",
+                url:"components/shoppingCart.cfc?method=fnDeleteSubcategory",
+                data:{subcategoryId : subcategoryId.value},
+                success:function(result){
+                    if(result)
+                    {
+                        document.getElementById(subcategoryId.value).remove();
+                    }
                 }
-            }
-        });
-    } 
+            });
+        } 
+    });
 }
 
 function fnGetCategory()
@@ -271,6 +278,22 @@ function fnProductModalValidation(){
     let productTax = document.getElementById("productTax").value.trim();
     let productImage = document.getElementById("productImages").value.trim();
     let productId = document.getElementById("btnAddProducts").value.trim();
+    var formData=new FormData(document.getElementById("productForm"));
+    var Imagefiles = formData.getAll("productImages");
+    var errorImageType = false;
+    var errorImageSize = false;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp']
+    const maxSize = 2 * 1024 * 1024;
+    Imagefiles.forEach((image)=>{
+        if(!allowedTypes.includes(image.type)){
+            errorImageType =true
+        }
+        if(image.size > maxSize){
+            errorImageSize =true
+        }
+        
+    });
+  
 
     document.getElementById("errorProductName").innerHTML=" "
     document.getElementById("errorProductDescription").innerHTML=" ";
@@ -296,51 +319,64 @@ function fnProductModalValidation(){
     if(productTax.length < 1)
     {
         document.getElementById("errorProductTax").innerHTML="Enter the product Tax"
-        error=true;    }
-   
-    
+        error=true;
+    }
+    else if(productTax > 100 || productTax < 1){
+        document.getElementById("errorProductTax").innerHTML="Tax should be between 1-100"
+        error=true;
+    }
+    if(productId.length < 1){
+        if(productImage.length < 1)
+        {
+            document.getElementById("errorProductImage").innerHTML="Choose the image"
+            error=true;
+        }
+    }
+    if(productImage.length > 1)
+    {
+        if(errorImageType){
+            document.getElementById("errorProductImage").innerHTML="Invalid Image type"
+            error=true;
+        }else if (errorImageSize) {
+            document.getElementById("errorProductImage").innerHTML="Image size should be less than 2 MB"
+            error=true;
+        }
+    }
+
+
     if(error){
         event.preventDefault()
     }
     else {
-      
+
         if(productId.length < 1){
-            if(productImage.length < 1)
-            {
-                document.getElementById("errorProductImage").innerHTML="Choose the image"
-                event.preventDefault();    
-            }
-            else{
-                var formData=new FormData(document.getElementById("productForm"));
-                formData.forEach(function(value, key) {
-                    console.log(key, value);
-                });
-                $.ajax({
-                    type:"POST",
-                    url:"components/shoppingCart.cfc?method=fnAddProduct",
-                    data: formData,
-                    processData:false,
-                    contentType:false,
-                    success:function(result){
-                        if(result == "false")
-                        {
-                            document.getElementById("errorProductName").innerHTML="Product name already exist";
-                            event.preventDefault();
-                           
-                        }
-                        else
-                        {
-                            location.reload()
-                        }
-                    }
-                });
-            }
-        }
-        else{
-            var formData=new FormData(document.getElementById("productForm"));
+            // var formData=new FormData(document.getElementById("productForm"));
             formData.forEach(function(value, key) {
                 console.log(key, value);
             });
+            $.ajax({
+                type:"POST",
+                url:"components/shoppingCart.cfc?method=fnAddProduct",
+                data: formData,
+                processData:false,
+                contentType:false,
+                success:function(result){
+                    if(result == "false")
+                    {
+                        document.getElementById("errorProductName").innerHTML="Product name already exist";
+                        event.preventDefault();
+                       
+                    }
+                    else
+                    {
+                        location.reload()
+                    }
+                }
+            });
+            
+        }
+        else{
+            var formData=new FormData(document.getElementById("productForm"));
             $.ajax({
                 type:"POST",
                 url:"components/shoppingCart.cfc?method=fnUpdateProduct",
@@ -393,20 +429,29 @@ function fnEditProductModal(structProduct){
 
 function fnDeleteProduct(productId)
 {
-    if(confirm("Do you want to Delete this item?"))
-    {
-        $.ajax({
-            type:"GET",
-            url:"components/shoppingCart.cfc?method=fnDeleteProduct",
-            data:{productId : productId.value},
-            success:function(result){
-                if(result)
-                {
-                    document.getElementById(productId.value).remove();
+    Swal.fire({
+        title: "Delte this product!",
+        text: "Are you sure?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type:"GET",
+                url:"components/shoppingCart.cfc?method=fnDeleteProduct",
+                data:{productId : productId.value},
+                success:function(result){
+                    if(result)
+                    {
+                        document.getElementById(productId.value).remove();
+                    }
                 }
-            }
-        });
-    } 
+            });
+        }
+    });
 }
 
 function fnImageModal(structImage){
@@ -433,7 +478,7 @@ function fnImageModal(structImage){
                 carouselSubContainer.append(image);
                 carouselSubContainer.classList.add('active');
                 carouselContainer.append(carouselSubContainer);
-                
+
                 for (var key in structImageDetails.otherImages) {
                     if (structImageDetails.otherImages.hasOwnProperty(key)) {
                         console.log(structImageDetails.otherImages[key]);
@@ -461,7 +506,7 @@ function fnImageModal(structImage){
                         deleteBtn.onclick = function() {
                             fnProductDelete(this,structImage.productId);
                         };
-                    
+
                         const thumbnailBtn = document.createElement('button');
                         thumbnailBtn.textContent = 'Set as Thumbnail';
                         thumbnailBtn.value = key;

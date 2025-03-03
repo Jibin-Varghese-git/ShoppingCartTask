@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>User Subcategory</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -14,13 +14,17 @@
         <cfset local.objUserShoppingCart = createObject("component","components/userShoppingCart")>
         <cfinclude  template="userHeader.cfm">
         <cfif structKeyExists(url, "search") && structKeyExists(url, "sort")>
-            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(sort=url.sort,search=url.search)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(sort=url.sort,search=url.search,limit="10")>
+            <cfset variables.productCount=local.objUserShoppingCart.productCount(search=url.search)>
         <cfelseif  structKeyExists(url, "search")>
-            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(search=url.search)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(search=url.search,limit="10")>
+            <cfset variables.productCount=local.objUserShoppingCart.productCount(search=url.search)>
         <cfelseif structKeyExists(url, "sort") && structKeyExists(url, "subCategoryId")>
-             <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId,sort=url.sort)>
+             <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId,sort=url.sort,limit="10")>
+            <cfset variables.productCount=local.objUserShoppingCart.productCount(subcategoryId=url.subCategoryId)>
         <cfelse>
-            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId)>
+            <cfset variables.subcategoryProductsListing=local.objUserShoppingCart.selectSubcategoryProducts(subcategoryId=url.subCategoryId,limit="10")>
+            <cfset variables.productCount=local.objUserShoppingCart.productCount(subcategoryId=url.subCategoryId)>
         </cfif>
         <div class="categoryMainContainer mt-2 px-2">
             <div class="subcategorySubcontainer my-3 px-3 py-2" id="subcategorySubcontainer">
@@ -30,9 +34,9 @@
                             <h1>No Products Found</h1>
                         <cfelse>
                             <cfif structKeyExists(url, "search")>
-                                <h3>Search Results for #url.search# </h3>
+                                <h3>Search Results for "#url.search#"</h3>
                             <cfelse>
-                                <h3>#variables.subcategoryProductsListing.subcategoryName#</h3>
+                                <h3 >#variables.subcategoryProductsListing.subcategoryName#</h3>
                             </cfif>
                             <div class="d-flex justify-content-between px-2">
                                 <div class="d-flex">
@@ -52,7 +56,7 @@
                                      <li><label>Min</label><input type="number" class="me-2" name="filter" id="filterMin" disabled></li>
                                      <li><label>Max</label><input type="number" class="me-2" name="filter" id="filterMax" disabled></li>
                                      <li><hr class="dropdown-divider"></li>
-                                    <li><button class="dropdown-item" onclick="filterPrice({<cfif structKeyExists(url, "subCategoryId")>
+                                     <li><button class="dropdown-item" onclick="filterPrice({<cfif structKeyExists(url, "subCategoryId")>
                                                                                                 subcategoryId:#url.subcategoryId#
                                                                                             <cfelse>
                                                                                                 search:'#url.search#'
@@ -64,6 +68,7 @@
                         </cfif>
                     </div>
                     <div class="productContainerSubcategory d-flex flex-wrap  my-3 ps-5 pe-3 py-3 w-100" id="productContainerSubcategory">
+                        <cfset variables.arrayProductDisplayedId = arrayNew(1)>
                         <cfloop query="variables.subcategoryProductsListing">
                             <div class="card p-2 m-3">
                                 <a href="userProduct.cfm?productId=#variables.subcategoryProductsListing.productId#" class="text-decoration-none">
@@ -77,13 +82,31 @@
                                     </div>
                                 </a>
                             </div>
+                            <cfset arrayAppend(variables.arrayProductDisplayedId, "#variables.subcategoryProductsListing.productId#")>
                         </cfloop>
                     </div>
                 </cfoutput>
-                <cfif queryRecordCount(variables.subcategoryProductsListing) GT 10>
-                    <div class="viewmoreBtnDiv d-flex justify-content-center align-items-center w-100">
-                        <button class="viewmoreBtn" id="viewmoreBtn" onclick="viewMore()" value="more">View More <i class="fa-solid fa-arrow-down" style="color: #bd8dc9;"></i></button>
+                <cfif variables.productCount.productCount GT 10>
+                    <cfoutput>
+                    <div class="viewmoreBtnDiv d-flex justify-content-center align-items-center w-100" id="viewmoreBtnDiv">
+                        <input type="hidden" id="productCountHidden" value="#variables.productCount.productCount#">
+                        <cfset variables.listExcludedProductId = variables.arrayProductDisplayedId.toList()>
+                        <button class="viewmoreBtn" id="viewmoreBtn" value="#variables.listExcludedProductId#"
+                            onclick="viewMore(this,{
+                                        <cfif structKeyExists(url, "search")>
+                                            search:'#url.search#'
+                                        <cfelseif structKeyExists(url, "subCategoryId")>
+                                            subCategoryId:#url.subCategoryId#
+                                        </cfif>
+                                        <cfif structKeyExists(url, "sort")>
+                                            ,sort:'#url.sort#'
+                                        </cfif>
+                                    })"
+                        >
+                            View More <i class='fa-solid fa-arrow-down' style='color: ##bd8dc9;'></i>
+                        </button>
                     </div>
+                    </cfoutput>
                 </cfif>
             </div>
         </div>

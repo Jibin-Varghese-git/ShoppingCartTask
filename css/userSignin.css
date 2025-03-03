@@ -405,7 +405,7 @@ header a{
  }
 
  .productContainerSubcategory{
-    max-height: 110vh;
+    height: auto;
     overflow: hidden;
  }
 
@@ -1160,4 +1160,36 @@ header a{
     background-color: #286b17;
   }
 
+  .productListingContainer .productListingSubContainer .card:hover {
+    transform: scale(1.1);
+  }
+
+  .productListingContainer .productListingSubContainer .card {
+    transition: transform 0.2s ease;
+  }
+
+  .categoryMainContainer .categorySubcontainer .card:hover {
+    transform: scale(1.1);
+  }
+
+  .categoryMainContainer .categorySubcontainer .card {
+    transition: transform 0.2s ease;
+  }
+
+  .subcategorySubcontainer .productContainerSubcategory .card:hover {
+    transform: scale(1.1);
+  }
+
+  .subcategorySubcontainer .productContainerSubcategory .card {
+    transition: transform 0.2s ease;
+  }
+
+  .orderSearchDiv button{
+        background-color: #ffffff;
+        border:none;
+        border-radius: 12px;
+        height: 32px;
+  }
+ 
+ 
  
